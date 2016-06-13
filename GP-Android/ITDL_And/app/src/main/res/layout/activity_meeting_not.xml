@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.itdl_and.facebook.login.MeetingNoteActivity">
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etMeetingTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Title"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etMeetingAgenda"
+        android:hint="Agenda"
+        android:layout_below="@+id/etMeetingTitle"
+        android:layout_centerHorizontal="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etMeetingPlace"
+        android:hint="Place"
+        android:layout_below="@+id/etMeetingAgenda"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="set Meeting Date"
+        android:id="@+id/btnMeetingDate"
+        android:layout_below="@+id/etMeetingPlace"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvdisplayDate"
+        android:layout_below="@+id/btnMeetingDate"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:text="Enter Estimated time "
+        android:id="@+id/btnEstimatedTime"
+       android:layout_below="@+id/tvdisplayDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tvDisplayTime"
+        android:layout_below="@+id/btnEstimatedTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="   Add Note  "
+        android:id="@+id/btnAddMeetingNote"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="67dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Priority "
+        android:id="@+id/textView10"
+        android:layout_below="@+id/tvDisplayTime"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupPriority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/textView10"
+        android:layout_alignParentRight="true">
+
+        <RadioButton
+            android:id="@+id/radioButtonHigh"
+            android:layout_width="110dp"
+            android:layout_height="59dp"
+            android:checked="true"
+            android:text="High" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMedium"
+            android:layout_width="130dp"
+            android:layout_height="59dp"
+            android:checked="true"
+            android:text="Medium" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLow"
+            android:layout_width="120dp"
+            android:layout_height="59dp"
+            android:checked="true"
+            android:text="Low" />
+    </RadioGroup>
+
+
+</RelativeLayout>

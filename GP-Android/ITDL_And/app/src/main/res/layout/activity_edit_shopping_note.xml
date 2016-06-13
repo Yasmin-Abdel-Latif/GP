@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.itdl_and.facebook.login.EditShoppingNoteActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Product Name: "
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etProductname"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:id="@+id/textView8"
+
+        android:layout_below="@+id/etProductname"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnercategory"
+        android:layout_below="@+id/textView8"
+        android:layout_marginTop="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Priority "
+        android:layout_below="@+id/spinnercategory"
+        android:id="@+id/textViewpriority"
+        android:layout_marginTop="40dp"
+        android:layout_centerVertical="true"
+        />
+
+    <RadioGroup
+        android:id="@+id/radioGroupPriority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewpriority"
+        android:layout_below="@+id/spinnercategory"
+        android:layout_marginTop="60dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioHigh"
+            android:layout_width="110dp"
+            android:layout_height="59dp"
+            android:checked="true"
+            android:text="High" />
+        <RadioButton
+            android:id="@+id/radioMedium"
+            android:layout_width="130dp"
+            android:layout_height="59dp"
+            android:checked="true"
+            android:text="Medium" />
+        <RadioButton
+            android:id="@+id/radioLow"
+            android:layout_width="120dp"
+            android:layout_height="59dp"
+            android:checked="true"
+            android:text="Low" />
+
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Update "
+        android:id="@+id/btnUpdateShopingnote"
+        android:layout_marginTop="74dp"
+        android:layout_below="@+id/radioGroupPriority"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="94dp"
+        android:layout_marginStart="94dp" />
+
+</RelativeLayout>

@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">ITDL_And</string>
+    <string name="facebook_app_id">278131329196035</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_first">MainActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_view_user_info">ViewUserInfoActivity</string>
+    <string name="title_activity_add_note">AddNoteActivity</string>
+    <string name="SignUp"> Sign up</string>
+    <string name="LogIn"> Log In</string>
+    <string name="UserPassword">Password</string>
+    <string name="UserName">User Name</string>
+    <string name="Email">Email</string>
+    <string name="TwitterAccount"> Twitter Account</string>
+    <string name="Want_sign_up">if this your first time in app</string>
+    <string name="Register">continue</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="BirthDate">Birth Date</string>
+    <string name="GoHome">Go To Home</string>
+    <string name="City">City</string>
+    <string name="update">Update</string>
+    <string name="SignOut"> Sign Out</string>
+    <string name="updateProfile">Update Profile</string>
+    <string name="title_activity_ordinary_note">Ordinary Note</string>
+    <string name="spinner_title">Select Note Type</string>
+    <string name="title_activity_shopping_note">Shopping Note</string>
+    <string name="title_activity_meeting_note">MeetingNotActivity</string>
+    <string name="title_activity_deadline">DeadlineActivity</string>
+    <string name="title_activity_show_all_notes">ShowAllNotesActivity</string>
+    <string name="title_activity_show_note_details">ShowNoteDetailsActivity</string>
+    <string name="title_activity_edit_ordinary_note">EditOrdinaryNoteActivity</string>
+    <string name="title_activity_edit_shopping_note">EditShoppingNoteActivity</string>
+    <string name="title_activity_edit_meeting_note">EditMeetingNoteActivity</string>
+    <string name="title_activity_edit_deadline_note">EditDeadlineNoteActivity</string>
+    <string name="title_activity_preferences">PreferencesActivity</string>
+    <string name="title_activity_perference_percentege">PerferencePercentegeActivity</string>
+
+    <string-array name="Categories">
+        <item>Food</item>
+        <item>Sport</item>
+        <item>Fashion </item>
+    </string-array>
+</resources>

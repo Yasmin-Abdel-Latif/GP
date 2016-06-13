@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.itdl_and.facebook.login">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="controllers.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/title_activity_sign_up" />
+        <activity
+            android:name=".ViewUserInfoActivity"
+            android:label="@string/title_activity_view_user_info" />
+        <activity
+            android:name=".AddNoteActivity"
+            android:label="@string/title_activity_add_note" />
+        <activity
+            android:name=".OrdinaryNoteActivity"
+            android:label="@string/title_activity_ordinary_note" />
+        <activity
+            android:name=".ShoppingNoteActivity"
+            android:label="@string/title_activity_shopping_note" />
+        <activity
+            android:name=".MeetingNoteActivity"
+            android:label="@string/title_activity_meeting_note" />
+        <activity
+            android:name=".DeadlineActivity"
+            android:label="@string/title_activity_deadline" />
+        <activity
+            android:name=".ShowAllNotesActivity"
+            android:label="@string/title_activity_show_all_notes" />
+        <activity
+            android:name=".ShowNoteDetailsActivity"
+            android:label="@string/title_activity_show_note_details" />
+        <activity
+            android:name=".EditOrdinaryNoteActivity"
+            android:label="@string/title_activity_edit_ordinary_note" />
+        <activity
+            android:name=".EditShoppingNoteActivity"
+            android:label="@string/title_activity_edit_shopping_note" />
+        <activity
+            android:name=".EditMeetingNoteActivity"
+            android:label="@string/title_activity_edit_meeting_note" />
+        <activity
+            android:name=".EditDeadlineNoteActivity"
+            android:label="@string/title_activity_edit_deadline_note" />
+
+        <service android:name="controllers.ApplicationService" />
+
+        <activity
+            android:name=".PreferencesActivity"
+            android:label="@string/title_activity_preferences" />
+        <activity
+            android:name=".PerferencePercentegeActivity"
+            android:label="@string/title_activity_perference_percentege" />
+
+    </application>
+
+</manifest>
