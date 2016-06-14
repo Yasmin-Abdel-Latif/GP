@@ -23,10 +23,10 @@ import model.MeetingNoteEntity;
 
 public class EditMeetingNoteActivity extends ActionBarActivity implements View.OnClickListener {
     Calendar calendar =Calendar.getInstance();
-    Button btnDate,btnEstimatedTime,btnUpdateNote;
+    Button btnDate,btnEstimatedTime,btnUpdateNote, btnMeetingTime;
     EditText Title,Agenda,meeingPlace;
     TextView displayDate,DisplayTime;
-    String date,time,oldtitle,oldAgnda,oldPlace,olddate,oldtime,oldpriority;
+    String date,time,oldtitle,oldAgnda,oldPlace,olddate,oldtime,oldpriority,estimatedTime,oldDatePart,oldEstimatedTime;
     RadioGroup priorityRadioGroup;
     RadioButton RbtnHigh,RbtnMedium,RbtnLow;
     MeetingNoteEntity meetingNoteEntity ;
@@ -45,6 +45,7 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
         btnDate = (Button) findViewById(R.id.btnMeetingDate);
         displayDate= (TextView) findViewById(R.id.tvdisplayDate);
         DisplayTime= (TextView) findViewById(R.id.tvDisplayTime);
+        btnMeetingTime = (Button) findViewById(R.id.btnMeetingTime);
         btnEstimatedTime = (Button) findViewById(R.id.btnEstimatedTime);
         btnUpdateNote = (Button) findViewById(R.id.btnAddMeetingNote);
         RbtnHigh=(RadioButton) findViewById(R.id.radioHigh);
@@ -54,9 +55,13 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
         oldtitle=meetingNoteEntity.getMeetingTitle();
         oldAgnda=meetingNoteEntity.getMeetingAgenda();
         oldPlace=meetingNoteEntity.getMeetingPlace();
-        oldtime=meetingNoteEntity.getEstimatedTransportTime().toString();
+        oldEstimatedTime=meetingNoteEntity.getEstimatedTransportTime().toString();
         olddate=meetingNoteEntity.getMeetingNoteDate().toString();
         oldpriority=meetingNoteEntity.getNotePriority();
+
+        String[] oldParts = olddate.split(" ");
+        oldDatePart = oldParts[0];
+        oldtime = oldParts[1];
 
         if (meetingNoteEntity.getNotePriority().equals("High")){
             RbtnHigh.setChecked(true);
@@ -72,11 +77,13 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
         Title.setText(oldtitle);
         Agenda.setText(oldAgnda);
         meeingPlace.setText(oldPlace);
-        displayDate.setText(olddate);
+        displayDate.setText(oldDatePart);
         DisplayTime.setText(oldtime);
+
 
         btnUpdateNote.setOnClickListener(this);
         btnDate.setOnClickListener(this);
+        btnMeetingTime.setOnClickListener(this);
         btnEstimatedTime.setOnClickListener(this);
 
     }
@@ -86,6 +93,14 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
         public void onTimeSet(TimePicker timePicker, int hours, int minute) {
             DisplayTime.setText("Estimated Time :"+hours + "hours and " + minute+"minute");
             time=hours+":"+minute+":00";
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener ontimelistener3 =new TimePickerDialog.OnTimeSetListener() {
+
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hours, int minute) {
+            estimatedTime=hours+":"+minute+":00";
         }
     };
 
@@ -99,13 +114,17 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
     };
     @Override
     public void onClick(View view) {
-        if (view == btnEstimatedTime){
+        if (view == btnMeetingTime){
             new TimePickerDialog(EditMeetingNoteActivity.this, ontimelistener2,
                     calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
         }
         else if (view==btnDate){
             new DatePickerDialog(EditMeetingNoteActivity.this, listener,
                     calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }
+        else if (view==btnEstimatedTime){
+            new TimePickerDialog(EditMeetingNoteActivity.this, ontimelistener3,
+                    calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
         }
         else if (view  == btnUpdateNote) {
             String title = Title.getText().toString();
@@ -115,13 +134,16 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
             RadioButton btnpriority = (RadioButton) findViewById(selectedId);
             String priority = btnpriority.getText().toString();
             if (date==null){
-                date=olddate;
+                date=oldDatePart;
             }
             if (time==null){
                 time=oldtime;
             }
-           if (title.equals(oldtitle) && place.equals(oldPlace) && agenda.equals(oldAgnda) && priority.equals(oldpriority) && date.equals(olddate)
-                    && time.equals(oldtime)) {
+            if (estimatedTime==null){
+                estimatedTime=oldEstimatedTime;
+            }
+           if (title.equals(oldtitle) && place.equals(oldPlace) && agenda.equals(oldAgnda) && priority.equals(oldpriority) && date.equals(oldDatePart)
+                    && time.equals(oldtime) && estimatedTime.equals(oldEstimatedTime)) {
                 Toast.makeText(getApplicationContext(), " no changes happened  ", Toast.LENGTH_LONG).show();
 
             } else {
@@ -129,10 +151,11 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
                 boolean isConnected = userController.isNetworkConnected(getApplicationContext());
                 NoteController noteController = new NoteController();
                 if (!isConnected) {
-                    noteController.UpdateMeetingNoteInLocalDB(title, place, agenda, date, priority, time, meetingNoteEntity.getNoteId());
+                    String temp = date + " " + time;
+                    noteController.UpdateMeetingNoteInLocalDB(title, place, agenda, temp, priority, estimatedTime, meetingNoteEntity.getNoteId());
                 } else {
-
-                    noteController.UpdateMeetingNoteInLocalDB(title, place, agenda, date, priority, time, meetingNoteEntity.getNoteId());
+                    String temp = date + " " + time;
+                    noteController.UpdateMeetingNoteInLocalDB(title, place, agenda, temp, priority, estimatedTime, meetingNoteEntity.getNoteId());
                 }
 
             }

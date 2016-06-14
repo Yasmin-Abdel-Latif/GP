@@ -127,6 +127,7 @@ public class NoteController {
         String userID=String.valueOf(userController.getCurrentUserID());
 
         try {
+            //http://fci-gp-intelligent-to-do.appspot.com/rest/
             String res = new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/addMeetingNoteService",
                     title,place,agenda,date,time,userID,priority, "addMeetingNoteService").get();
             JSONObject object = new JSONObject(res);
@@ -250,7 +251,7 @@ public class NoteController {
 
         MeetingNoteEntity noteEntity =new MeetingNoteEntity(meetingNote,Priority,
                 getCurrentDate(),isDone,isdeleted,isTextCategorized,issync,title,place,agenda,
-                java.sql.Date.valueOf(meetingNoteDate),Time.valueOf(estimatedTransportTime));
+                Timestamp.valueOf(meetingNoteDate),Time.valueOf(estimatedTransportTime));
         noteEntity.setServernoteId(serverNoteId);
 
         LocalDataBase localDataBase =new LocalDataBase(MyApplication.getAppContext());
@@ -379,7 +380,7 @@ public class NoteController {
             isDone = IntToboolean(res.getInt(res.getColumnIndex("isDone")));
             isDeleted = IntToboolean(res.getInt(res.getColumnIndex("isDeleted")));
             isTextcat = IntToboolean(res.getInt(res.getColumnIndex("isTextCategorized")));
-            java.sql.Date MeetingDate =   java.sql.Date.valueOf(res.getString(res.getColumnIndex("meetingNoteDate")));
+            Timestamp MeetingDate = Timestamp.valueOf(res.getString(res.getColumnIndex("meetingNoteDate")));
             Time EstimatedTime =Time.valueOf(res.getString(res.getColumnIndex("estimatedTransportTime")));
             String place = res.getString(res.getColumnIndex("meetingPlace"));
             String agenda = res.getString(res.getColumnIndex("meetingAgenda"));
@@ -468,7 +469,7 @@ public class NoteController {
     public void UpdateMeetingNoteInLocalDB(String title,String place,String agenda,String meetingNoteDate,
                                            String Priority ,String estimatedTransportTime,int noteid){
 
-        MeetingNoteEntity meetingNoteEntity =new MeetingNoteEntity(meetingNote,Priority,title,place,agenda, java.sql.Date.valueOf(meetingNoteDate),
+        MeetingNoteEntity meetingNoteEntity =new MeetingNoteEntity(meetingNote,Priority,title,place,agenda, java.sql.Timestamp.valueOf(meetingNoteDate),
                 Time.valueOf(estimatedTransportTime),noteid);
 
         LocalDataBase localDataBase =new LocalDataBase(MyApplication.getAppContext());
@@ -515,7 +516,7 @@ public class NoteController {
                 creationDate= Timestamp.valueOf(res.getString(res.getColumnIndex("creationDate")));
                 isDone = IntToboolean(res.getInt(res.getColumnIndex("isDone")));
                 isTextcat = IntToboolean(res.getInt(res.getColumnIndex("isTextCategorized")));
-                java.sql.Date MeetingDate =   java.sql.Date.valueOf(res.getString(res.getColumnIndex("meetingNoteDate")));
+                java.sql.Timestamp MeetingDate =   java.sql.Timestamp.valueOf(res.getString(res.getColumnIndex("meetingNoteDate")));
                 Time EstimatedTime =Time.valueOf(res.getString(res.getColumnIndex("estimatedTransportTime")));
                 String place = res.getString(res.getColumnIndex("meetingPlace"));
                 String agenda = res.getString(res.getColumnIndex("meetingAgenda"));

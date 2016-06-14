@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * Created by samah on 25/03/2016.
  */
 public class MeetingNoteEntity extends NoteEntity {
-    protected Date meetingNoteDate;
+    protected Timestamp meetingNoteDate;
     protected Time estimatedTransportTime;
     protected String meetingTitle;
     protected String meetingPlace;
@@ -19,7 +19,7 @@ public class MeetingNoteEntity extends NoteEntity {
 
     public MeetingNoteEntity(String noteType,String Priority, Timestamp noteDateCreation,
                              boolean isDone, boolean isActive, boolean isTextCategorized, boolean isSynchronized,
-                        String meetingtitle ,String meetingplace,String agenda, Date meetingNoteDate,Time estimatedTransportTime) {
+                        String meetingtitle ,String meetingplace,String agenda, Timestamp meetingNoteDate,Time estimatedTransportTime) {
         super(noteType,Priority , noteDateCreation, isDone, isActive, isTextCategorized, isSynchronized);
 
         this.estimatedTransportTime=estimatedTransportTime;
@@ -29,7 +29,7 @@ public class MeetingNoteEntity extends NoteEntity {
         this.meetingNoteDate=meetingNoteDate;
     }
     public MeetingNoteEntity(String noteType,String Priority,
-                             String meetingtitle ,String meetingplace,String agenda, Date meetingNoteDate,Time estimatedTransportTime, int id) {
+                             String meetingtitle ,String meetingplace,String agenda, Timestamp meetingNoteDate,Time estimatedTransportTime, int id) {
         super(noteType,Priority , id);
 
         this.estimatedTransportTime=estimatedTransportTime;
@@ -74,11 +74,11 @@ public class MeetingNoteEntity extends NoteEntity {
         this.estimatedTransportTime = estimatedTransportTime;
     }
 
-    public Date getMeetingNoteDate() {
+    public Timestamp getMeetingNoteDate() {
         return meetingNoteDate;
     }
 
-    public void setMeetingNoteDate(Date meetingNoteDate) {
+    public void setMeetingNoteDate(Timestamp meetingNoteDate) {
         this.meetingNoteDate = meetingNoteDate;
     }
 
