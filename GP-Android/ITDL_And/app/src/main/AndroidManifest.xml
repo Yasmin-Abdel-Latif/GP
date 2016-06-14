@@ -71,14 +71,12 @@
             android:name=".EditDeadlineNoteActivity"
             android:label="@string/title_activity_edit_deadline_note" />
 
-        <service android:name="controllers.ApplicationService" />
+        <activity
+            android:name=".PreferenceActivity"
+            android:label="@string/title_activity_preference" >
+        </activity>
 
-        <activity
-            android:name=".PreferencesActivity"
-            android:label="@string/title_activity_preferences" />
-        <activity
-            android:name=".PerferencePercentegeActivity"
-            android:label="@string/title_activity_perference_percentege" />
+        <service android:name="controllers.ApplicationService" />
 
     </application>
 

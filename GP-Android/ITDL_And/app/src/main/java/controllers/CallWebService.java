@@ -98,6 +98,10 @@ public class CallWebService extends AsyncTask<String, Void, String> {
             urlParameters = "userID=" + params[1];
         }
 
+        else if (serviceType.equals("enterInitialWeightsForOneUserService")){
+            urlParameters = "userID=" + params[1] + "&userInitialWeightsSTR="+ params[2];
+        }
+
         String n =new Connection().connect(params[0],urlParameters);
 
         return n;

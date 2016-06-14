@@ -7,6 +7,7 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_view_user_info">ViewUserInfoActivity</string>
     <string name="title_activity_add_note">AddNoteActivity</string>
+    <string name="title_activity_preference">PreferenceActivity</string>
     <string name="SignUp"> Sign up</string>
     <string name="LogIn"> Log In</string>
     <string name="UserPassword">Password</string>

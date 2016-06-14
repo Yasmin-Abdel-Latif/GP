@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Category implements Serializable {
     String categoryName;
     long userId;
-    int categoryPercentage;
+    double categoryPercentage;
 
     public Category(String categoryName) {
         this.categoryName = categoryName;
@@ -44,27 +44,11 @@ public class Category implements Serializable {
         this.userId = userid;
     }
 
-    public int getCategoryPercentage() {
+    public double getCategoryPercentage() {
         return categoryPercentage;
     }
 
-    public void setCategoryPercentage(int categoryPercentage) {
+    public void setCategoryPercentage(double categoryPercentage) {
         this.categoryPercentage = categoryPercentage;
-    }
-
-    @Override
-    public String toString() {
-        JSONObject obj= new JSONObject();
-        try {
-            obj.put("categoryName",categoryName);
-            obj.put("userId",userId);
-            obj.put("categoryPercentage",categoryPercentage);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return obj.toString();
-
-
     }
 }

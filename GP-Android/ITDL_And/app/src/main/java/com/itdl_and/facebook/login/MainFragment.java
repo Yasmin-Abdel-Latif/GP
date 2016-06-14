@@ -185,8 +185,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         Email= (EditText)view.findViewById(R.id.editTextEmail);
         Password=(EditText)view.findViewById(R.id.editTextPassword);
 
-        Log.i("Cursor", "Empty");
-
         LogInButton.setOnClickListener(this);
         SignUpButton.setOnClickListener(this);
         GoToHomeButton.setOnClickListener(this);

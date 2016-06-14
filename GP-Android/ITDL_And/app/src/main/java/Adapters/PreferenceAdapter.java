@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.itdl_and.facebook.login.R;
 
@@ -16,19 +16,22 @@ import java.util.ArrayList;
 import model.Category;
 
 /**
- * Created by samah on 18/05/2016.
+ * Created by samah on 13/06/2016.
  */
-
-public class categoryAdapter extends BaseAdapter {
+public class PreferenceAdapter extends BaseAdapter {
     ArrayList<Category> MYCategories =new ArrayList<Category>();
+
     Context context;
     LayoutInflater layoutInflater ;
+    int percent ;
 
-    public categoryAdapter(Context context){
-       fillcategory();
+    public PreferenceAdapter(Context context){
+        fillcategory();
         this.context=context;
         layoutInflater=layoutInflater.from(this.context);
     }
+
+
 
     @Override
     public int getCount() {
@@ -46,10 +49,11 @@ public class categoryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder viewHolder;
+
         if (convertView == null){
-            convertView=layoutInflater.inflate(R.layout.one_category,null);
+            convertView=layoutInflater.inflate(R.layout.one_pereference_perecent,null);
             viewHolder=new ViewHolder();
             convertView.setTag(viewHolder);
         }
@@ -57,27 +61,44 @@ public class categoryAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.category= (CheckBox) convertView.findViewById(R.id.checkBoxCategory);
+        viewHolder.category= (TextView) convertView.findViewById(R.id.textViewcategory);
+        viewHolder.percent= (SeekBar) convertView.findViewById(R.id.SeekparcategoryPercent);
+        viewHolder.displayperecent = (TextView) convertView.findViewById(R.id.textViewpercent);
         viewHolder.category.setText(MYCategories.get(position).getCategoryName());
+
         viewHolder.category.setTextColor(Color.BLACK);
+        viewHolder.displayperecent.setTextColor(Color.BLACK);
+        viewHolder.displayperecent.setText(viewHolder.percent.getProgress() +"%");
 
-        viewHolder.category.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final int  pos=position;
+
+        viewHolder.percent.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                getItem((Integer) buttonView.getTag()).setIschecked(isChecked);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                percent=progress;
+                viewHolder.displayperecent.setText(""+progress+"%");
+                MYCategories.get(pos).setCategoryPercentage((double)progress/100);
 
             }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                viewHolder.displayperecent.setText(""+percent+"%");
+                MYCategories.get(pos).setCategoryPercentage((double)percent/100);
+
+            }
+
         });
-        viewHolder.category.setTag(position);
-        //viewHolder.category.setChecked(MYCategories.get(position).ischecked());
+
         return convertView;
     }
 
+    private class ViewHolder{
+        TextView category,displayperecent;
+        SeekBar percent;
 
-
-    private  class ViewHolder{
-      CheckBox category;
     }
 
     void fillcategory(){
@@ -95,19 +116,9 @@ public class categoryAdapter extends BaseAdapter {
         MYCategories.add(new Category("Readings"));
 
     }
-    ArrayList<Category> getMYCategories(){
-        return  MYCategories;
+
+    public ArrayList<Category> getMYCategories(){
+
+        return MYCategories;
     }
-
-    public ArrayList<Category> getCheckedCategories() {
-       ArrayList<Category> Categories = new ArrayList<Category>();
-       for (Category p : MYCategories) {
-            if (p.ischecked()){
-                Categories.add(p);
-            }
-           }
-
-       return Categories;
-  }
-
 }
