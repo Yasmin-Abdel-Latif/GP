@@ -107,13 +107,6 @@ public class UserController {
 				addFBUserPost(fbPosts.get(i));
 			}
 
-//			Intent homeIntent = new Intent(MyApplication.getAppContext(),
-//					HomeActivity.class);
-//			homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//			homeIntent.putExtra("status", "Registered successfully");
-//			homeIntent.putExtra("userId", object.get("userId").toString());
-//			homeIntent.putExtra("serviceType", "RegistrationService");
-
 			Intent perefernces = new Intent(MyApplication.getAppContext(),
 					PreferencesActivity.class);
 			perefernces.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

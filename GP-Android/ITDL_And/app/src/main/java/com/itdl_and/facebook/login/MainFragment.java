@@ -79,7 +79,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         story = data.getJSONObject(i).getString("story");
                                     if(data.getJSONObject(i).has("message"))
                                         message = data.getJSONObject(i).getString("message");
-                                    String fbPostCreationDate = data.getJSONObject(i).getString("CreationDate");
+                                    String fbPostCreationDate = data.getJSONObject(i).getString("created_time");
                                     String fbPostContent = story + " " + message;
                                     String fbPostID = data.getJSONObject(i).getString("id");
                                     int read = 0;

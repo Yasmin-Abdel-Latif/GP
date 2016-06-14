@@ -91,7 +91,7 @@ public class CallWebService extends AsyncTask<String, Void, String> {
         }
 
         else if (serviceType.equals("AddUserPostService")){
-            urlParameters = "userID=" + params[1] + "&postID=" + params[2] + "&postContent=" + params[3] + "&postCreationDate=" + params[4];
+            urlParameters = "userID=" + params[1] + "&postID=" + params[2] + "&postContent=" + params[3] + "&creationDate=" + params[4];
         }
 
         else if (serviceType.equals("GetPostsService")){
