@@ -223,7 +223,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void onClick(View v) {
         if (v == GoToHomeButton) {
-            Intent i = new Intent(getActivity().getApplicationContext(), PreferencesActivity.class);
+            Intent i = new Intent(getActivity().getApplicationContext(), PreferenceActivity.class);
             i.putExtra("name", "Sam");
             i.putExtra("userId", "5634472569470976");
             i.putExtra("serviceType", "LoginService");
