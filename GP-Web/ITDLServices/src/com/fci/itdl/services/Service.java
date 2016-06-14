@@ -12,6 +12,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.fci.itdl.controller.UserController;
+import com.fci.itdl.model.FacebookPost;
 import com.fci.itdl.model.Offer;
 import com.fci.itdl.model.Store;
 
@@ -154,6 +155,52 @@ public class Service {
 		}
 		jobject.put("AllOffers", joffers);
 		jobject.put("Status", "OK");
+		
+		return jobject.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/AddUserPostService")
+	public String addUserPostService(@FormParam("userID") String userID, @FormParam("postID") String postID,
+			@FormParam("postContent") String postContent, @FormParam("creationDate") String creationDate) 
+	{
+		JSONObject object = new JSONObject();
+		if(FacebookPost.getfbPost(postID) == null)
+		{
+			FacebookPost fbPost = new FacebookPost(userID, postID, postContent, creationDate, 0);
+			fbPost.savePost();
+		}
+		object.put("Status", "OK");
+		
+		return object.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/GetPostsService")
+	public String getPostsService(@FormParam("userID") String userID) 
+	{
+		JSONObject jobject = new JSONObject();
+		JSONArray jposts = new JSONArray();
+		
+		ArrayList<FacebookPost> posts = new ArrayList<FacebookPost>();
+		posts.addAll(FacebookPost.getUserPosts(userID));
+		for(int i = 0 ; i < posts.size() ; i++)
+		{
+			JSONObject jpost = new JSONObject();
+			jpost.put("userID", posts.get(i).getUserID());
+			jpost.put("postID", posts.get(i).getPostID());
+			jpost.put("postContent", posts.get(i).getPostContent());
+			jpost.put("creationDate", posts.get(i).getCreationDate());
+			jpost.put("read", 0);
+			
+			jposts.add(jpost);
+		}
+		jobject.put("AllUserPosts", jposts);
+		jobject.put("Status", "OK");
+
+		FacebookPost.setPostsRead(userID);
 		
 		return jobject.toString();
 	}

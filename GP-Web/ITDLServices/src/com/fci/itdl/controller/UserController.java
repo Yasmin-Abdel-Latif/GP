@@ -28,7 +28,7 @@ import com.fci.itdl.model.*;
 @Path("/")
 @Produces("text/html")
 public class UserController {
-	
+
 	// http://localhost:8888/rest/
 	// http://itdloffers.appspot.com/rest/
 	// http://8-dot-itdloffers.appspot.com/rest/
@@ -38,7 +38,7 @@ public class UserController {
 	public static String echo;
 	public static Offer offerChosen = null;
 	public static ArrayList<Offer> myOffers;
-	
+
 	/**
 	 * Action function to render Signup page, this function will be executed
 	 * using url like this /rest/signup
@@ -62,32 +62,33 @@ public class UserController {
 	public Response login() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
-	
+
 	@GET
 	@Path("/addofferview")
 	public Response addOfferView() {
 		return Response.ok(new Viewable("/jsp/addOffer")).build();
 	}
-	
+
 	@GET
 	@Path("/updateAccountView")
 	public Response updateAccountView(@Context HttpServletResponse response, @Context HttpServletRequest request) {
-		HttpSession session=request.getSession(false);
-		String storeEmail=(String)session.getAttribute("storeEmail");
+		HttpSession session = request.getSession(false);
+		String storeEmail = (String) session.getAttribute("storeEmail");
 		storeData = Store.getStore(storeEmail);
 		return Response.ok().entity(new Viewable("/jsp/updateAccount")).build();
 	}
-	
+
 	@POST
 	@Path("/updateOfferView")
-	public Response updateOfferView(@Context HttpServletResponse response, @Context HttpServletRequest request, @FormParam("OfferID") String offerID) {
-		HttpSession session=request.getSession(false);
-		String storeEmail=(String)session.getAttribute("storeEmail");
+	public Response updateOfferView(@Context HttpServletResponse response, @Context HttpServletRequest request,
+			@FormParam("OfferID") String offerID) {
+		HttpSession session = request.getSession(false);
+		String storeEmail = (String) session.getAttribute("storeEmail");
 		storeData = Store.getStore(storeEmail);
 		offerChosen = Offer.getOffer(offerID);
 		return Response.ok().entity(new Viewable("/jsp/updateOffer")).build();
 	}
-	
+
 	/**
 	 * Action function to render Sign Out page, this function will be executed
 	 * using url like this /rest/signout
@@ -113,7 +114,7 @@ public class UserController {
 		storeData.setPassword("");
 		return Response.ok(new Viewable("/jsp/entryPoint")).build();
 	}
-	
+
 	/**
 	 * Action function to response to signup request, This function will act as
 	 * a controller part and it will calls RegistrationService to make
@@ -140,7 +141,7 @@ public class UserController {
 	public Response signup(@Context HttpServletResponse response, @Context HttpServletRequest request,
 			@FormParam("name") String storeName, @FormParam("email") String email, @FormParam("password") String pass,
 			@FormParam("lat") String lat, @FormParam("lon") String lon, @FormParam("address") String address)
-					throws ServletException {
+			throws ServletException {
 		String serviceUrl = webServiceLink + "RegistrationService";
 		String urlParameters = "name=" + storeName + "&email=" + email + "&password=" + pass + "&lat=" + lat + "&lon="
 				+ lon + "&address=" + address;
@@ -150,10 +151,9 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
-			{
-				HttpSession session=request.getSession();
-				session.setAttribute("storeEmail",email);
+			if (object.get("Status").equals("OK")) {
+				HttpSession session = request.getSession();
+				session.setAttribute("storeEmail", email);
 				storeData = Store.getStore(email);
 				return Response.ok(new Viewable("/jsp/goHome")).build();
 			}
@@ -189,29 +189,30 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
-			{
-				HttpSession session=request.getSession(true);
-				session.setAttribute("storeEmail",storeEmail);
+			if (object.get("Status").equals("OK")) {
+				HttpSession session = request.getSession(true);
+				session.setAttribute("storeEmail", storeEmail);
 				storeData = Store.getStore(storeEmail);
 				offers = new ArrayList<Offer>();
-	            offers.addAll(Store.getActiveStoreOffers(storeEmail));
+				offers.addAll(Store.getActiveStoreOffers(storeEmail));
 				return Response.ok().entity(new Viewable("/jsp/homepage")).build();
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	@POST
 	@Path("/addOffer")
 	@Produces("text/html")
 	public Response addOffer(@FormParam("StoreID") String storeEmail, @FormParam("datepickerStart") String offerStart,
-			@FormParam("datepickerEnd") String offerEnd, @FormParam("offerContent") String offerContent, @FormParam("category") String offerCategory) {
+			@FormParam("datepickerEnd") String offerEnd, @FormParam("offerContent") String offerContent,
+			@FormParam("category") String offerCategory) {
 		String serviceUrl = webServiceLink + "AddOfferService";
-		String urlParameters = "StoreID=" + storeEmail + "&datepickerStart=" + offerStart + "&datepickerEnd=" + offerEnd + "&offerContent=" + offerContent + "&category=" + offerCategory;
+		String urlParameters = "StoreID=" + storeEmail + "&datepickerStart=" + offerStart + "&datepickerEnd=" + offerEnd
+				+ "&offerContent=" + offerContent + "&category=" + offerCategory;
 		System.out.println(urlParameters);
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -219,25 +220,25 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
-			{
+			if (object.get("Status").equals("OK")) {
 				storeData = Store.getStore(storeEmail);
 				return Response.ok().entity(new Viewable("/jsp/goHome")).build();
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	@POST
 	@Path("/updateAccount")
 	@Produces("text/html")
 	public Response updateAccount(@FormParam("StoreID") String storeEmail, @FormParam("name") String newName,
 			@FormParam("email") String newEmail, @FormParam("password") String newPassword) {
 		String serviceUrl = webServiceLink + "UpdateAccountService";
-		String urlParameters = "StoreID=" + storeEmail + "&name=" + newName + "&email=" + newEmail + "&password=" + newPassword;
+		String urlParameters = "StoreID=" + storeEmail + "&name=" + newName + "&email=" + newEmail + "&password="
+				+ newPassword;
 		System.out.println(urlParameters);
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -245,24 +246,25 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
-			{
+			if (object.get("Status").equals("OK")) {
 				return Response.ok().entity(new Viewable("/jsp/goHome")).build();
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	@POST
 	@Path("/updateOffer")
 	@Produces("text/html")
 	public Response updateOffer(@FormParam("OfferID") String offerID, @FormParam("datepickerStart") String offerStart,
-			@FormParam("datepickerEnd") String offerEnd, @FormParam("offerContent") String offerContent, @FormParam("category") String offerCategory) {
+			@FormParam("datepickerEnd") String offerEnd, @FormParam("offerContent") String offerContent,
+			@FormParam("category") String offerCategory) {
 		String serviceUrl = webServiceLink + "UpdateOfferService";
-		String urlParameters = "OfferID=" + offerID + "&datepickerStart=" + offerStart + "&datepickerEnd=" + offerEnd + "&offerContent=" + offerContent + "&category=" + offerCategory;
+		String urlParameters = "OfferID=" + offerID + "&datepickerStart=" + offerStart + "&datepickerEnd=" + offerEnd
+				+ "&offerContent=" + offerContent + "&category=" + offerCategory;
 		System.out.println(urlParameters);
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -270,17 +272,16 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
-			{
+			if (object.get("Status").equals("OK")) {
 				return Response.ok().entity(new Viewable("/jsp/goHome")).build();
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	@POST
 	@Path("/deleteOffer")
 	@Produces("text/html")
@@ -294,17 +295,16 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
-			{
+			if (object.get("Status").equals("OK")) {
 				return Response.ok().entity(new Viewable("/jsp/goHome")).build();
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	@POST
 	@Path("/getOffers")
 	@Produces("text/html")
@@ -319,8 +319,7 @@ public class UserController {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
 			myOffers = new ArrayList<Offer>();
-			if (object.get("Status").equals("OK"))
-			{
+			if (object.get("Status").equals("OK")) {
 				JSONArray joffers = (JSONArray) parser.parse(object.get("AllOffers").toString());
 				for (int i = 0; i < joffers.size(); i++) {
 					JSONObject joffer;
@@ -334,11 +333,50 @@ public class UserController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return "failed";
 	}
-	
-	public Offer convertJsonObjToOfferObj(JSONObject jsonObj){
-		return new Offer(jsonObj.get("StoreID").toString(), jsonObj.get("OfferID").toString(), jsonObj.get("CategoryName").toString(), jsonObj.get("Content").toString(), jsonObj.get("StartDate").toString(), jsonObj.get("EndDate").toString());
+
+	public Offer convertJsonObjToOfferObj(JSONObject jsonObj) {
+		return new Offer(jsonObj.get("StoreID").toString(), jsonObj.get("OfferID").toString(),
+				jsonObj.get("CategoryName").toString(), jsonObj.get("Content").toString(),
+				jsonObj.get("StartDate").toString(), jsonObj.get("EndDate").toString());
+	}
+
+	@POST
+	@Path("/getPosts")
+	@Produces("text/html")
+	public String getPosts(@FormParam("userID") String userID) {
+		String serviceUrl = webServiceLink + "GetPostsService";
+		String urlParameters = "userID=" + userID;
+		System.out.println(urlParameters);
+		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		JSONParser parser = new JSONParser();
+		try {
+			Object obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			ArrayList<FacebookPost> posts = new ArrayList<FacebookPost>();
+			if (object.get("Status").equals("OK")) {
+				JSONArray jposts = (JSONArray) parser.parse(object.get("AllUserPosts").toString());
+				for (int i = 0; i < jposts.size(); i++) {
+					JSONObject jpost;
+					jpost = (JSONObject) jposts.get(i);
+					posts.add(convertJsonObjToPostObj(jpost));
+				}
+				Map<String, ArrayList<FacebookPost>> allPosts = new HashMap<String, ArrayList<FacebookPost>>();
+				allPosts.put("allposts", posts);
+				return posts.toString();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return "failed";
+	}
+
+	public FacebookPost convertJsonObjToPostObj(JSONObject jsonObj) {
+		return new FacebookPost(jsonObj.get("userID").toString(), jsonObj.get("postID").toString(),
+				jsonObj.get("postContent").toString(), jsonObj.get("creationDate").toString(), 1);
 	}
 }

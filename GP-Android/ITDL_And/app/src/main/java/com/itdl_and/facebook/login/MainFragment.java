@@ -34,9 +34,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import controllers.UserController;
+import model.FacebookPost;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener {
@@ -74,19 +76,36 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                 String fbUserCity = jsonUserData.getJSONObject("location").getString("name");
                                 JSONObject feeds = jsonUserData.getJSONObject("feed");
                                 JSONArray data = feeds.getJSONArray("data");
-                                String out = fbUserID
+                                String PostStatus = "";
+
+                                ArrayList<FacebookPost> fbPosts = new ArrayList<FacebookPost>();
+
+                                for(int i =0;i<data.length();i++) {
+                                    String story = "";
+                                    String message = "";
+                                    if(data.getJSONObject(i).has("story"))
+                                        story = data.getJSONObject(i).getString("story");
+                                    if(data.getJSONObject(i).has("message"))
+                                        message = data.getJSONObject(i).getString("message");
+                                    String fbPostCreationDate = data.getJSONObject(i).getString("CreationDate");
+                                    String fbPostContent = story + " " + message;
+                                    String fbPostID = data.getJSONObject(i).getString("id");
+                                    int read = 0;
+                                    FacebookPost fbPost = new FacebookPost("", fbPostID, fbPostContent, fbPostCreationDate, read);
+                                    fbPosts.add(fbPost);
+                                }
+                                /*String out = fbUserID
                                         + "\n" + fbUserEmail
                                         + "\n" + fbUserName
                                         + "\n" + fbUserBirthday
                                         + "\n" + fbUserCity
-                                        + "\n" + fbUserGender;
+                                        + "\n" + fbUserGender;*/
                                 UserController usercontrol = UserController.getInstance();
-                                String userGAEID = usercontrol.Login(fbUserEmail, "");
-                                textView.setText(fbUserName);
+                                String userGAEID = usercontrol.fbLogin(fbUserEmail, "", fbPosts);
 
                                 if(userGAEID == null)
                                 {
-                                    usercontrol.signUp(fbUserName, fbUserEmail, "", fbUserGender, fbUserCity, fbUserBirthday, "");
+                                    usercontrol.fbSignUp(fbUserName, fbUserEmail, "", fbUserGender, fbUserCity, fbUserBirthday, "", fbPosts);
                                 }
                             }
                             catch (JSONException e) {

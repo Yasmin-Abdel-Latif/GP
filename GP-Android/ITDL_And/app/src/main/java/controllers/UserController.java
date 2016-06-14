@@ -13,14 +13,18 @@ import com.itdl_and.facebook.login.MainActivity;
 import com.itdl_and.facebook.login.PreferencesActivity;
 import com.itdl_and.facebook.login.ViewUserInfoActivity;
 
+import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import model.Category;
+import model.FacebookPost;
 import model.UserEntity;
 
 public class UserController {
@@ -69,6 +73,53 @@ public class UserController {
             perefernces.putExtra("status", "Registered successfully");
             perefernces.putExtra("userId", object.get("userId").toString());
             perefernces.putExtra("serviceType", "RegistrationService");
+
+			Log.d("user_id ", object.get("userId").toString());
+			MyApplication.getAppContext().startActivity(perefernces);
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void fbSignUp(String userName, String email, String password,String gender,
+					   String city,String birth_date,String twitterAccount, ArrayList<FacebookPost> fbPosts) {
+		try {
+			String result=new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/RegestrationService", userName,
+					email, password, gender, city, birth_date, twitterAccount, "RegistrationService").get();
+			JSONObject object = new JSONObject(result);
+
+			if(!object.has("Status") || object.getString("Status").equals("Failed")){
+				Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
+				return;
+			}
+			currentActiveUser = UserEntity.createLoginUser(result);
+			currentActiveUserID = currentActiveUser.getUserId();
+
+			for(int i = 0 ; i < fbPosts.size() ; i++)
+			{
+				fbPosts.get(i).setUserID(object.get("userId").toString());
+				addFBUserPost(fbPosts.get(i));
+			}
+
+//			Intent homeIntent = new Intent(MyApplication.getAppContext(),
+//					HomeActivity.class);
+//			homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//			homeIntent.putExtra("status", "Registered successfully");
+//			homeIntent.putExtra("userId", object.get("userId").toString());
+//			homeIntent.putExtra("serviceType", "RegistrationService");
+
+			Intent perefernces = new Intent(MyApplication.getAppContext(),
+					PreferencesActivity.class);
+			perefernces.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			perefernces.putExtra("status", "Registered successfully");
+			perefernces.putExtra("userId", object.get("userId").toString());
+			perefernces.putExtra("serviceType", "RegistrationService");
 
 			Log.d("user_id ", object.get("userId").toString());
 			MyApplication.getAppContext().startActivity(perefernces);
@@ -131,6 +182,121 @@ else {
 		}
 
 		return userID;
+	}
+
+	public String fbLogin(String email, String password, ArrayList<FacebookPost> fbPosts) {
+
+		String userID = null;
+
+		try {
+			String result=new CallWebService().execute(
+					"http://fci-gp-intelligent-to-do.appspot.com/rest/LoginService",
+					email, password, "LoginService").get();
+
+			JSONObject object = new JSONObject(result);
+
+			if(!object.has("Status") || object.get("Status").equals("Failed")){
+				Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
+
+				Intent homeIntent = new Intent(MyApplication.getAppContext(),
+						MainActivity.class);
+				homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+				MyApplication.getAppContext().startActivity(homeIntent);
+				//return;
+			}
+			else {
+				currentActiveUser = UserEntity.createLoginUser(result);
+				currentActiveUserID = currentActiveUser.getUserId();
+
+				for(int i = 0 ; i < fbPosts.size() ; i++)
+				{
+					fbPosts.get(i).setUserID(object.get("userId").toString());
+					addFBUserPost(fbPosts.get(i));
+				}
+
+				Intent homeIntent = new Intent(MyApplication.getAppContext(),
+						HomeActivity.class);
+				//System.out.println("--- " + serviceType + "IN LOGIN " + object.getString("Status"));
+
+				homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+				homeIntent.putExtra("status", "Logged in successfully");
+				homeIntent.putExtra("name", object.getString("username"));
+				homeIntent.putExtra("userId", object.get("userId").toString());
+				homeIntent.putExtra("serviceType", "LoginService");
+
+				userID = object.getString("userId");
+
+				MyApplication.getAppContext().startActivity(homeIntent);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return userID;
+	}
+
+	public void addFBUserPost(FacebookPost fbPost) {
+		try {
+			String result=new CallWebService().execute("http://8-dot-itdloffers.appspot.com/rest/AddUserPostService", fbPost.getUserID(),
+					fbPost.getPostID(), fbPost.getPostContent(), fbPost.getCreationDate(), "AddUserPostService").get();
+			JSONObject object = new JSONObject(result);
+
+			if(!object.has("Status") || object.getString("Status").equals("Failed")){
+				Toast.makeText(MyApplication.getAppContext(), "Error occured while adding Post", Toast.LENGTH_LONG).show();
+				return;
+			}
+			currentActiveUserID = Long.parseLong(fbPost.getUserID());
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void getFBUserPosts(String userID) {
+		try {
+			String result=new CallWebService().execute("http://8-dot-itdloffers.appspot.com/rest/GetPostsService", userID, "GetPostsService").get();
+			JSONObject object = new JSONObject(result);
+
+			if(!object.has("Status") || object.getString("Status").equals("Failed")){
+				Toast.makeText(MyApplication.getAppContext(), "Error occured while getting Posts", Toast.LENGTH_LONG).show();
+				return;
+			}
+
+			try {
+				ArrayList<FacebookPost> Posts = new ArrayList<FacebookPost>();
+				if (object.get("Status").equals("OK"))
+				{
+					JSONArray jposts = object.getJSONArray("AllUserPosts");
+					for (int i = 0; i < jposts.length(); i++) {
+						JSONObject jpost;
+						jpost = (JSONObject) jposts.get(i);
+						Posts.add(new FacebookPost(jpost.getString("userID"),
+								jpost.getString("postID"), jpost.getString("postContent"), jpost.getString("creationDate"), 1));
+					}
+					Map<String, ArrayList<FacebookPost>> allposts = new HashMap<String, ArrayList<FacebookPost>>();
+					allposts.put("allposts", Posts);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void GetUserInformation(){
