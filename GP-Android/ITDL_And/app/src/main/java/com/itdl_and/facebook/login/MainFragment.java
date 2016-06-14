@@ -1,8 +1,6 @@
 package com.itdl_and.facebook.login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +21,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
@@ -50,14 +46,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    public String fbUserProfile = "";
-    public String fbUserPosts = "";
 
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
             AccessToken accessToken = loginResult.getAccessToken();
-            final Profile profile = Profile.getCurrentProfile();
 
             GraphRequest request = GraphRequest.newMeRequest(
                     accessToken,
@@ -76,7 +69,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                 String fbUserCity = jsonUserData.getJSONObject("location").getString("name");
                                 JSONObject feeds = jsonUserData.getJSONObject("feed");
                                 JSONArray data = feeds.getJSONArray("data");
-                                String PostStatus = "";
 
                                 ArrayList<FacebookPost> fbPosts = new ArrayList<FacebookPost>();
 
@@ -111,8 +103,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                             catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-                            fbUserProfile = response.toString();
                         }
                     });
             Bundle parameters = new Bundle();
