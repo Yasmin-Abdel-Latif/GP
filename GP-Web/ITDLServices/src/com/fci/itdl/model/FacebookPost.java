@@ -110,7 +110,7 @@ public class FacebookPost {
 
 	public static ArrayList<FacebookPost> getUserPosts(String userID) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Filter filterOfferStatus = new FilterPredicate("userID", FilterOperator.EQUAL, userID);
+		Filter filterOfferStatus = new FilterPredicate("UserID", FilterOperator.EQUAL, userID);
 		Query gaeQuery = new Query("FacebookPosts").setFilter(filterOfferStatus);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		ArrayList<FacebookPost> posts = new ArrayList<FacebookPost>();
@@ -128,7 +128,7 @@ public class FacebookPost {
 	
 	public static void setPostsRead(String userID) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Filter filterOfferStatus = new FilterPredicate("userID", FilterOperator.EQUAL, userID);
+		Filter filterOfferStatus = new FilterPredicate("UserID", FilterOperator.EQUAL, userID);
 		Query gaeQuery = new Query("FacebookPosts").setFilter(filterOfferStatus);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {

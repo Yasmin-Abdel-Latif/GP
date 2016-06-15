@@ -308,9 +308,9 @@ public class UserController {
 	@POST
 	@Path("/getOffers")
 	@Produces("text/html")
-	public String getOffers(@FormParam("email") String storeEmail) {
+	public String getOffers() {
 		String serviceUrl = webServiceLink + "GetOffersService";
-		String urlParameters = "email=" + storeEmail;
+		String urlParameters = "";
 		System.out.println(urlParameters);
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -318,18 +318,26 @@ public class UserController {
 		try {
 			Object obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			myOffers = new ArrayList<Offer>();
+			String output = "";
 			if (object.get("Status").equals("OK")) {
-				JSONArray joffers = (JSONArray) parser.parse(object.get("AllOffers").toString());
-				for (int i = 0; i < joffers.size(); i++) {
-					JSONObject joffer;
-					joffer = (JSONObject) joffers.get(i);
-					myOffers.add(convertJsonObjToOfferObj(joffer));
+				JSONArray jstores = (JSONArray) parser.parse(object.get("AllStores").toString());
+				for (int i = 0; i < jstores.size(); i++) {
+					JSONObject jstore;
+					jstore = (JSONObject) jstores.get(i);
+					ArrayList<Offer> storeOffers = new ArrayList<Offer>();
+					String storeLat = jstore.get("latitude").toString();
+					String storeLong = jstore.get("longitude").toString();
+					String jsonStoreEmail = jstore.get("storeEmail").toString();
+					JSONArray joffers = (JSONArray) parser.parse(jstore.get("offers").toString());
+					for (int j = 0; j < joffers.size(); j++) {
+						JSONObject joffer;
+						joffer = (JSONObject) joffers.get(j);
+						storeOffers.add(convertJsonObjToOfferObj(joffer));
+					}
+					output += storeLat + " " + storeLong + " " + jsonStoreEmail + " " + storeOffers.toString() + "\n";
 				}
-				Map<String, ArrayList<Offer>> allOffers = new HashMap<String, ArrayList<Offer>>();
-				allOffers.put("alloffers", myOffers);
-				return myOffers.toString();
 			}
+			return output;
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -342,11 +350,48 @@ public class UserController {
 				jsonObj.get("CategoryName").toString(), jsonObj.get("Content").toString(),
 				jsonObj.get("StartDate").toString(), jsonObj.get("EndDate").toString());
 	}
+	
+	@POST
+	@Path("/getAllStores")
+	@Produces("text/html")
+	public String getAllStores() {
+		String serviceUrl = webServiceLink + "GetAllStores";
+		String urlParameters = "";
+		System.out.println(urlParameters);
+		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		JSONParser parser = new JSONParser();
+		try {
+			Object obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			if (object.get("Status").equals("OK")) {
+				ArrayList<Store> stores = new ArrayList<Store>();
+				JSONArray jstores = (JSONArray) parser.parse(object.get("AllStores").toString());
+				for (int i = 0; i < jstores.size(); i++) {
+					JSONObject jstore;
+					jstore = (JSONObject) jstores.get(i);
+					stores.add(convertJsonObjToStoreObj(jstore));
+				}
+				return stores.toString();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return "failed";
+	}
+	
+	public Store convertJsonObjToStoreObj(JSONObject jsonObj) {
+		return new Store(jsonObj.get("name").toString(), jsonObj.get("email").toString(),
+				jsonObj.get("password").toString(), jsonObj.get("address").toString(),
+				Double.parseDouble(jsonObj.get("latitude").toString()),
+				Double.parseDouble(jsonObj.get("longitude").toString()));
+	}
 
 	@POST
 	@Path("/getPosts")
 	@Produces("text/html")
-	public String getPosts(@FormParam("userID") String userID) {
+	public String getPosts(@FormParam("email") String userID) {
 		String serviceUrl = webServiceLink + "GetPostsService";
 		String urlParameters = "userID=" + userID;
 		System.out.println(urlParameters);

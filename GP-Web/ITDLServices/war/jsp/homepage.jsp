@@ -66,7 +66,7 @@ $(document).ready(function(){
 	
 	$(".getoffers").click(function(){
 		var str = "<%=storeEmail%>";
-        document.getElementById("dumyForm").innerHTML = "<form id='formSubmitting' action='/itdl/getOffers' method='POST'><input type='hidden' id='email' name='email' value='" + str + "'></form>";
+        document.getElementById("dumyForm").innerHTML = "<form id='formSubmitting' action='/itdl/getPosts' method='POST'><input type='hidden' id='email' name='email' value='6313740437815296'></form>";
         $("#formSubmitting").submit();
 	});
 	

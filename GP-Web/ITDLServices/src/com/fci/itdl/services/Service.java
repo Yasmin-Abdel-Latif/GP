@@ -133,30 +133,70 @@ public class Service {
 	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/GetOffersService")
-	public String getOffersService(@FormParam("email") String storeEmail) 
+	public String getOffersService() 
 	{
-		JSONObject jobject = new JSONObject();
-		JSONArray joffers = new JSONArray();
-		
-		ArrayList<Offer> offers = new ArrayList<Offer>();
-		offers.addAll(Offer.getActiveOffers());
-		for(int i = 0 ; i < offers.size() ; i++)
+		JSONObject jresult = new JSONObject();
+		JSONArray jarray = new JSONArray();
+		ArrayList<Store> stores = new ArrayList<Store>();
+		stores.addAll(Store.getAllStores());
+		for(int i = 0 ; i < stores.size() ; i++)
 		{
-			JSONObject joffer = new JSONObject();
-			joffer.put("OfferID", offers.get(i).getOfferID());
-			joffer.put("StoreID", offers.get(i).getStoreID());
-		    joffer.put("StartDate", offers.get(i).getStartDate());
-			joffer.put("EndDate", offers.get(i).getEndDate());
-			joffer.put("Content", offers.get(i).getContent());
-			joffer.put("Status", "ON");
-			joffer.put("CategoryName", offers.get(i).getCategoryID());
+			JSONObject jobject = new JSONObject();
+			JSONArray joffers = new JSONArray();
 			
-			joffers.add(joffer);
+			ArrayList<Offer> offers = new ArrayList<Offer>();
+			offers.addAll(Store.getActiveStoreOffers(stores.get(i).getEmail()));
+			for(int j = 0 ; j < offers.size() ; j++)
+			{
+				JSONObject joffer = new JSONObject();
+				joffer.put("OfferID", offers.get(j).getOfferID());
+				joffer.put("StoreID", offers.get(j).getStoreID());
+			    joffer.put("StartDate", offers.get(j).getStartDate());
+				joffer.put("EndDate", offers.get(j).getEndDate());
+				joffer.put("Content", offers.get(j).getContent());
+				joffer.put("Status", "ON");
+				joffer.put("CategoryName", offers.get(j).getCategoryID());
+				
+				joffers.add(joffer);
+			}
+			jobject.put("offers", joffers);
+			jobject.put("storeEmail", stores.get(i).getEmail());
+			jobject.put("latitude", stores.get(i).getLat());
+			jobject.put("longitude", stores.get(i).getLon());
+			
+			jarray.add(jobject);
 		}
-		jobject.put("AllOffers", joffers);
-		jobject.put("Status", "OK");
+		jresult.put("AllStores", jarray);
+		jresult.put("Status", "OK");
 		
-		return jobject.toString();
+		return jresult.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("/GetAllStores")
+	public String getAllStores() 
+	{
+		JSONObject jresult = new JSONObject();
+		JSONArray jarray = new JSONArray();
+		ArrayList<Store> stores = new ArrayList<Store>();
+		stores.addAll(Store.getAllStores());
+		for(int i = 0 ; i < stores.size() ; i++)
+		{
+			JSONObject jobject = new JSONObject();
+			jobject.put("email", stores.get(i).getEmail());
+			jobject.put("latitude", stores.get(i).getLat());
+			jobject.put("longitude", stores.get(i).getLon());
+			jobject.put("name", stores.get(i).getName());
+			jobject.put("password", stores.get(i).getPassword());
+			jobject.put("address", stores.get(i).getAddress());
+			
+			jarray.add(jobject);
+		}
+		jresult.put("AllStores", jarray);
+		jresult.put("Status", "OK");
+		
+		return jresult.toString();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -200,7 +240,7 @@ public class Service {
 		jobject.put("AllUserPosts", jposts);
 		jobject.put("Status", "OK");
 
-		FacebookPost.setPostsRead(userID);
+		//FacebookPost.setPostsRead(userID);
 		
 		return jobject.toString();
 	}

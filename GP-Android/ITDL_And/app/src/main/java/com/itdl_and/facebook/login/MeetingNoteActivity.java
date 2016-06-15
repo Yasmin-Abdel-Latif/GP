@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import controllers.NoteController;
@@ -25,12 +26,12 @@ public class MeetingNoteActivity extends ActionBarActivity implements View.OnCli
     Calendar calendar =Calendar.getInstance();
     Button btnDate,btnEstimatedTime,btnAddNote,btnMeetingTime;
     EditText Title,Agenda,meeingPlace;
-    TextView displayDate,DisplayTime;
+    TextView displayDate,DisplayTime,DisplayTimeEstimation;
     String date,time,estimatedTime,temp;
     RadioGroup priorityRadioGroup;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_not);
         priorityRadioGroup = (RadioGroup)findViewById(R.id.radioGroupPriority);
@@ -38,10 +39,11 @@ public class MeetingNoteActivity extends ActionBarActivity implements View.OnCli
         Title = (EditText) findViewById(R.id.etMeetingTitle);
         Agenda = (EditText) findViewById(R.id.etMeetingAgenda);
         meeingPlace = (EditText) findViewById(R.id.etMeetingPlace);
-        btnDate = (Button) findViewById(R.id.btnMeetingDate );
+        btnDate = (Button) findViewById(R.id.btnMeetingDate);
         displayDate= (TextView) findViewById(R.id.tvdisplayDate);
         DisplayTime= (TextView) findViewById(R.id.tvDisplayTime);
         btnMeetingTime = (Button) findViewById(R.id.btnMeetingTime);
+        DisplayTimeEstimation=(TextView) findViewById(R.id.tvDisplayEstimatedTime);
         btnEstimatedTime = (Button) findViewById(R.id.btnEstimatedTime);
         btnAddNote = (Button) findViewById(R.id.btnAddMeetingNote);
         btnAddNote.setOnClickListener(this);
@@ -50,12 +52,28 @@ public class MeetingNoteActivity extends ActionBarActivity implements View.OnCli
         btnEstimatedTime.setOnClickListener(this);
 
     }
+
     TimePickerDialog.OnTimeSetListener ontimelistener2 =new TimePickerDialog.OnTimeSetListener() {
 
         @Override
         public void onTimeSet(TimePicker timePicker, int hours, int minute) {
-            DisplayTime.setText("Estimated Time :"+hours + "hours and " + minute+"minute");
-            time=twoDigits(hours)+":"+twoDigits(minute)+":00";
+            DecimalFormat formatter = new DecimalFormat("00");
+            String hoursFormatted = formatter.format(hours);
+            String minuteFormatted = formatter.format(minute);
+            DisplayTime.setText("Time :"+hoursFormatted + ":" + minuteFormatted);
+            time=hoursFormatted+":"+minuteFormatted+":00";
+        }
+    };
+
+    DatePickerDialog.OnDateSetListener listener =new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayofmonth) {
+            month=month+1;
+            DecimalFormat formatter = new DecimalFormat("00");
+            String monthFormatted = formatter.format(month);
+            String dayofmonthFormatted = formatter.format(dayofmonth);
+            displayDate.setText("selected Date is "+year+"-"+ monthFormatted+"-"+dayofmonthFormatted);
+            date =year+"-"+monthFormatted+"-"+dayofmonthFormatted;
         }
     };
 
@@ -63,16 +81,11 @@ public class MeetingNoteActivity extends ActionBarActivity implements View.OnCli
 
         @Override
         public void onTimeSet(TimePicker timePicker, int hours, int minute) {
-            estimatedTime=twoDigits(hours)+":"+twoDigits(minute)+":00";
-        }
-    };
-
-    DatePickerDialog.OnDateSetListener listener =new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayofmonth) {
-
-            displayDate.setText("selected Date is "+year+"-"+(month+1) +"-"+dayofmonth);
-            date =twoDigits(year)+"-"+twoDigits(month+1)+"-"+twoDigits(dayofmonth);
+            DecimalFormat formatter = new DecimalFormat("00");
+            String hoursFormatted = formatter.format(hours);
+            String minuteFormatted = formatter.format(minute);
+            DisplayTimeEstimation.setText("Estimated Time :"+hoursFormatted + "hours and " + minuteFormatted+"minute");
+            estimatedTime=hoursFormatted+":"+minuteFormatted+":00";
         }
     };
 
@@ -102,22 +115,16 @@ public class MeetingNoteActivity extends ActionBarActivity implements View.OnCli
             NoteController noteController = new NoteController();
             temp = date+" "+time;
 
+
             if (!isConnected) {
                 noteController.addMeetingNoteInLoacalDB(title,place,agenda,temp,priority,estimatedTime,false,0);
             }
             else{
+
                 noteController.addMeetingNote(title, place, agenda, temp, priority, estimatedTime);
             }
 
         }
-    }
-
-    public String twoDigits(int num)
-    {
-        String numStr = "" + num;
-        if(num < 10)
-            numStr = "0" + numStr;
-        return numStr;
     }
 }
 
