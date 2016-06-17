@@ -17,31 +17,55 @@ public class MeetingNoteEntity extends NoteEntity {
     protected String meetingPlace;
     protected String meetingAgenda;
 
-    public MeetingNoteEntity(String noteType,String Priority, Timestamp noteDateCreation,
+    public MeetingNoteEntity(String noteType, String Priority, Timestamp noteDateCreation,
                              boolean isDone, boolean isActive, boolean isTextCategorized, boolean isSynchronized,
-                        String meetingtitle ,String meetingplace,String agenda, Timestamp meetingNoteDate,Time estimatedTransportTime) {
-        super(noteType,Priority , noteDateCreation, isDone, isActive, isTextCategorized, isSynchronized);
+                             String meetingtitle, String meetingplace, String agenda, Timestamp meetingNoteDate, Time estimatedTransportTime) {
+        super(noteType, Priority, noteDateCreation, isDone, isActive, isTextCategorized, isSynchronized);
 
-        this.estimatedTransportTime=estimatedTransportTime;
-        this.meetingPlace=meetingplace;
-        this.meetingAgenda=agenda;
-        this.meetingTitle=meetingtitle;
-        this.meetingNoteDate=meetingNoteDate;
+        this.estimatedTransportTime = estimatedTransportTime;
+        this.meetingPlace = meetingplace;
+        this.meetingAgenda = agenda;
+        this.meetingTitle = meetingtitle;
+        this.meetingNoteDate = meetingNoteDate;
     }
-    public MeetingNoteEntity(String noteType,String Priority,
-                             String meetingtitle ,String meetingplace,String agenda, Timestamp meetingNoteDate,Time estimatedTransportTime, int id) {
-        super(noteType,Priority , id);
 
-        this.estimatedTransportTime=estimatedTransportTime;
-        this.meetingPlace=meetingplace;
-        this.meetingAgenda=agenda;
-        this.meetingTitle=meetingtitle;
-        this.meetingNoteDate=meetingNoteDate;
+    public MeetingNoteEntity(
+            Timestamp meetingNoteDate,
+            Time estimatedTransportTime,
+            String meetingTitle,
+            String meetingPlace,
+            String meetingAgenda,
+            long noteID,
+            long userID,
+            Timestamp creationDate,
+            boolean isDone,
+            boolean isTextCategorized,
+            String noteType) {
+        super(noteID, userID, creationDate, isDone, isTextCategorized, noteType);
+        this.meetingNoteDate = meetingNoteDate;
+        this.estimatedTransportTime = estimatedTransportTime;
+        this.meetingTitle = meetingTitle;
+        this.meetingPlace = meetingPlace;
+        this.meetingAgenda = meetingAgenda;
+
     }
-    public MeetingNoteEntity(String noteType,String Priority, String meetingtitle ,int id){
-        super(noteType,Priority,id);
-        meetingTitle=meetingtitle;
+
+    public MeetingNoteEntity(String noteType, String Priority,
+                             String meetingtitle, String meetingplace, String agenda, Timestamp meetingNoteDate, Time estimatedTransportTime, int id) {
+        super(noteType, Priority, id);
+
+        this.estimatedTransportTime = estimatedTransportTime;
+        this.meetingPlace = meetingplace;
+        this.meetingAgenda = agenda;
+        this.meetingTitle = meetingtitle;
+        this.meetingNoteDate = meetingNoteDate;
     }
+
+    public MeetingNoteEntity(String noteType, String Priority, String meetingtitle, int id) {
+        super(noteType, Priority, id);
+        meetingTitle = meetingtitle;
+    }
+
     public String getMeetingPlace() {
         return meetingPlace;
     }
@@ -84,20 +108,20 @@ public class MeetingNoteEntity extends NoteEntity {
 
     @Override
     public String toString() {
-        JSONObject obj= new JSONObject();
+        JSONObject obj = new JSONObject();
         try {
-            obj.put("meetingNoteDate",meetingNoteDate);
-            obj.put("estimatedTransportTime",estimatedTransportTime);
-            obj.put("meetingTitle",meetingTitle);
-            obj.put("meetingAgenda",meetingAgenda);
-            obj.put("meetingPlace",meetingPlace);
+            obj.put("meetingNoteDate", meetingNoteDate);
+            obj.put("estimatedTransportTime", estimatedTransportTime);
+            obj.put("meetingTitle", meetingTitle);
+            obj.put("meetingAgenda", meetingAgenda);
+            obj.put("meetingPlace", meetingPlace);
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String h =obj.toString();
-       h= h.substring(0,h.length()-1);
-        return h+","+super.toString() ;
+        String h = obj.toString();
+        h = h.substring(0, h.length() - 1);
+        return h + "," + super.toString();
     }
 }

@@ -350,7 +350,7 @@ public class UserController {
 				jsonObj.get("CategoryName").toString(), jsonObj.get("Content").toString(),
 				jsonObj.get("StartDate").toString(), jsonObj.get("EndDate").toString());
 	}
-	
+
 	@POST
 	@Path("/getAllStores")
 	@Produces("text/html")
@@ -380,7 +380,7 @@ public class UserController {
 
 		return "failed";
 	}
-	
+
 	public Store convertJsonObjToStoreObj(JSONObject jsonObj) {
 		return new Store(jsonObj.get("name").toString(), jsonObj.get("email").toString(),
 				jsonObj.get("password").toString(), jsonObj.get("address").toString(),
@@ -391,7 +391,7 @@ public class UserController {
 	@POST
 	@Path("/getPosts")
 	@Produces("text/html")
-	public String getPosts(@FormParam("email") String userID) {
+	public String getPosts(@FormParam("UserID") String userID) {
 		String serviceUrl = webServiceLink + "GetPostsService";
 		String urlParameters = "userID=" + userID;
 		System.out.println(urlParameters);
@@ -423,5 +423,52 @@ public class UserController {
 	public FacebookPost convertJsonObjToPostObj(JSONObject jsonObj) {
 		return new FacebookPost(jsonObj.get("userID").toString(), jsonObj.get("postID").toString(),
 				jsonObj.get("postContent").toString(), jsonObj.get("creationDate").toString(), 1);
+	}
+
+	public String getAllNotes(String userID) throws ParseException {
+		String serviceUrl = "http://4-dot-secondhelloworld-1221.appspot.com/restNotes/getAllNotesService";
+		String urlParameters = "userID=" + userID;
+		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+
+		ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
+		NoteParser noteParser = new NoteParser();
+
+		JSONParser parser = new JSONParser();
+
+		JSONArray array = (JSONArray) parser.parse(retJson.toString());
+
+		if (array.size() == 0) {
+			return "emptyNotes";
+		}
+		for (int i = 0; i < array.size(); i++) {
+			JSONObject object;
+			object = (JSONObject) array.get(i);
+			System.out.println(object.toJSONString());
+			if (object.containsKey("meeting")) {
+				JSONParser p = new JSONParser();
+				JSONObject object1 = (JSONObject) p.parse(object.get("meeting").toString());
+				notes.add(noteParser.convertJsonObjToMeetingNoteObj(object1));
+
+			} else if (object.containsKey("ordinary")) {
+				JSONParser p = new JSONParser();
+				JSONObject object1 = (JSONObject) p.parse(object.get("ordinary").toString());
+				notes.add(noteParser.convertJsonObjToOrdinaryNoteObj(object1));
+
+			} else if (object.containsKey("shopping")) {
+				System.out.println("shopping");
+				JSONParser p = new JSONParser();
+				JSONObject object1 = (JSONObject) p.parse(object.get("shopping").toString());
+				notes.add(noteParser.convertJsonObjToShoppingNoteObj(object1));
+
+			} else if (object.containsKey("deadline")) {
+				System.out.println("deadline");
+				JSONParser p = new JSONParser();
+				JSONObject object1 = (JSONObject) p.parse(object.get("deadline").toString());
+				notes.add(noteParser.convertJsonObjToDeadLineNoteObj(object1));
+			}
+		}
+
+		return notes.toString();
 	}
 }

@@ -15,7 +15,7 @@ public class Category implements Serializable {
 
     public Category(String categoryName) {
         this.categoryName = categoryName;
-        categoryPercentage=0;
+        categoryPercentage = 0;
     }
 
     public boolean ischecked() {

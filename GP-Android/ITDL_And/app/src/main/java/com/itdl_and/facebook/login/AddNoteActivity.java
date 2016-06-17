@@ -11,8 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 public class AddNoteActivity extends Activity implements AdapterView.OnItemSelectedListener {
-    Spinner spinner ;
-    String noteTypes []={"Select note Type ","Ordinary","Meeting","Deadline","Shopping"};
+    Spinner spinner;
+    String noteTypes[] = {"Select note Type ", "Ordinary", "Meeting", "Deadline", "Shopping"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,12 +21,12 @@ public class AddNoteActivity extends Activity implements AdapterView.OnItemSelec
 
         spinner = (Spinner) findViewById(R.id.spinner);
 
-        ArrayAdapter<String> adpter =new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_spinner_item,noteTypes);
+        ArrayAdapter<String> adpter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, noteTypes);
 
         spinner.setAdapter(adpter);
         spinner.setOnItemSelectedListener(this);
 
-}
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,24 +53,21 @@ public class AddNoteActivity extends Activity implements AdapterView.OnItemSelec
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-        int position =spinner.getSelectedItemPosition();
+        int position = spinner.getSelectedItemPosition();
         String noteType = adapterView.getItemAtPosition(position).toString();
 
-        if (noteType.equals("Ordinary")){
+        if (noteType.equals("Ordinary")) {
             Intent intent = new Intent(getApplicationContext(), OrdinaryNoteActivity.class);
             startActivity(intent);
 
-        }
-        else if (noteType.equals("Meeting")){
+        } else if (noteType.equals("Meeting")) {
             Intent intent = new Intent(getApplicationContext(), MeetingNoteActivity.class);
             startActivity(intent);
 
-        }
-        else if (noteType.equals("Deadline")){
+        } else if (noteType.equals("Deadline")) {
             Intent intent = new Intent(getApplicationContext(), DeadlineActivity.class);
             startActivity(intent);
-        }
-        else if (noteType.equals("Shopping")){
+        } else if (noteType.equals("Shopping")) {
             Intent intent = new Intent(getApplicationContext(), ShoppingNoteActivity.class);
             startActivity(intent);
 

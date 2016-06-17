@@ -9,17 +9,29 @@ import java.sql.Timestamp;
 /**
  * Created by samah on 21/03/2016.
  */
-public abstract class NoteEntity implements Serializable{
+public abstract class NoteEntity implements Serializable {
 
-    protected int  localNoteId;
-    protected  long userId;
-    protected  long servernoteId;
+    protected int localNoteId;
+    protected long userId;
+    protected long servernoteId;
     protected Timestamp noteDateCreation;
-    protected  String notePriority;
+    protected String notePriority;
     protected String noteType;
     protected boolean isDone;
     protected boolean isDeleted;
     protected boolean isTextCategorized;
+
+    public NoteEntity(long noteID, long userID, Timestamp creationDate, boolean isDone, boolean isTextCategorized,
+                      String noteType) {
+        super();
+
+        this.servernoteId = noteID;
+        this.userId = userID;
+        this.noteDateCreation = creationDate;
+        this.isDone = isDone;
+        this.isTextCategorized = isTextCategorized;
+        this.noteType = noteType;
+    }
 
     public boolean isAdded() {
         return isAdded;
@@ -45,24 +57,24 @@ public abstract class NoteEntity implements Serializable{
         this.isDeleted = isDeleted;
     }
 
-    protected  boolean isAdded;
-    protected  boolean isUpdated;
+    protected boolean isAdded;
+    protected boolean isUpdated;
 
     @Override
     public String toString() {
-        JSONObject obj= new JSONObject();
+        JSONObject obj = new JSONObject();
         try {
-            obj.put("localNoteId",localNoteId);
-            obj.put("noteDateCreation",noteDateCreation);
-            obj.put("notePriority",notePriority);
-            obj.put("noteType",noteType);
-            obj.put("isDone",isDone);
-            obj.put("isDeleted",isDeleted);
-            obj.put("isAdded",isAdded);
-            obj.put("isUpdated",isUpdated);
-            obj.put("isTextCategorized",isTextCategorized);
-            obj.put("userId",userId);
-            obj.put("serverNoteId",servernoteId);
+            obj.put("localNoteId", localNoteId);
+            obj.put("noteDateCreation", noteDateCreation);
+            obj.put("notePriority", notePriority);
+            obj.put("noteType", noteType);
+            obj.put("isDone", isDone);
+            obj.put("isDeleted", isDeleted);
+            obj.put("isAdded", isAdded);
+            obj.put("isUpdated", isUpdated);
+            obj.put("isTextCategorized", isTextCategorized);
+            obj.put("userId", userId);
+            obj.put("serverNoteId", servernoteId);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -78,31 +90,34 @@ public abstract class NoteEntity implements Serializable{
         this.servernoteId = servernoteId;
     }
 
-    public NoteEntity(String noteType ,String notePriority,int id){
-    this.noteType=noteType;
-    this.notePriority=notePriority;
-    this.localNoteId=id;
-}
-    public NoteEntity(String noteType , long userId ,Timestamp noteDateCreation,
-                      boolean isDone ,boolean isDeleted,boolean isTextCategorized,boolean isAdded) {
-        this.noteDateCreation=noteDateCreation;
-        this.noteType=noteType;
-        this.isDeleted=isDeleted;
-        this.isDone=isDone;
-        this.isTextCategorized=isTextCategorized;
-        this.userId=userId;
-        this.isAdded=isAdded;
-    }
-    public NoteEntity(String noteType , String notePriority,Timestamp noteDateCreation,
-                      boolean isDone ,boolean isDeleted,boolean isTextCategorized,boolean isAdded) {
-        this.noteDateCreation=noteDateCreation;
-        this.noteType=noteType;
-        this.isDeleted=isDeleted;
-        this.isDone=isDone;
-        this.isTextCategorized=isTextCategorized;
+    public NoteEntity(String noteType, String notePriority, int id) {
+        this.noteType = noteType;
         this.notePriority = notePriority;
-        this.isAdded=isAdded;
+        this.localNoteId = id;
     }
+
+    public NoteEntity(String noteType, long userId, Timestamp noteDateCreation,
+                      boolean isDone, boolean isDeleted, boolean isTextCategorized, boolean isAdded) {
+        this.noteDateCreation = noteDateCreation;
+        this.noteType = noteType;
+        this.isDeleted = isDeleted;
+        this.isDone = isDone;
+        this.isTextCategorized = isTextCategorized;
+        this.userId = userId;
+        this.isAdded = isAdded;
+    }
+
+    public NoteEntity(String noteType, String notePriority, Timestamp noteDateCreation,
+                      boolean isDone, boolean isDeleted, boolean isTextCategorized, boolean isAdded) {
+        this.noteDateCreation = noteDateCreation;
+        this.noteType = noteType;
+        this.isDeleted = isDeleted;
+        this.isDone = isDone;
+        this.isTextCategorized = isTextCategorized;
+        this.notePriority = notePriority;
+        this.isAdded = isAdded;
+    }
+
     public int getNoteId() {
         return localNoteId;
     }
@@ -150,7 +165,6 @@ public abstract class NoteEntity implements Serializable{
     public void setIsTextCategorized(boolean isTextCategorized) {
         this.isTextCategorized = isTextCategorized;
     }
-
 
 
     public long getUserId() {

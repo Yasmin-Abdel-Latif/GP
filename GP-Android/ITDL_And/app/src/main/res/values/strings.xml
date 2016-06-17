@@ -13,7 +13,7 @@
     <string name="UserPassword">Password</string>
     <string name="UserName">User Name</string>
     <string name="Email">Email</string>
-    <string name="TwitterAccount"> Twitter Account</string>
+    <string name="TwitterAccount">Twitter ID</string>
     <string name="Want_sign_up">if this your first time in app</string>
     <string name="Register">continue</string>
     <string name="gender">Gender</string>

@@ -15,12 +15,13 @@ import controllers.NoteController;
 import controllers.UserController;
 
 public class ShoppingNoteActivity extends ActionBarActivity {
-Spinner spinnerCategory;
-    String Categories []={"Select a category" ,"Food","Sport","Fashion"};
+    Spinner spinnerCategory;
+    String Categories[] = {"Select a category", "Food", "Sport", "Fashion"};
     String category = "";
     EditText productName;
     Button Add;
     RadioGroup priorityRadioGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +29,9 @@ Spinner spinnerCategory;
         spinnerCategory = (Spinner) findViewById(R.id.spinnercategory);
         productName = (EditText) findViewById(R.id.etProductname);
         Add = (Button) findViewById(R.id.btnSaveShopingnote);
-        priorityRadioGroup = (RadioGroup)findViewById(R.id.radioGroupPriority);
+        priorityRadioGroup = (RadioGroup) findViewById(R.id.radioGroupPriority);
 
-        ArrayAdapter<String> adpter =new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_spinner_item,Categories);
+        ArrayAdapter<String> adpter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Categories);
 
         spinnerCategory.setAdapter(adpter);
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -46,30 +47,29 @@ Spinner spinnerCategory;
 
             }
         });
-   Add.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
+        Add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-         String   productname =productName.getText().toString();
-        int selectedId = priorityRadioGroup.getCheckedRadioButtonId();
-        RadioButton btnpriority = (RadioButton) findViewById(selectedId);
-        String priority = btnpriority.getText().toString();
-        UserController userController = UserController.getInstance();
-        boolean isConnected=userController.isNetworkConnected(getApplicationContext());
-        NoteController noteController = new NoteController();
+                String productname = productName.getText().toString();
+                int selectedId = priorityRadioGroup.getCheckedRadioButtonId();
+                RadioButton btnpriority = (RadioButton) findViewById(selectedId);
+                String priority = btnpriority.getText().toString();
+                UserController userController = UserController.getInstance();
+                boolean isConnected = userController.isNetworkConnected(getApplicationContext());
+                NoteController noteController = new NoteController();
 
-        if (!isConnected) {
-           noteController.AddShoppingNoteInLocalDB(productname, priority,category, false,0);
+                if (!isConnected) {
+                    noteController.AddShoppingNoteInLocalDB(productname, priority, category, false, 0);
 
-        }
-        else{
+                } else {
 
-           // Toast.makeText(getApplicationContext(), " Connected ", Toast.LENGTH_LONG).show();
-            noteController.addShoppingNote(productname, priority, category);
-        }
+                    // Toast.makeText(getApplicationContext(), " Connected ", Toast.LENGTH_LONG).show();
+                    noteController.addShoppingNote(productname, priority, category);
+                }
 
-    }
-});
+            }
+        });
     }
 
 }

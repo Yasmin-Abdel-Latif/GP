@@ -24,15 +24,17 @@ import model.ShoppingNoteEntity;
  */
 public class NoteAdapter extends BaseAdapter {
 
-    ArrayList<NoteEntity> MYNotes=new ArrayList<NoteEntity>();
+    ArrayList<NoteEntity> MYNotes = new ArrayList<NoteEntity>();
     Context context;
-    LayoutInflater layoutInflater ;
-    public NoteAdapter(Context context){
-        NoteController noteController =new NoteController();
-        MYNotes= noteController.ShowAllNotes();
-        this.context=context;
-        layoutInflater=layoutInflater.from(this.context);
+    LayoutInflater layoutInflater;
+
+    public NoteAdapter(Context context) {
+        NoteController noteController = new NoteController();
+        MYNotes = noteController.ShowAllNotes();
+        this.context = context;
+        layoutInflater = layoutInflater.from(this.context);
     }
+
     @Override
     public int getCount() {
         return (MYNotes == null) ? 0 : MYNotes.size();
@@ -52,72 +54,68 @@ public class NoteAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
 
         ViewHolder viewHolder;
-        if (view == null){
-            view=layoutInflater.inflate(R.layout.single_note_row,null);
-            viewHolder=new ViewHolder();
+        if (view == null) {
+            view = layoutInflater.inflate(R.layout.single_note_row, null);
+            viewHolder = new ViewHolder();
             view.setTag(viewHolder);
-        }
-    else {
+        } else {
             viewHolder = (ViewHolder) view.getTag();
-         }
+        }
 
-        String NoteType =MYNotes.get(position).getNoteType();
-        final int id =MYNotes.get(position).getNoteId();
-         final String priority;
-        if(NoteType.equals("Ordinary")){
-            OrdinaryNoteEntity ordinaryNoteEntity =(OrdinaryNoteEntity)MYNotes.get(position);
-            String content=ordinaryNoteEntity.getNoteContent();
-             priority=ordinaryNoteEntity.getNotePriority();
-            viewHolder.tvNoteType=SetTextToTV(view, R.id.tvnoteType, "Type : Ordinary");
-            viewHolder.tvPriority=SetTextToTV(view,R.id.tvPriority,"Priority : "+priority);
-            viewHolder.tvTitleOrContentOrProduct=SetTextToTV(view,R.id.tvTitleOrcontentOrproduct,"Content : "+content);
-        }
-        else if(NoteType.equals("Meeting")){
-            MeetingNoteEntity meetingNoteEntity =(MeetingNoteEntity) MYNotes.get(position);
-            String Title=  meetingNoteEntity.getMeetingTitle();
-             priority =meetingNoteEntity.getNotePriority();
-            viewHolder.tvNoteType=SetTextToTV(view, R.id.tvnoteType, "Type : Meeting");
-            viewHolder.tvPriority=SetTextToTV(view,R.id.tvPriority,"Priority : "+priority);
-            viewHolder.tvTitleOrContentOrProduct=SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "Meeting Title : "+Title);
-        }
-        else if(NoteType.equals("Deadline")){
-            DeadlineNoteEntity deadlineNoteEntity =(DeadlineNoteEntity) MYNotes.get(position);
-            String Title=  deadlineNoteEntity.getDeadLineTitle();
-             priority =deadlineNoteEntity.getNotePriority();
-            viewHolder.tvNoteType=SetTextToTV(view, R.id.tvnoteType, "Type : Deadline");
-            viewHolder.tvPriority=SetTextToTV(view,R.id.tvPriority,"Priority : "+priority);
-            viewHolder.tvTitleOrContentOrProduct=SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "Deadline Title :"+Title);
-        }
-        else if(NoteType.equals("Shopping")){
-            final ShoppingNoteEntity shoppingNoteEntity =(ShoppingNoteEntity) MYNotes.get(position);
-            String Product =shoppingNoteEntity.getProductToBuy();
-             priority=shoppingNoteEntity.getNotePriority();
+        String NoteType = MYNotes.get(position).getNoteType();
+        final int id = MYNotes.get(position).getNoteId();
+        final String priority;
+        if (NoteType.equals("Ordinary")) {
+            OrdinaryNoteEntity ordinaryNoteEntity = (OrdinaryNoteEntity) MYNotes.get(position);
+            String content = ordinaryNoteEntity.getNoteContent();
+            priority = ordinaryNoteEntity.getNotePriority();
+            viewHolder.tvNoteType = SetTextToTV(view, R.id.tvnoteType, "Type : Ordinary");
+            viewHolder.tvPriority = SetTextToTV(view, R.id.tvPriority, "Priority : " + priority);
+            viewHolder.tvTitleOrContentOrProduct = SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "Content : " + content);
+        } else if (NoteType.equals("Meeting")) {
+            MeetingNoteEntity meetingNoteEntity = (MeetingNoteEntity) MYNotes.get(position);
+            String Title = meetingNoteEntity.getMeetingTitle();
+            priority = meetingNoteEntity.getNotePriority();
+            viewHolder.tvNoteType = SetTextToTV(view, R.id.tvnoteType, "Type : Meeting");
+            viewHolder.tvPriority = SetTextToTV(view, R.id.tvPriority, "Priority : " + priority);
+            viewHolder.tvTitleOrContentOrProduct = SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "Meeting Title : " + Title);
+        } else if (NoteType.equals("Deadline")) {
+            DeadlineNoteEntity deadlineNoteEntity = (DeadlineNoteEntity) MYNotes.get(position);
+            String Title = deadlineNoteEntity.getDeadLineTitle();
+            priority = deadlineNoteEntity.getNotePriority();
+            viewHolder.tvNoteType = SetTextToTV(view, R.id.tvnoteType, "Type : Deadline");
+            viewHolder.tvPriority = SetTextToTV(view, R.id.tvPriority, "Priority : " + priority);
+            viewHolder.tvTitleOrContentOrProduct = SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "Deadline Title :" + Title);
+        } else if (NoteType.equals("Shopping")) {
+            final ShoppingNoteEntity shoppingNoteEntity = (ShoppingNoteEntity) MYNotes.get(position);
+            String Product = shoppingNoteEntity.getProductToBuy();
+            priority = shoppingNoteEntity.getNotePriority();
             //final int id =shoppingNoteEntity.getNoteId();
-            viewHolder.tvNoteType=SetTextToTV(view, R.id.tvnoteType, "Type : Shopping");
-            viewHolder.tvPriority=SetTextToTV(view,R.id.tvPriority,"Priority : "+priority);
-            viewHolder.tvTitleOrContentOrProduct=SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "You want to buy : "+Product);
+            viewHolder.tvNoteType = SetTextToTV(view, R.id.tvnoteType, "Type : Shopping");
+            viewHolder.tvPriority = SetTextToTV(view, R.id.tvPriority, "Priority : " + priority);
+            viewHolder.tvTitleOrContentOrProduct = SetTextToTV(view, R.id.tvTitleOrcontentOrproduct, "You want to buy : " + Product);
 
         }
 
-        viewHolder.btnDetails= (Button) view.findViewById(R.id.btnDetails);
+        viewHolder.btnDetails = (Button) view.findViewById(R.id.btnDetails);
         viewHolder.btnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NoteController noteController =new NoteController();
+                NoteController noteController = new NoteController();
                 noteController.GetNoteDetails(id);
             }
         });
         return view;
     }
 
-    private TextView SetTextToTV(View v,int tvid,String text){
-    TextView tv = (TextView) v.findViewById(tvid);
-    tv.setText(text);
-    return tv;
+    private TextView SetTextToTV(View v, int tvid, String text) {
+        TextView tv = (TextView) v.findViewById(tvid);
+        tv.setText(text);
+        return tv;
     }
 
-    private  class ViewHolder{
-        TextView tvPriority,tvNoteType,tvTitleOrContentOrProduct;
+    private class ViewHolder {
+        TextView tvPriority, tvNoteType, tvTitleOrContentOrProduct;
         Button btnDetails;
     }
 }

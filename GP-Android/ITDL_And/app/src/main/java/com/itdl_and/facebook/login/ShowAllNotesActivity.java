@@ -9,21 +9,21 @@ import Adapters.NoteAdapter;
 
 public class ShowAllNotesActivity extends ActionBarActivity {
 
-    ListView listViewNotes ;
+    ListView listViewNotes;
     TextView tvNoNotes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all_notes);
 
         listViewNotes = (ListView) findViewById(R.id.LvShowNotes);
-        tvNoNotes= (TextView) findViewById(R.id.tvNoNotes);
-        NoteAdapter noteAdapter =new NoteAdapter(getApplicationContext());
-        if (noteAdapter.getCount()==0)
-        {tvNoNotes.setText("No Notes To Show ");
+        tvNoNotes = (TextView) findViewById(R.id.tvNoNotes);
+        NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext());
+        if (noteAdapter.getCount() == 0) {
+            tvNoNotes.setText("No Notes To Show ");
 
-        }
-        else {
+        } else {
             //listViewNotes.setItemsCanFocus(false);
             listViewNotes.setAdapter(noteAdapter);
         }

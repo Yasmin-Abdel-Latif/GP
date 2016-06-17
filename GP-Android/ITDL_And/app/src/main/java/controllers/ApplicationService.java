@@ -22,10 +22,10 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        intervalInSec=intent.getIntExtra("Interval", 120);
+        intervalInSec = intent.getIntExtra("Interval", 120);
         // MyDBH =intent.getParcelableExtra("MyDBHandler");
-        ConTime=new Timer();
-        ConTime.schedule(new SyncAdd(), 0, intervalInSec*1000);
+        ConTime = new Timer();
+        ConTime.schedule(new SyncAdd(), 0, intervalInSec * 1000);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -33,29 +33,27 @@ public class ApplicationService extends Service {
     class SyncAdd extends TimerTask {
 
         @Override
-        public void run(){
+        public void run() {
 
-           // Toast.makeText(MyApplication.getAppContext(),"in run  ",Toast.LENGTH_LONG).show();
+            // Toast.makeText(MyApplication.getAppContext(),"in run  ",Toast.LENGTH_LONG).show();
 
-           boolean IsConnected= UserController.getInstance().isNetworkConnected(MyApplication.getAppContext());
+            boolean IsConnected = UserController.getInstance().isNetworkConnected(MyApplication.getAppContext());
 
-            if (IsConnected==true)
-            {
+            if (IsConnected == true) {
                 //select from table with sync 0
                 //Toast.makeText(MyApplication.getAppContext(),"ConnectionToInternet is true ",Toast.LENGTH_LONG).show();
                 System.out.println("--- IN Run  connected ----");
 
                 Log.i("ConnectionInternet", "connected");
-                NoteController noteController =new NoteController();
-               String NotSyncNotes = noteController.GetNotSyncNotes();
+                NoteController noteController = new NoteController();
+                String NotSyncNotes = noteController.GetNotSyncNotes();
 
-                if(NotSyncNotes!=""){
-                  //  Toast.makeText(MyApplication.getAppContext(),"there is notes  ",Toast.LENGTH_LONG).show();
+                if (NotSyncNotes != "") {
+                    //  Toast.makeText(MyApplication.getAppContext(),"there is notes  ",Toast.LENGTH_LONG).show();
                     Log.i("CursornnnnteeeeeN000o= ", NotSyncNotes);
-                  noteController.Syncroinzation(NotSyncNotes);
-                }
-                else{
-                    Log.i("Cursor" ,"Empty");
+                    noteController.Syncroinzation(NotSyncNotes);
+                } else {
+                    Log.i("Cursor", "Empty");
 
                 }
             }

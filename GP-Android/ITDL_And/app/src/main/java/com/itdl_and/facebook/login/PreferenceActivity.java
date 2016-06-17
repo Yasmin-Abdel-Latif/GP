@@ -13,10 +13,11 @@ import controllers.UserController;
 import model.Category;
 
 public class PreferenceActivity extends ActionBarActivity {
-    ListView listViewCategories ;
+    ListView listViewCategories;
     Button Submit;
-    UserController userController=UserController.getInstance();
-ArrayList<Category> pereferences=new ArrayList<Category>();
+    UserController userController = UserController.getInstance();
+    ArrayList<Category> pereferences = new ArrayList<Category>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,9 +25,9 @@ ArrayList<Category> pereferences=new ArrayList<Category>();
         listViewCategories = (ListView) findViewById(R.id.listViewCategories);
         Submit = (Button) findViewById(R.id.btnSubmit);
 
-         PreferenceAdapter preferenceAdapter  = new PreferenceAdapter(getApplicationContext());
+        PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getApplicationContext());
         listViewCategories.setAdapter(preferenceAdapter);
-        pereferences =preferenceAdapter.getMYCategories();
+        pereferences = preferenceAdapter.getMYCategories();
 
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override

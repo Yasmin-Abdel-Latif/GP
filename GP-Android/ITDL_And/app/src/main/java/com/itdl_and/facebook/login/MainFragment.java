@@ -1,5 +1,8 @@
 package com.itdl_and.facebook.login;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,7 +35,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
+import controllers.AlarmReceiver;
 import controllers.UserController;
 import model.FacebookPost;
 
@@ -40,17 +45,45 @@ import model.FacebookPost;
 public class MainFragment extends Fragment implements View.OnClickListener {
 
     private CallbackManager callbackManager;
-    Button LogInButton,SignUpButton,GoToHomeButton;
-    EditText Email ,Password;
-    private TextView textView;
+    Button LogInButton, SignUpButton, GoToHomeButton;
+    EditText Email, Password;
+    private static TextView textView;
+    LoginResult log;
+    private static final String TAG = "HELLO";
 
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    public AlarmManager alarmManager;
+    Intent alarmIntent;
+    PendingIntent pendingIntent;
+
+    public void setAlarm() {
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmIntent = new Intent(getActivity().getApplicationContext(), AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, alarmIntent, 0);
+
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
+        alarmStartTime.set(Calendar.MINUTE, 0);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval()/*AlarmManager.INTERVAL_DAY*/, pendingIntent);
+    }
+
+    private int getInterval() {
+        int days = 1;
+        int hours = 1;
+        int minutes = 1;
+        int seconds = 60;
+        int milliseconds = 1000;
+        int repeatMS = days * hours * minutes * seconds * milliseconds;
+        return repeatMS;
+    }
 
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
             AccessToken accessToken = loginResult.getAccessToken();
+            log = loginResult;
 
             GraphRequest request = GraphRequest.newMeRequest(
                     accessToken,
@@ -72,12 +105,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
                                 ArrayList<FacebookPost> fbPosts = new ArrayList<FacebookPost>();
 
-                                for(int i =0;i<data.length();i++) {
+                                for (int i = 0; i < data.length(); i++) {
                                     String story = "";
                                     String message = "";
-                                    if(data.getJSONObject(i).has("story"))
+                                    if (data.getJSONObject(i).has("story"))
                                         story = data.getJSONObject(i).getString("story");
-                                    if(data.getJSONObject(i).has("message"))
+                                    if (data.getJSONObject(i).has("message"))
                                         message = data.getJSONObject(i).getString("message");
                                     String fbPostCreationDate = data.getJSONObject(i).getString("created_time");
                                     String fbPostContent = story + " " + message;
@@ -86,21 +119,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                     FacebookPost fbPost = new FacebookPost("", fbPostID, fbPostContent, fbPostCreationDate, read);
                                     fbPosts.add(fbPost);
                                 }
-                                /*String out = fbUserID
+                                String out = fbUserID
                                         + "\n" + fbUserEmail
                                         + "\n" + fbUserName
                                         + "\n" + fbUserBirthday
                                         + "\n" + fbUserCity
-                                        + "\n" + fbUserGender;*/
+                                        + "\n" + fbUserGender;
+                                Log.i("FFFFFFFFFFFFF", out);
                                 UserController usercontrol = UserController.getInstance();
-                                String userGAEID = usercontrol.fbLogin(fbUserEmail, "", fbPosts);
+                                long userGAEID = usercontrol.fbLogin(fbUserEmail, "", fbPosts);
+                                Log.i(TAG, String.valueOf(userGAEID));
 
-                                if(userGAEID == null)
-                                {
+                                if (userGAEID == 0) {
                                     usercontrol.fbSignUp(fbUserName, fbUserEmail, "", fbUserGender, fbUserCity, fbUserBirthday, "", fbPosts);
                                 }
-                            }
-                            catch (JSONException e) {
+
+                                setAlarm();
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -142,13 +177,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
         callbackManager = CallbackManager.Factory.create();
 
-        accessTokenTracker= new AccessTokenTracker() {
+        accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
 
@@ -158,7 +193,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                if(newProfile != null){
+                if (newProfile != null) {
                     textView.setText(newProfile.getName());
                 }
             }
@@ -179,11 +214,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
         textView = (TextView) view.findViewById(R.id.textView);
-        LogInButton=(Button) view.findViewById(R.id.buttonLogIn);
-        SignUpButton=(Button) view.findViewById(R.id.buttonSignUp);
-        GoToHomeButton= (Button) view.findViewById(R.id.buttonGoToHome);
-        Email= (EditText)view.findViewById(R.id.editTextEmail);
-        Password=(EditText)view.findViewById(R.id.editTextPassword);
+        LogInButton = (Button) view.findViewById(R.id.buttonLogIn);
+        SignUpButton = (Button) view.findViewById(R.id.buttonSignUp);
+        GoToHomeButton = (Button) view.findViewById(R.id.buttonGoToHome);
+        Email = (EditText) view.findViewById(R.id.editTextEmail);
+        Password = (EditText) view.findViewById(R.id.editTextPassword);
 
         LogInButton.setOnClickListener(this);
         SignUpButton.setOnClickListener(this);
@@ -218,6 +253,67 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if(profile != null){
             textView.setText(profile.getName());
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+            GraphRequest request = GraphRequest.newMeRequest(
+                    accessToken,
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
+                            JSONObject jsonUserData = response.getJSONObject();
+                            try {
+                                String fbUserID = jsonUserData.getString("id");
+                                String fbUserEmail = jsonUserData.getString("email");
+                                String fbUserName = jsonUserData.getString("name");
+                                String fbUserBirthday = jsonUserData.getString("birthday");
+                                String fbUserGender = jsonUserData.getString("gender");
+                                String fbUserCity = jsonUserData.getJSONObject("location").getString("name");
+                                JSONObject feeds = jsonUserData.getJSONObject("feed");
+                                JSONArray data = feeds.getJSONArray("data");
+
+                                ArrayList<FacebookPost> fbPosts = new ArrayList<FacebookPost>();
+
+                                for(int i =0;i<data.length();i++) {
+                                    String story = "";
+                                    String message = "";
+                                    if(data.getJSONObject(i).has("story"))
+                                        story = data.getJSONObject(i).getString("story");
+                                    if(data.getJSONObject(i).has("message"))
+                                        message = data.getJSONObject(i).getString("message");
+                                    String fbPostCreationDate = data.getJSONObject(i).getString("created_time");
+                                    String fbPostContent = story + " " + message;
+                                    String fbPostID = data.getJSONObject(i).getString("id");
+                                    int read = 0;
+                                    FacebookPost fbPost = new FacebookPost("", fbPostID, fbPostContent, fbPostCreationDate, read);
+                                    fbPosts.add(fbPost);
+                                }
+                                String out = fbUserID
+                                        + "\n" + fbUserEmail
+                                        + "\n" + fbUserName
+                                        + "\n" + fbUserBirthday
+                                        + "\n" + fbUserCity
+                                        + "\n" + fbUserGender;
+                                UserController usercontrol = UserController.getInstance();
+                                long userGAEID = usercontrol.fbLogin(fbUserEmail, "", fbPosts);
+
+
+                                if(userGAEID != 0)
+                                {
+                                    Log.i(TAG, String.valueOf(userGAEID));
+                                    setAlarm();
+                                }
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,email,name,birthday,gender,location,friends{name,gender},feed");
+            request.setParameters(parameters);
+            request.executeAsync();
         }
     }
 

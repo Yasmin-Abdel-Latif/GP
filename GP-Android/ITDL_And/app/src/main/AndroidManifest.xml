@@ -77,6 +77,8 @@
         </activity>
 
         <service android:name="controllers.ApplicationService" />
+        <receiver android:name="controllers.AlarmReceiver"  android:enabled="true"/>
+        <service android:name="controllers.AlarmService" />
 
     </application>
 
