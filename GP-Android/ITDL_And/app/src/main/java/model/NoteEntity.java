@@ -20,6 +20,7 @@ public abstract class NoteEntity implements Serializable {
     protected boolean isDone;
     protected boolean isDeleted;
     protected boolean isTextCategorized;
+    boolean ischecked;
 
     public NoteEntity(long noteID, long userID, Timestamp creationDate, boolean isDone, boolean isTextCategorized,
                       String noteType) {
@@ -173,5 +174,13 @@ public abstract class NoteEntity implements Serializable {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public boolean ischecked() {
+        return ischecked;
+    }
+
+    public void setIschecked(boolean ischecked) {
+        this.ischecked = ischecked;
     }
 }

@@ -43,7 +43,7 @@ public class NoteController {
         String userID = String.valueOf(userController.getCurrentUserID());
 
         try {
-            String res = new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/addOrdinaryNoteService",
+            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addOrdinaryNoteService",
                     noteContent, userID, "addOrdinaryNoteService").get();
 
             JSONObject object = new JSONObject(res);
@@ -71,7 +71,7 @@ public class NoteController {
         String userID = String.valueOf(userController.getCurrentUserID());
 
         try {
-            String res = new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/addShoppingNoteService",
+            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addShoppingNoteService",
                     productToBuy, category, userID, "addShoppingNoteService").get();
             JSONObject object = new JSONObject(res);
 
@@ -98,7 +98,7 @@ public class NoteController {
         String userID = String.valueOf(userController.getCurrentUserID());
 
         try {
-            String res = new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/addDeadLineNoteService",
+            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addDeadLineNoteService",
                     title, deadlinedate_time, String.valueOf(progressValue), userID, "addDeadLineNoteService").get();
             JSONObject object = new JSONObject(res);
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
@@ -124,7 +124,7 @@ public class NoteController {
 
         try {
             //http://fci-gp-intelligent-to-do.appspot.com/rest/
-            String res = new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/addMeetingNoteService",
+            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addMeetingNoteService",
                     title, place, agenda, date, time, userID, priority, "addMeetingNoteService").get();
             JSONObject object = new JSONObject(res);
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
@@ -343,6 +343,30 @@ public class NoteController {
         Toast.makeText(MyApplication.getAppContext(), " note Deleted  ", Toast.LENGTH_LONG).show();
 
     }
+
+    public String UpdateCreationDateAndIsDone(long noteid) {
+        try {
+            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/updateCreationDateAndIsDoneService",
+                    String.valueOf(noteid), "updateCreationDateAndIsDoneService").get();
+            JSONObject object = new JSONObject(res);
+
+            if (!object.has("Status") || object.getString("Status").equals("Failed")) {
+                Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
+                return "Failed";
+            } else {
+                Toast.makeText(MyApplication.getAppContext(), "Notes added successfully", Toast.LENGTH_LONG).show();
+                return "Done";
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "Failed";
+    }
+
     ///////
 
     public void GetNoteDetails(int noteId) {

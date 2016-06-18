@@ -21,8 +21,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -102,7 +107,7 @@ public class UserController {
             String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/RegestrationService", userName,
                     email, password, gender, city, birth_date, twitterAccount, "RegistrationService").get();
 
-            Log.i("Cursor", "FBSignup");
+            Log.i("Cursor", result);
 
             JSONObject object = new JSONObject(result);
 
@@ -111,10 +116,11 @@ public class UserController {
                 return;
             }
             currentActiveUser = UserEntity.createLoginUser(result);
-            currentActiveUserID = getCurrentActiveUser().getUserId();
+            currentActiveUserID = currentActiveUser.getUserId();
+            Log.i("Cursor", result);
 
             for (int i = 0; i < fbPosts.size(); i++) {
-                fbPosts.get(i).setUserID(object.get("userId").toString());
+                fbPosts.get(i).setUserID(String.valueOf(object.getLong("userId")));
                 addFBUserPost(fbPosts.get(i));
             }
 
@@ -122,10 +128,10 @@ public class UserController {
                     PreferenceActivity.class);
             perefernce.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             perefernce.putExtra("status", "Registered successfully");
-            perefernce.putExtra("userId", object.get("userId").toString());
+            perefernce.putExtra("userId", object.getLong("userId"));
             perefernce.putExtra("serviceType", "RegistrationService");
 
-            Log.d("user_id ", object.get("userId").toString());
+            Log.i("user_id ", String.valueOf(object.getLong("userId")));
             MyApplication.getAppContext().startActivity(perefernce);
 
         } catch (InterruptedException e) {
@@ -210,7 +216,7 @@ public class UserController {
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 MyApplication.getAppContext().startActivity(homeIntent);
-                //return;
+                return 0;
             } else {
                 currentActiveUser = UserEntity.createLoginUser(result);
                 currentActiveUserID = getCurrentActiveUser().getUserId();
@@ -303,43 +309,40 @@ public class UserController {
     }
 
     public static ArrayList<NoteEntity> getAllNotes(String userID) {
+
+        ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
         try {
             Log.i("HELLO HI", userID);
+            userID = userID.trim();
             String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/getAllNotesService", userID, "getAllNotesService").get();
+
             Log.i("HELLO", result);
             JSONObject object = new JSONObject(result);
 
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
-                Toast.makeText(MyApplication.getAppContext(), "Error occured while getting Posts", Toast.LENGTH_LONG).show();
-                return null;
+                Toast.makeText(MyApplication.getAppContext(), "Error occured while getting Notes", Toast.LENGTH_LONG).show();
+                return notes;
             }
 
             try {
-                ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
                 NoteParser noteParser = new NoteParser();
                 if (object.get("Status").equals("OK")) {
                     JSONArray jnotes = object.getJSONArray("AllUserNotes");
+                    Log.i("HELLO",String.valueOf(jnotes.length()));
+                    Timestamp ts = new Timestamp(new Date().getTime());
+                    String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
                     for (int i = 0; i < jnotes.length(); i++) {
                         JSONObject jnote = (JSONObject) jnotes.get(i);
-                        if (jnote.has("Meeting")) {
-                            Log.i("HELLO", jnote.getString("Meeting"));
-                            JSONObject note1 = new JSONObject(jnote.getString("Meeting"));
-                            notes.add(noteParser.convertJsonObjToMeetingNoteObj(note1));
-
-                        } else if (jnote.has("Ordinary")) {
+                        if (jnote.has("Ordinary")) {
                             Log.i("HELLO", jnote.getString("Ordinary"));
                             JSONObject note1 = new JSONObject(jnote.getString("Ordinary"));
-                            notes.add(noteParser.convertJsonObjToOrdinaryNoteObj(note1));
-
-                        } else if (jnote.has("Shopping")) {
-                            Log.i("HELLO", jnote.getString("Shopping"));
-                            JSONObject note1 = new JSONObject(jnote.getString("Shopping"));
-                            notes.add(noteParser.convertJsonObjToShoppingNoteObj(note1));
-
-                        } else if (jnote.has("Deadline")) {
-                            Log.i("HELLO", jnote.getString("Deadline"));
-                            JSONObject note1 = new JSONObject(jnote.getString("Deadline"));
-                            notes.add(noteParser.convertJsonObjToDeadLineNoteObj(note1));
+                            NoteEntity note = noteParser.convertJsonObjToOrdinaryNoteObj(note1);
+                            String day = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(note.getNoteDateCreation().getTime());
+                            int days = (int) ((note.getNoteDateCreation().getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                            notes.add(note);
+                            /*if ((day.equals(curDay)) && (days > 0) && (days <= 14)) {
+                                notes.add(note);
+                            }*/
                         }
                     }
                     return notes;
@@ -354,7 +357,7 @@ public class UserController {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null;
+        return notes;
     }
 
     public void GetUserInformation() {
@@ -461,15 +464,14 @@ public class UserController {
             }
         }
 
-        Log.d("category_Chosenn", String.valueOf(jsonArrayPrfrnce));
+        Log.i("category_Chosenn", String.valueOf(jsonArrayPrfrnce));
 
-        String result = null;
         try {
 
-            result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/enterInitialWeightsForOneUserService",
+            String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/enterInitialWeightsForOneUserService",
                     String.valueOf(UserController.getCurrentUserID()), jsonArrayPrfrnce.toString(), "enterInitialWeightsForOneUserService").get();
 
-            Log.i("RRRRRRrresult=", result);
+            Log.i("HELLO PRFRNC", result);
 
             if (!result.equals("added")) {
                 Toast.makeText(MyApplication.getAppContext(), "Error occurred", Toast.LENGTH_LONG).show();
@@ -478,7 +480,6 @@ public class UserController {
 
             Intent homeIntent = new Intent(MyApplication.getAppContext(),
                     HomeActivity.class);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             homeIntent.putExtra("status", "Registered successfully");
             homeIntent.putExtra("userId", String.valueOf(currentActiveUserID));
             homeIntent.putExtra("serviceType", "UserPreferenceService");

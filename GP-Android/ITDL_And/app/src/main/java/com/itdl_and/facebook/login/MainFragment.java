@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import controllers.AlarmReceiver;
+import controllers.MyApplication;
 import controllers.UserController;
 import model.FacebookPost;
 
@@ -53,14 +54,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    public AlarmManager alarmManager;
-    Intent alarmIntent;
-    PendingIntent pendingIntent;
 
     public void setAlarm() {
-        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmIntent = new Intent(getActivity().getApplicationContext(), AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, alarmIntent, 0);
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
 
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -126,6 +124,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         + "\n" + fbUserCity
                                         + "\n" + fbUserGender;
                                 Log.i("FFFFFFFFFFFFF", out);
+                                Log.i("FFFFFFFFFFFFF", fbPosts.size()+"");
                                 UserController usercontrol = UserController.getInstance();
                                 long userGAEID = usercontrol.fbLogin(fbUserEmail, "", fbPosts);
                                 Log.i(TAG, String.valueOf(userGAEID));

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.itdl_and.facebook.login">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -15,7 +15,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,11 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home" />
@@ -70,14 +73,19 @@
         <activity
             android:name=".EditDeadlineNoteActivity"
             android:label="@string/title_activity_edit_deadline_note" />
-
         <activity
             android:name=".PreferenceActivity"
-            android:label="@string/title_activity_preference" >
-        </activity>
+            android:label="@string/title_activity_preference"></activity>
+        <activity
+            android:name=".HabitActivity"
+            android:label="@string/title_activity_habit_note"></activity>
 
         <service android:name="controllers.ApplicationService" />
-        <receiver android:name="controllers.AlarmReceiver"  android:enabled="true"/>
+
+        <receiver
+            android:name="controllers.AlarmReceiver"
+            android:enabled="true" />
+
         <service android:name="controllers.AlarmService" />
 
     </application>

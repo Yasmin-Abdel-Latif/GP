@@ -2,6 +2,7 @@ package com.itdl_and.facebook.login;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -28,6 +29,8 @@ public class PreferenceActivity extends ActionBarActivity {
         PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getApplicationContext());
         listViewCategories.setAdapter(preferenceAdapter);
         pereferences = preferenceAdapter.getMYCategories();
+
+        Log.i("HELLO PRFACT", pereferences.size() + "");
 
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override

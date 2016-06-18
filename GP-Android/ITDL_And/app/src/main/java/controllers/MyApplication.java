@@ -2,6 +2,8 @@ package controllers;
 
 import android.content.Context;
 
+import com.itdl_and.facebook.login.MainFragment;
+
 public class MyApplication extends android.app.Application {
 
 
@@ -13,6 +15,8 @@ public class MyApplication extends android.app.Application {
         super.onCreate();
         MyApplication.context = getApplicationContext();
         MyApplication.userController = UserController.getInstance();
+        MainFragment mf = new MainFragment();
+        mf.setAlarm();
     }
 
     public static Context getAppContext() {

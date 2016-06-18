@@ -45,15 +45,32 @@ public class HomeActivity extends ActionBarActivity implements View.OnClickListe
             text = status + " ... " + welcome + "  , your id is " + id;
             UserController uc = UserController.getInstance();
             String twitterId = uc.getCurrentActiveUser().getUserTwitterAccount();
-            long localId = localDataBase.InsertUserInfo(id, "");
-            Toast.makeText(MyApplication.getAppContext(), " ID Inserted ", Toast.LENGTH_LONG).show();
+            if(localDataBase.GetUserID().length() > 0)
+            {
+                localDataBase.UpdateUserInfo(id, twitterId);
+                Toast.makeText(MyApplication.getAppContext(), " ID Updated 1", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                long localId = localDataBase.InsertUserInfo(id, twitterId);
+                Toast.makeText(MyApplication.getAppContext(), " ID Inserted " + localId, Toast.LENGTH_LONG).show();
+            }
+
         } else if (serviceType.equals("UserPreferenceService")) {
             String id = extras.getString("userId");
             text = status + " ... " + welcome + "  , your id is " + id;
             UserController uc = UserController.getInstance();
             String twitterId = uc.getCurrentActiveUser().getUserTwitterAccount();
-            long localId = localDataBase.InsertUserInfo(id, "");
-            Toast.makeText(MyApplication.getAppContext(), " ID Inserted ", Toast.LENGTH_LONG).show();
+            if(localDataBase.GetUserID().length() > 0)
+            {
+                localDataBase.UpdateUserInfo(id, twitterId);
+                Toast.makeText(MyApplication.getAppContext(), " ID Updated 1", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                long localId = localDataBase.InsertUserInfo(id, twitterId);
+                Toast.makeText(MyApplication.getAppContext(), " ID Inserted " + localId, Toast.LENGTH_LONG).show();
+            }
         } else if (serviceType.equals("UpdateProfileService")) {
             text = status;
         }
