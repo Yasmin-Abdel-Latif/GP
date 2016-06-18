@@ -328,13 +328,15 @@ public class UserController {
 					String storeLat = jstore.get("latitude").toString();
 					String storeLong = jstore.get("longitude").toString();
 					String jsonStoreEmail = jstore.get("storeEmail").toString();
+					String storeAddress = jstore.get("storeAddress").toString();
+					String storeName = jstore.get("storeName").toString();
 					JSONArray joffers = (JSONArray) parser.parse(jstore.get("offers").toString());
 					for (int j = 0; j < joffers.size(); j++) {
 						JSONObject joffer;
 						joffer = (JSONObject) joffers.get(j);
 						storeOffers.add(convertJsonObjToOfferObj(joffer));
 					}
-					output += storeLat + " " + storeLong + " " + jsonStoreEmail + " " + storeOffers.toString() + "\n";
+					output += storeName + " " + storeAddress + " " + storeLat + " " + storeLong + " " + jsonStoreEmail + " " + storeOffers.toString() + "\n";
 				}
 			}
 			return output;

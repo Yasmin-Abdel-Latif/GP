@@ -64,10 +64,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 0);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval()/*AlarmManager.INTERVAL_DAY*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
     }
 
-    private int getInterval() {
+    /*private int getInterval() {
         int days = 1;
         int hours = 1;
         int minutes = 1;
@@ -75,7 +75,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         int milliseconds = 1000;
         int repeatMS = days * hours * minutes * seconds * milliseconds;
         return repeatMS;
-    }
+    }*/
 
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override
@@ -252,7 +252,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if(profile != null){
             textView.setText(profile.getName());
-            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            /*AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
             GraphRequest request = GraphRequest.newMeRequest(
                     accessToken,
@@ -312,7 +312,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             Bundle parameters = new Bundle();
             parameters.putString("fields", "id,email,name,birthday,gender,location,friends{name,gender},feed");
             request.setParameters(parameters);
-            request.executeAsync();
+            request.executeAsync();*/
         }
     }
 

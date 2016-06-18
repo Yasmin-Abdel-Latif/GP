@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import Adapters.HabitNotesAdapter;
+import controllers.MyApplication;
 import controllers.NoteController;
 import model.NoteEntity;
 import model.OrdinaryNoteEntity;
@@ -48,11 +49,10 @@ public class HabitActivity extends ActionBarActivity {
                                                  NoteController nc = new NoteController();
                                                  nc.UpdateCreationDateAndIsDone(c.getServernoteId());
                                              }
-                                             /*Intent intent = new Intent(getApplicationContext(), PerferencePercentegeActivity.class);
-                                             Bundle bundleObject = new Bundle();
-                                             bundleObject.putSerializable("CheckedNotes", chosenNotes);
-                                             intent.putExtras(bundleObject);
-                                             startActivity(intent);*/
+                                             Intent homeIntent = new Intent(MyApplication.getAppContext(),
+                                                     HomeActivity.class);
+                                             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                             MyApplication.getAppContext().startActivity(homeIntent);
                                              Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
                                          }
                                      }

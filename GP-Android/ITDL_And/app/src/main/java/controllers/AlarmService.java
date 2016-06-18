@@ -55,47 +55,52 @@ public class AlarmService extends IntentService {
         Log.i(TAG, "Alarm Service has started.");
         LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
-            JSONObject jsonObject = new JSONObject(ld.GetUserID());
-            String userID = jsonObject.getString("UserID");
-            String userTwitterAccount = jsonObject.getString("Twitter_Account");
-            Log.i(TAG, userID);
-            Log.i(TAG, userTwitterAccount + " Twitter");
-            ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
-            notes.addAll(UserController.getAllNotes(userID));
-            if(notes.size() > 0)
+            String resultLD = ld.GetUserID();
+            if(resultLD.trim().length() > 0)
             {
-                Context context = MyApplication.getAppContext();
-                notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                Intent mIntent = new Intent(MyApplication.getAppContext(), HabitActivity.class);
-                String result = "";
-                for(int i = 0 ; i < notes.size() ; i++)
+                JSONObject jsonObject = new JSONObject(resultLD);
+                String userID = jsonObject.getString("UserID");
+                String userTwitterAccount = jsonObject.getString("Twitter_Account");
+                Log.i(TAG, userID);
+                Log.i(TAG, userTwitterAccount + " Twitter");
+                ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
+                notes.addAll(UserController.getAllNotes(userID));
+                if(notes.size() > 0)
                 {
-                    result += ((OrdinaryNoteEntity)notes.get(i)).getNoteContent() + ", ";
+                    Context context = MyApplication.getAppContext();
+                    notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    Intent mIntent = new Intent(MyApplication.getAppContext(), HabitActivity.class);
+                    String result = "";
+                    for(int i = 0 ; i < notes.size() ; i++)
+                    {
+                        result += ((OrdinaryNoteEntity)notes.get(i)).getNoteContent() + ", ";
+                    }
+                    Bundle bundleObject = new Bundle();
+                    bundleObject.putSerializable("Notes", notes);
+                    mIntent.putExtras(bundleObject);
+                    pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    Resources res = this.getResources();
+                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+                    builder.setContentIntent(pendingIntent)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher))
+                            .setTicker("Suggested Actions")
+                            .setSound(alarmSound)
+                            .setAutoCancel(true)
+                            .setContentTitle("These Are Some Notes That Might Interest You")
+                            .setContentText(result);
+
+                    notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                    Timestamp ts = new Timestamp(new Date().getTime());
+                    String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
+                    notificationManager.notify(weekDayToInt(curDay), builder.build());
                 }
-                Bundle bundleObject = new Bundle();
-                bundleObject.putSerializable("Notes", notes);
-                mIntent.putExtras(bundleObject);
-                pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                Resources res = this.getResources();
-                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-                builder.setContentIntent(pendingIntent)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher))
-                        .setTicker("Suggested Actions")
-                        .setSound(alarmSound)
-                        .setAutoCancel(true)
-                        .setContentTitle("These Are Some Notes That Might Interest You")
-                        .setContentText(result);
-
-                notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                Timestamp ts = new Timestamp(new Date().getTime());
-                String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
-                notificationManager.notify(weekDayToInt(curDay), builder.build());
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

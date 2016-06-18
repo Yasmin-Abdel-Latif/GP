@@ -339,10 +339,10 @@ public class UserController {
                             NoteEntity note = noteParser.convertJsonObjToOrdinaryNoteObj(note1);
                             String day = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(note.getNoteDateCreation().getTime());
                             int days = (int) ((note.getNoteDateCreation().getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-                            notes.add(note);
-                            /*if ((day.equals(curDay)) && (days > 0) && (days <= 14)) {
+                            //notes.add(note);
+                            if ((day.equals(curDay)) && (days > 0) && (days <= 14)) {
                                 notes.add(note);
-                            }*/
+                            }
                         }
                     }
                     return notes;
@@ -361,11 +361,12 @@ public class UserController {
     }
 
     public void GetUserInformation() {
-        System.out.print("UserID" + currentActiveUser.getUserId());
+        Log.i("UserID" , String.valueOf(currentActiveUser.getUserId()));
         try {
             String result = new CallWebService().execute(
-                    "http://fci-gp-intelligent-to-do.appspot.com/rest/GetUserInfoService",
+                    "http://5-dot-secondhelloworld-1221.appspot.com/restNotes/GetUserInfoService",
                     String.valueOf(currentActiveUser.getUserId()), "GetUserInfoService").get();
+            Log.i("HELLO" , result);
             JSONObject object = new JSONObject(result);
 
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
@@ -402,7 +403,7 @@ public class UserController {
         String userId = String.valueOf(currentActiveUser.getUserId());
         try {
             String result = new CallWebService().execute(
-                    "http://fci-gp-intelligent-to-do.appspot.com/rest/UpdateProfileService", userId, userName,
+                    "http://5-dot-secondhelloworld-1221.appspot.com/restNotes/UpdateProfileService", userId, userName,
                     email, password, gender, city, birth_date, twitterAccount, "UpdateProfileService").get();
             JSONObject object = new JSONObject(result);
 

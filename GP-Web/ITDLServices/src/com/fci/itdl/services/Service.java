@@ -163,6 +163,8 @@ public class Service {
 			jobject.put("storeEmail", stores.get(i).getEmail());
 			jobject.put("latitude", stores.get(i).getLat());
 			jobject.put("longitude", stores.get(i).getLon());
+			jobject.put("storeName", stores.get(i).getName());
+			jobject.put("storeAddress", stores.get(i).getAddress());
 			
 			jarray.add(jobject);
 		}
