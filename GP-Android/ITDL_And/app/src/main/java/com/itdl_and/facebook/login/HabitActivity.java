@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import Adapters.HabitNotesAdapter;
+import controllers.NoteController;
 import model.NoteEntity;
 import model.OrdinaryNoteEntity;
 
@@ -44,6 +45,8 @@ public class HabitActivity extends ActionBarActivity {
                                              ArrayList<NoteEntity> chosenNotes = note_adapter.getCheckedNotes();
                                              for (NoteEntity c : chosenNotes) {
                                                  result += c.getNoteType() + " " + c.getServernoteId() + " " + c.getUserId();
+                                                 NoteController nc = new NoteController();
+                                                 nc.UpdateCreationDateAndIsDone(c.getServernoteId());
                                              }
                                              /*Intent intent = new Intent(getApplicationContext(), PerferencePercentegeActivity.class);
                                              Bundle bundleObject = new Bundle();
