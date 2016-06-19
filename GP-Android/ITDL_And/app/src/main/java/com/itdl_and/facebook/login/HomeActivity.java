@@ -73,6 +73,9 @@ public class HomeActivity extends ActionBarActivity implements View.OnClickListe
             }
         } else if (serviceType.equals("UpdateProfileService")) {
             text = status;
+        } else if (serviceType.equals("UpdatePrefService")) {
+            String id = extras.getString("userId");
+            text = status + " ... " + welcome + "  , your id is " + id;
         }
 
         ShowTextView = (TextView) findViewById(R.id.ShowText);
@@ -103,17 +106,6 @@ public class HomeActivity extends ActionBarActivity implements View.OnClickListe
         } else if (view == btnShowNotes) {
             Intent intent = new Intent(getApplicationContext(), ShowAllNotesActivity.class);
             startActivity(intent);
-         /*  NoteController noteController= new NoteController();
-             ArrayList<NoteEntity> res= noteController.ShowAllNotes();
-
-            if (res.size()==0){
-             Toast.makeText(getApplicationContext(), " No Notes To Show ", Toast.LENGTH_LONG).show();
-
-            }
-            else{
-                Toast.makeText(getApplicationContext(), "  Notes To Show ", Toast.LENGTH_LONG).show();
-
-            }*/
         }
     }
 }

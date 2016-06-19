@@ -38,6 +38,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import controllers.AlarmReceiver;
+import controllers.AlarmReceiverGetNearestStore;
+import controllers.AlarmReceiverGetOffer;
+import controllers.AlarmReceiverUpdatePref;
 import controllers.MyApplication;
 import controllers.UserController;
 import model.FacebookPost;
@@ -60,22 +63,62 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
 
+        Log.i("SET ALARM", "SUGGESTED ACTIONS");
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 0);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
-    /*private int getInterval() {
+    public void setAlarmUpdatePref() {
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverUpdatePref.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
+
+        Log.i("SET ALARM", "UPDATE PREFERENCES");
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
+        alarmStartTime.set(Calendar.MINUTE, 1);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+    }
+
+    public void setAlarmGetOfferBTN() {
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverGetOffer.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
+
+        Log.i("SET ALARM", "GET OFFERS");
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
+        alarmStartTime.set(Calendar.MINUTE, 2);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+    }
+
+    public void setAlarmGetNearestStoreBTN() {
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverGetNearestStore.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
+
+        Log.i("SET ALARM", "GET NEAREST STORES");
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
+        alarmStartTime.set(Calendar.MINUTE, 3);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+    }
+
+    private int getInterval() {
         int days = 1;
         int hours = 1;
-        int minutes = 1;
+        int minutes = 5;
         int seconds = 60;
         int milliseconds = 1000;
         int repeatMS = days * hours * minutes * seconds * milliseconds;
         return repeatMS;
-    }*/
+    }
 
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override

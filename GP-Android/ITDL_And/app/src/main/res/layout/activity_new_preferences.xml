@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.itdl_and.facebook.login.NewPreferencesActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/res"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="there are new preferences weights" />
+
+    <TextView
+        android:id="@+id/newPreferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/BTN_Yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yes, update my preferences" />
+
+    <Button
+        android:id="@+id/BTN_No"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't update" />
+
+</LinearLayout>

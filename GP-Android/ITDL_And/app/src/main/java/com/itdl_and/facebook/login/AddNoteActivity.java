@@ -21,7 +21,7 @@ public class AddNoteActivity extends Activity implements AdapterView.OnItemSelec
 
         spinner = (Spinner) findViewById(R.id.spinner);
 
-        ArrayAdapter<String> adpter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, noteTypes);
+        ArrayAdapter<String> adpter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, noteTypes);
 
         spinner.setAdapter(adpter);
         spinner.setOnItemSelectedListener(this);

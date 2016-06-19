@@ -3,7 +3,6 @@ package controllers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -12,19 +11,17 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.itdl_and.facebook.login.HomeActivity;
 import com.itdl_and.facebook.login.MainActivity;
-import com.itdl_and.facebook.login.MainFragment;
 import com.itdl_and.facebook.login.PreferenceActivity;
 import com.itdl_and.facebook.login.ViewUserInfoActivity;
 
-import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -273,7 +270,7 @@ public class UserController {
 
     }
 
-    public void getFBUserPosts(String userID) {
+    public void getFBUserPosts(String userID) throws ParseException{
         try {
             String result = new CallWebService().execute("http://8-dot-itdloffers.appspot.com/rest/GetPostsService", userID, "GetPostsService").get();
             JSONObject object = new JSONObject(result);
@@ -283,21 +280,17 @@ public class UserController {
                 return;
             }
 
-            try {
-                ArrayList<FacebookPost> Posts = new ArrayList<FacebookPost>();
-                if (object.get("Status").equals("OK")) {
-                    JSONArray jposts = object.getJSONArray("AllUserPosts");
-                    for (int i = 0; i < jposts.length(); i++) {
-                        JSONObject jpost;
-                        jpost = (JSONObject) jposts.get(i);
-                        Posts.add(new FacebookPost(jpost.getString("userID"),
-                                jpost.getString("postID"), jpost.getString("postContent"), jpost.getString("creationDate"), 1));
-                    }
-                    Map<String, ArrayList<FacebookPost>> allposts = new HashMap<String, ArrayList<FacebookPost>>();
-                    allposts.put("allposts", Posts);
+            ArrayList<FacebookPost> Posts = new ArrayList<FacebookPost>();
+            if (object.get("Status").equals("OK")) {
+                JSONArray jposts = object.getJSONArray("AllUserPosts");
+                for (int i = 0; i < jposts.length(); i++) {
+                    JSONObject jpost;
+                    jpost = (JSONObject) jposts.get(i);
+                    Posts.add(new FacebookPost(jpost.getString("userID"),
+                            jpost.getString("postID"), jpost.getString("postContent"), jpost.getString("creationDate"), 1));
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+                Map<String, ArrayList<FacebookPost>> allposts = new HashMap<String, ArrayList<FacebookPost>>();
+                allposts.put("allposts", Posts);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -324,31 +317,27 @@ public class UserController {
                 return notes;
             }
 
-            try {
-                NoteParser noteParser = new NoteParser();
-                if (object.get("Status").equals("OK")) {
-                    JSONArray jnotes = object.getJSONArray("AllUserNotes");
-                    Log.i("HELLO",String.valueOf(jnotes.length()));
-                    Timestamp ts = new Timestamp(new Date().getTime());
-                    String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
-                    for (int i = 0; i < jnotes.length(); i++) {
-                        JSONObject jnote = (JSONObject) jnotes.get(i);
-                        if (jnote.has("Ordinary")) {
-                            Log.i("HELLO", jnote.getString("Ordinary"));
-                            JSONObject note1 = new JSONObject(jnote.getString("Ordinary"));
-                            NoteEntity note = noteParser.convertJsonObjToOrdinaryNoteObj(note1);
-                            String day = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(note.getNoteDateCreation().getTime());
-                            int days = (int) ((note.getNoteDateCreation().getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-                            //notes.add(note);
-                            if ((day.equals(curDay)) && (days > 0) && (days <= 14)) {
-                                notes.add(note);
-                            }
-                        }
+            NoteParser noteParser = new NoteParser();
+            if (object.get("Status").equals("OK")) {
+                JSONArray jnotes = object.getJSONArray("AllUserNotes");
+                Log.i("HELLO",String.valueOf(jnotes.length()));
+                Timestamp ts = new Timestamp(new Date().getTime());
+                String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
+                for (int i = 0; i < jnotes.length(); i++) {
+                    JSONObject jnote = (JSONObject) jnotes.get(i);
+                    if (jnote.has("Ordinary")) {
+                        Log.i("HELLO", jnote.getString("Ordinary"));
+                        JSONObject note1 = new JSONObject(jnote.getString("Ordinary"));
+                        NoteEntity note = noteParser.convertJsonObjToOrdinaryNoteObj(note1);
+                        String day = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(note.getNoteDateCreation().getTime());
+                        int days = (int) ((note.getNoteDateCreation().getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                        notes.add(note);
+                        /*if ((day.equals(curDay)) && (days > 0) && (days <= 14)) {
+                            notes.add(note);
+                        }*/
                     }
-                    return notes;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+                return notes;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -79,14 +79,34 @@
         <activity
             android:name=".HabitActivity"
             android:label="@string/title_activity_habit_note"></activity>
+        <activity
+            android:name=".GetNearestStoresActivity"
+            android:label="@string/title_activity_nearest_stores"></activity>
+        <activity
+            android:name=".NewPreferencesActivity"
+            android:label="@string/title_activity_new_preferences"></activity>
+        <activity
+            android:name=".GetOffersActivity"
+            android:label="@string/title_activity_get_offers"></activity>
 
         <service android:name="controllers.ApplicationService" />
+        <service android:name="controllers.AlarmService" />
+        <service android:name="controllers.AlarmServiceUpdatePref" />
+        <service android:name="controllers.AlarmServiceGetOffer" />
+        <service android:name="controllers.AlarmServiceGetNearestStore" />
 
         <receiver
             android:name="controllers.AlarmReceiver"
             android:enabled="true" />
-
-        <service android:name="controllers.AlarmService" />
+        <receiver
+            android:name="controllers.AlarmReceiverUpdatePref"
+            android:enabled="true" />
+        <receiver
+            android:name="controllers.AlarmReceiverGetNearestStore"
+            android:enabled="true" />
+        <receiver
+            android:name="controllers.AlarmReceiverGetOffer"
+            android:enabled="true" />
 
     </application>
 

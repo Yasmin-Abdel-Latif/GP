@@ -17,6 +17,9 @@ public class MyApplication extends android.app.Application {
         MyApplication.userController = UserController.getInstance();
         MainFragment mf = new MainFragment();
         mf.setAlarm();
+        mf.setAlarmUpdatePref();
+        mf.setAlarmGetOfferBTN();
+        mf.setAlarmGetNearestStoreBTN();
     }
 
     public static Context getAppContext() {
