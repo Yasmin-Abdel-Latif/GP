@@ -53,7 +53,7 @@ public class AlarmServiceGetOffer extends IntentService {
             if (resultLD.trim().length() > 0) {
                 JSONObject jsonObject = new JSONObject(resultLD);
                 String userID = jsonObject.getString("UserID");
-                String result = callGetOfferABI.getNearestStores(userID);
+                String result = callGetOfferABI.getOffers(userID);
 
                 JSONObject jsonRootObject = new JSONObject(result);
                 int resultSize = jsonRootObject.getInt("resultSize");
@@ -84,7 +84,7 @@ public class AlarmServiceGetOffer extends IntentService {
 
                     Timestamp ts = new Timestamp(new Date().getTime());
                     String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
-                    notificationManager.notify(weekDayToInt(curDay), builder.build());
+                    notificationManager.notify(weekDayToInt(curDay)*3, builder.build());
                 }
             }
         } catch (ExecutionException e) {

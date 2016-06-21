@@ -41,6 +41,7 @@
     <string name="title_activity_nearest_stores">GetNearestStoresActivity</string>
     <string name="title_activity_new_preferences">NewPreferencesActivity</string>
     <string name="title_activity_get_offers">GetOffersActivity</string>
+    <string name="title_activity_edit_deadline_progress">EditDeadlineProgressActivity</string>
 
     <string-array name="Categories">
         <item>Food</item>

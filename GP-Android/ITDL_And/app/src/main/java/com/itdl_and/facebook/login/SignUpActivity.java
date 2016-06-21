@@ -2,7 +2,7 @@ package com.itdl_and.facebook.login;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +17,7 @@ import java.util.Calendar;
 
 import controllers.UserController;
 
-public class SignUpActivity extends ActionBarActivity {
+public class SignUpActivity extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
     Button Regest, btnDate;
     EditText Email, Password, TwitterAccount, userName, City;

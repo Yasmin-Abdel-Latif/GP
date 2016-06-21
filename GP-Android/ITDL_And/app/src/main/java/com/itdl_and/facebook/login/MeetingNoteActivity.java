@@ -3,7 +3,7 @@ package com.itdl_and.facebook.login;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +21,7 @@ import java.util.Calendar;
 import controllers.NoteController;
 import controllers.UserController;
 
-public class MeetingNoteActivity extends ActionBarActivity implements View.OnClickListener {
+public class MeetingNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
     Calendar calendar = Calendar.getInstance();
     Button btnDate, btnEstimatedTime, btnAddNote, btnMeetingTime;

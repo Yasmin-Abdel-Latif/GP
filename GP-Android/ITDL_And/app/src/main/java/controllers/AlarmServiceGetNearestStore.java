@@ -91,7 +91,7 @@ public class AlarmServiceGetNearestStore extends IntentService {
 
                     Timestamp ts = new Timestamp(new Date().getTime());
                     String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
-                    notificationManager.notify(weekDayToInt(curDay), builder.build());
+                    notificationManager.notify(weekDayToInt(curDay)*2, builder.build());
                 }
             }
         } catch (ExecutionException e) {

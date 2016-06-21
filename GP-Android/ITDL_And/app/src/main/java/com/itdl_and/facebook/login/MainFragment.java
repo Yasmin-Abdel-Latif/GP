@@ -68,7 +68,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 0);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
     public void setAlarmUpdatePref() {
@@ -81,7 +81,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 1);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
     public void setAlarmGetOfferBTN() {
@@ -94,7 +94,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 2);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
     public void setAlarmGetNearestStoreBTN() {
@@ -107,13 +107,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 3);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getInterval() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
-    private int getInterval() {
+    private int getIntervalWeek() {
+        int days = 7;
+        int hours = 24;
+        int minutes = 60;
+        int seconds = 60;
+        int milliseconds = 1000;
+        int repeatMS = days * hours * minutes * seconds * milliseconds;
+        return repeatMS;
+    }
+
+    private int getIntervalDay() {
         int days = 1;
         int hours = 1;
-        int minutes = 5;
+        int minutes = 60;
         int seconds = 60;
         int milliseconds = 1000;
         int repeatMS = days * hours * minutes * seconds * milliseconds;

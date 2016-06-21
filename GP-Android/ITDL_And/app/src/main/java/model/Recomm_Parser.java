@@ -14,28 +14,51 @@ import java.util.Vector;
  */
 public class Recomm_Parser {
     public Vector<NearestStore> getParsesNearestStores(String nearestStoresSTR) throws ParseException, JSONException {
-        //JSONParser parser = new JSONParser();
+
         Vector<NearestStore> result = new Vector<NearestStore>();
-        Log.i("EsraaSTR : ",nearestStoresSTR);
+        //  JSONParser parser = new JSONParser();
         JSONObject jsonRootObject = new JSONObject(nearestStoresSTR);
-        JSONArray jsonArray = jsonRootObject.optJSONArray("result");
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject obj = new JSONObject();
-            obj = (JSONObject) jsonArray.get(i);
-            NearestStore nearStore = new NearestStore();
+        // JSONObject jsonObjAllNearstStore = new JSONObject();
+        //jsonObjAllNearstStore = (JSONObject) parser.parse(nearestStoresSTR.toString());
 
-            nearStore.setStoreName(String.valueOf(obj.get("storeName")));
-            nearStore.setUserProductToBuy(String.valueOf(obj.get("userProductToBuy")));
-            nearStore.setLat(Double.parseDouble(obj.get("lat").toString()));
-            nearStore.setLongt(Double.parseDouble(obj.get("longt").toString()));
-            nearStore.setCategory(String.valueOf(obj.get("category")));
+        int resultSize = Integer.parseInt(jsonRootObject.get("resultSize").toString());
+        if (resultSize > 0) {
+            JSONArray nearStoreArr = new JSONArray();
+            nearStoreArr = (JSONArray) jsonRootObject.get("result");
+            for (int i = 0; i < nearStoreArr.length(); i++) {
+                JSONObject nStoreObj = new JSONObject();
+                nStoreObj = (JSONObject) nearStoreArr.get(i);
+                NearestStore n = new NearestStore();
+                n.setLat(Double.parseDouble(nStoreObj.get("lat").toString()));
+                n.setLat(Double.parseDouble(nStoreObj.get("longt").toString()));
+                n.setStoreName(nStoreObj.get("storeName").toString());
+                n.setStoreAddress(nStoreObj.get("storeAddress").toString());
+                n.setStoreEmail(nStoreObj.get("storeEmail").toString());
+                JSONArray listOfcat = new JSONArray();
+                listOfcat = (JSONArray) nStoreObj.get("listOfStoreCategories");
+                Vector<String> v1 = new Vector<String>();
+                for (int j = 0; j < listOfcat.length(); j++) {
+                    v1.add(listOfcat.get(j).toString());
+                }
+                JSONArray noteList = new JSONArray();
+                noteList = (JSONArray) nStoreObj.get("listOfShoppingNote");
 
+                Vector<String> v2 = new Vector<String>();
+                for (int j = 0; j < noteList.length(); j++) {
+                    v2.add(noteList.get(j).toString());
+                }
+                n.setListOfUserShoppingNotes(v2);
+                n.setStoreCategories(v1);
+                result.add(n);
+            }
 
-
-            result.add(nearStore);
+        } else {
 
         }
+
+
         return result;
+
     }
 
     public Vector<Offer> getParsedOffers(String offersSTR) throws ParseException, JSONException {
@@ -62,7 +85,7 @@ public class Recomm_Parser {
             offer.setStoreName(String.valueOf(obj.get("storeName")));
 
             offer.setStoreAddress(String.valueOf(obj.get("storeAddress")));
-            Log.i("storeName = ", offer.getStoreName()+"   "+offer.getStoreAddress() );
+            Log.i("storeName = ", offer.getStoreName() + "   " + offer.getStoreAddress());
             result.add(offer);
 
         }
@@ -85,6 +108,6 @@ public class Recomm_Parser {
 
             result.add(uiw);
         }
-            return result;
-        }
+        return result;
+    }
 }

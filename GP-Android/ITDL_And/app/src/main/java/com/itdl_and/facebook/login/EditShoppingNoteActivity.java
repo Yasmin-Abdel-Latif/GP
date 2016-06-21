@@ -2,7 +2,7 @@ package com.itdl_and.facebook.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +17,7 @@ import controllers.NoteController;
 import controllers.UserController;
 import model.ShoppingNoteEntity;
 
-public class EditShoppingNoteActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+public class EditShoppingNoteActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner spinnerCategories;
     int spinnerPosition;
     String newCategory = "", oldPname, oldpriority, oldCategory;

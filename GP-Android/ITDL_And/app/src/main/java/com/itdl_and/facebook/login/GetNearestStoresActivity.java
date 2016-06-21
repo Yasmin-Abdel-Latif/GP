@@ -1,7 +1,7 @@
 package com.itdl_and.facebook.login;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +22,7 @@ import java.util.Vector;
 import model.NearestStore;
 import model.Recomm_Parser;
 
-public class GetNearestStoresActivity extends ActionBarActivity {
+public class GetNearestStoresActivity extends AppCompatActivity {
     TextView t;
     ListView storesListView;
     Vector<NearestStore> storesVec = new Vector<NearestStore>();
@@ -98,63 +98,14 @@ public class GetNearestStoresActivity extends ActionBarActivity {
             final NearestStore currentStore = storesVec.get(position);
             //fill the view
 
-            TextView storeEmail = (TextView) itemView.findViewById(R.id.storeEmail);
-            storeEmail.setText(currentStore.getStoreName());
+            String storeInfo = currentStore.toString();
+
+            TextView storeInformation = (TextView) itemView.findViewById(R.id.storeInformation);
+            storeInformation.setText(storeInfo);
             ImageView storeImg = (ImageView) itemView.findViewById(R.id.imgStore);
-            if (currentStore.getCategory().equals("art and entertainment")) {
 
-                storeImg.setImageResource(R.drawable.art);
-
-            } else if (currentStore.getCategory().equals("food and drink")) {
-
-                storeImg.setImageResource(R.drawable.food);
-
-            } else if (currentStore.getCategory().equals("style and fashion")) {
-
-                storeImg.setImageResource(R.drawable.style);
-
-            } else if (currentStore.getCategory().equals("technology and computing")) {
-
-                storeImg.setImageResource(R.drawable.technology);
-            } else if (currentStore.getCategory().equals("religion and spirituality")) {
-
-                storeImg.setImageResource(R.drawable.religion);
-            } else if (currentStore.getCategory().equals("hobbies and interests")) {
-
-                storeImg.setImageResource(R.drawable.hobbies);
-
-            } else if (currentStore.getCategory().equals("health and fitness")) {
-
-                storeImg.setImageResource(R.drawable.health);
-
-            } else if (currentStore.getCategory().equals("education")) {
-
-                storeImg.setImageResource(R.drawable.education);
-
-            } else if (currentStore.getCategory().equals("sports")) {
-
-                storeImg.setImageResource(R.drawable.sports);
-
-            } else if (currentStore.getCategory().equals("pets")) {
-                storeImg.setImageResource(R.drawable.pets);
-
-            }
-            TextView productToBuy = (TextView) itemView.findViewById(R.id.userProductToBuy);
-            productToBuy.setText("your note: \"" + currentStore.getUserProductToBuy() + "\"");
-
-            TextView productCategory = (TextView) itemView.findViewById(R.id.productCategory);
-            productCategory.setText("product category: " + currentStore.getCategory());
-
-//            Button likeStoreBTN = (Button)itemView.findViewById(R.id.BTN_like_Store);
-//            likeStoreBTN.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(getContext(),currentStore.getUserProductToBuy(),Toast.LENGTH_LONG ).show();
-//                }
-//            });
+            storeImg.setImageResource(R.drawable.store);
             return itemView;
-
-            //return super.getView(position, convertView, parent);
 
 
         }

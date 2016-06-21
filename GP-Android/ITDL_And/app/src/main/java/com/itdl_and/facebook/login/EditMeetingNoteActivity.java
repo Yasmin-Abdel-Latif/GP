@@ -4,7 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,7 +21,7 @@ import controllers.NoteController;
 import controllers.UserController;
 import model.MeetingNoteEntity;
 
-public class EditMeetingNoteActivity extends ActionBarActivity implements View.OnClickListener {
+public class EditMeetingNoteActivity extends AppCompatActivity implements View.OnClickListener {
     Calendar calendar = Calendar.getInstance();
     Button btnDate, btnEstimatedTime, btnUpdateNote, btnMeetingTime;
     EditText Title, Agenda, meeingPlace;

@@ -2,7 +2,7 @@ package com.itdl_and.facebook.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +21,7 @@ import controllers.Recomm_Controller;
 import model.Recomm_Parser;
 import model.UserInialWeights;
 
-public class NewPreferencesActivity extends ActionBarActivity {
+public class NewPreferencesActivity extends AppCompatActivity {
 
     Vector<UserInialWeights> newUserPref = new Vector<UserInialWeights>();
     TextView newPref;
@@ -38,7 +38,6 @@ public class NewPreferencesActivity extends ActionBarActivity {
 
         newPrefOutput = getIntent().getStringExtra("updatePrefOutput");
         userID = getIntent().getStringExtra("userID");
-
         tt = (TextView) findViewById(R.id.res);
         // tt.setText(newPrefOutput);
 
@@ -55,9 +54,27 @@ public class NewPreferencesActivity extends ActionBarActivity {
 
             newUserPref = parser.getParsesUserInialWeights(newPrefOutput);
             for (int i = 0; i < newUserPref.size(); i++) {
+                for (int j = 0; j < newUserPref.size(); j++) {
+                    if (newUserPref.get(i).getInialWeight() > newUserPref.get(j).getInialWeight()) {
+                        UserInialWeights u1 = new UserInialWeights();
+                        u1 = newUserPref.get(i);
+                        UserInialWeights u2 = new UserInialWeights();
+                        u2 = newUserPref.get(j);
+                        newUserPref.set(i, u2);
+                        newUserPref.set(j, u1);
+
+                    }
+                }
+            }
+
+            for (int i = 0; i < newUserPref.size(); i++) {
                 UserInialWeights u = new UserInialWeights();
                 u = newUserPref.get(i);
-                text += u.getCategoryName() + "    " + u.getInialWeight() + "\n";
+                String num1Str = String.format("%.2g%n", u.getInialWeight());
+
+                double num1 = Double.parseDouble(num1Str);
+
+                text += u.getCategoryName() + "    " + num1 + "\n";
 
             }
             newPref = (TextView) findViewById(R.id.newPreferences);
@@ -81,11 +98,8 @@ public class NewPreferencesActivity extends ActionBarActivity {
                         e.printStackTrace();
                     }
                     Toast.makeText(getApplicationContext(), "updated successfully", Toast.LENGTH_LONG).show();
-                    Intent k = new Intent(NewPreferencesActivity.this, HomeActivity.class);
-                    k.putExtra("status", "Updated successfully");
-                    k.putExtra("serviceType", "UpdatePrefService");
-                    k.putExtra("userId", userID);
-                    k.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent k = new Intent(NewPreferencesActivity.this, MainActivity.class);
+
                     startActivity(k);
 
 
@@ -96,11 +110,8 @@ public class NewPreferencesActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Intent k = new Intent(NewPreferencesActivity.this, HomeActivity.class);
-                    k.putExtra("status", "Update Operation Was Canceled");
-                    k.putExtra("serviceType", "UpdatePrefService");
-                    k.putExtra("userId", userID);
-                    k.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent k = new Intent(NewPreferencesActivity.this, MainActivity.class);
+
                     startActivity(k);
 
                 }

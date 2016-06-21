@@ -2,7 +2,7 @@ package com.itdl_and.facebook.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +14,7 @@ import controllers.NoteController;
 import controllers.UserController;
 import model.OrdinaryNoteEntity;
 
-public class EditOrdinaryNoteActivity extends ActionBarActivity implements View.OnClickListener{
+public class EditOrdinaryNoteActivity extends AppCompatActivity implements View.OnClickListener{
     Button UpdateNote;
     EditText noteContent;
     RadioGroup priorityRadioGroup;

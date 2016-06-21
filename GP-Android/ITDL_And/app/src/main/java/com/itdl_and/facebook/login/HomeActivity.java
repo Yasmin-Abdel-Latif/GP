@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,7 +16,7 @@ import controllers.NoteController;
 import controllers.UserController;
 import model.LocalDataBase;
 
-public class HomeActivity extends ActionBarActivity implements View.OnClickListener {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     TextView ShowTextView;
     Button UpdateProfile, SignOut, addNoteBtn, btnShowNotes;
 

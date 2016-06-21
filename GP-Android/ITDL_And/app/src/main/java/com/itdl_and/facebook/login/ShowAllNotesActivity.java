@@ -1,13 +1,13 @@
 package com.itdl_and.facebook.login;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import Adapters.NoteAdapter;
 
-public class ShowAllNotesActivity extends ActionBarActivity {
+public class ShowAllNotesActivity extends AppCompatActivity {
 
     ListView listViewNotes;
     TextView tvNoNotes;

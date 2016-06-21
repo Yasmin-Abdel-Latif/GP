@@ -2,6 +2,7 @@ package com.itdl_and.facebook.login;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,7 @@ import java.util.Vector;
 import model.Offer;
 import model.Recomm_Parser;
 
-public class GetOffersActivity extends ActionBarActivity {
+public class GetOffersActivity extends AppCompatActivity {
     Vector<Offer> preferedOffers = new Vector<Offer>();
     JSONArray likesOffers = new JSONArray();
 

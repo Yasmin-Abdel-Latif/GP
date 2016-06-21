@@ -1,7 +1,7 @@
 package com.itdl_and.facebook.login;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,9 +14,11 @@ import android.widget.Spinner;
 import controllers.NoteController;
 import controllers.UserController;
 
-public class ShoppingNoteActivity extends ActionBarActivity {
+public class ShoppingNoteActivity extends AppCompatActivity {
     Spinner spinnerCategory;
-    String Categories[] = {"Select a category", "Food", "Sport", "Fashion"};
+    String Categories[] = {"Select a category", "Art and Entertainment", "Movies", "Music"
+            , "Food and Drink", "Technology and Computing", "Sports", "Health and Fitness"
+            , "Religion and Spirituality", "Education", "Pets", "Style and Fashion", "Reading"};
     String category = "";
     EditText productName;
     Button Add;
@@ -31,7 +33,7 @@ public class ShoppingNoteActivity extends ActionBarActivity {
         Add = (Button) findViewById(R.id.btnSaveShopingnote);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radioGroupPriority);
 
-        ArrayAdapter<String> adpter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Categories);
+        ArrayAdapter<String> adpter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, Categories);
 
         spinnerCategory.setAdapter(adpter);
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

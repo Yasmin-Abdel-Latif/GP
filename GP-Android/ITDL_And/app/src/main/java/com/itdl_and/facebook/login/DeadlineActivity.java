@@ -1,9 +1,14 @@
 package com.itdl_and.facebook.login;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -14,13 +19,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Date;
 
+import controllers.AlarmReceiverDeadlineNote;
+import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
+import model.LocalDataBase;
 
-public class DeadlineActivity extends ActionBarActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class DeadlineActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     EditText deadlineTitle;
     Button btnAddDeadlineNote, btnDate, btnTime;
     Calendar calendar = Calendar.getInstance();
@@ -93,12 +103,32 @@ public class DeadlineActivity extends ActionBarActivity implements View.OnClickL
             boolean isConnected = userController.isNetworkConnected(getApplicationContext());
             NoteController noteController = new NoteController();
 
+            int noteID = -1;
+
             if (!isConnected) {
-                //Toast.makeText(getApplicationContext(), " not Connected ", Toast.LENGTH_LONG).show();
-                noteController.addDeadlineNoteInLoacalDB(title, priority, deadlinedate_time, progressValue, false, 0);
+                noteID = noteController.addDeadlineNoteInLoacalDB(title, priority, deadlinedate_time, progressValue, false, 0);
             } else {
-                noteController.addDeadlineNote(title, priority, deadlinedate_time, progressValue);
+                noteID = noteController.addDeadlineNote(title, priority, deadlinedate_time, progressValue);
             }
+
+            if (noteID > 0) {
+                long milliseconds = ((Timestamp.valueOf(date + " " + time).getTime() - new Date().getTime()) / (2));
+                long middle = new Date().getTime() + milliseconds;
+                Timestamp firstAlarm = new Timestamp(middle);
+                Log.i("HELLO FirstAlarm", firstAlarm.toString());
+                LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
+                int alarmID = localDataBase.UpdateAlarmCell();
+                setAlarmDeadline(firstAlarm, alarmID, noteID, 1);
+                localDataBase.InsertNoteAlarm(noteID, alarmID);
+
+                Timestamp secondAlarm = new Timestamp(Timestamp.valueOf(date + " " + time).getTime() - (1000 * 60 * 60));
+                Log.i("HELLO SecondAlarm", secondAlarm.toString());
+                LocalDataBase localDataBase2 = new LocalDataBase(MyApplication.getAppContext());
+                int alarmID2 = localDataBase2.UpdateAlarmCell();
+                setAlarmDeadline(secondAlarm, alarmID2, noteID, 2);
+                localDataBase.InsertNoteAlarm(noteID, alarmID2);
+            }
+
 
         }
     }
@@ -118,5 +148,41 @@ public class DeadlineActivity extends ActionBarActivity implements View.OnClickL
     public void onStopTrackingTouch(SeekBar seekBar) {
         viewProgress.setText("Progress is " + progressValue + "%");
 
+    }
+
+    public void setAlarmDeadline(Timestamp alarmTime, int alarmID, int noteID, int alarmType) {
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverDeadlineNote.class);
+        alarmIntent.putExtra("alarmID", alarmID);
+        alarmIntent.putExtra("noteID", noteID);
+        alarmIntent.putExtra("alarmType", alarmType);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
+
+        String dateStr = alarmTime.toString().split(" ")[0];
+        String timeStr = alarmTime.toString().split(" ")[1];
+
+        String[] dateSplit = dateStr.split("-");
+        String[] timeSplit = timeStr.split(":");
+        Calendar alarmStartTime = Calendar.getInstance();
+        int day = Integer.parseInt(dateSplit[2]);
+        int month = Integer.parseInt(dateSplit[1])-1;
+        int year = Integer.parseInt(dateSplit[0]);
+        int hour = Integer.parseInt(timeSplit[0]);
+        int minute = Integer.parseInt(timeSplit[1]);
+        int second = 0;
+
+        Log.i("HELLO SET ALARM", day + "-" + month + "-" + year + " " + hour + ":" + minute + ":" + second);
+
+        alarmStartTime.set(Calendar.DAY_OF_MONTH, day);
+        alarmStartTime.set(Calendar.MONTH, month);
+        alarmStartTime.set(Calendar.YEAR, year);
+
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, hour);
+        alarmStartTime.set(Calendar.MINUTE, minute);
+        alarmStartTime.set(Calendar.SECOND, second);
+
+        Log.i("HELLO SET ALARM", alarmStartTime.getTime().toString());
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), pendingIntent);
     }
 }

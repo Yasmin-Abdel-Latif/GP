@@ -74,6 +74,9 @@
             android:name=".EditDeadlineNoteActivity"
             android:label="@string/title_activity_edit_deadline_note" />
         <activity
+            android:name=".EditDeadlineProgressActivity"
+            android:label="@string/title_activity_edit_deadline_progress" />
+        <activity
             android:name=".PreferenceActivity"
             android:label="@string/title_activity_preference"></activity>
         <activity
@@ -94,9 +97,13 @@
         <service android:name="controllers.AlarmServiceUpdatePref" />
         <service android:name="controllers.AlarmServiceGetOffer" />
         <service android:name="controllers.AlarmServiceGetNearestStore" />
+        <service android:name="controllers.AlarmServiceDeadlineNote" />
 
         <receiver
             android:name="controllers.AlarmReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name="controllers.AlarmReceiverDeadlineNote"
             android:enabled="true" />
         <receiver
             android:name="controllers.AlarmReceiverUpdatePref"

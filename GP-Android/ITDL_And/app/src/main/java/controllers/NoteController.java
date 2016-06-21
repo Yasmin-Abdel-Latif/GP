@@ -93,9 +93,11 @@ public class NoteController {
 
     }
 
-    public void addDeadlineNote(String title, String priority, String deadlinedate_time, int progressValue) {
+    public int addDeadlineNote(String title, String priority, String deadlinedate_time, int progressValue) {
         UserController userController = UserController.getInstance();
         String userID = String.valueOf(userController.getCurrentUserID());
+
+        int id = -1;
 
         try {
             String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addDeadLineNoteService",
@@ -103,9 +105,9 @@ public class NoteController {
             JSONObject object = new JSONObject(res);
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
                 Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
-                return;
+                return -1;
             } else {
-                addDeadlineNoteInLoacalDB(title, priority, deadlinedate_time, progressValue, true, Long.valueOf(object.get("noteid").toString()));
+                id = addDeadlineNoteInLoacalDB(title, priority, deadlinedate_time, progressValue, true, Long.valueOf(object.get("noteid").toString()));
 
                 Toast.makeText(MyApplication.getAppContext(), "deadline note is added successfully", Toast.LENGTH_LONG).show();
             }
@@ -116,6 +118,7 @@ public class NoteController {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return id;
     }
 
     public void addMeetingNote(String title, String place, String agenda, String date, String priority, String time) {
@@ -255,7 +258,7 @@ public class NoteController {
         }
     }
 
-    public void addDeadlineNoteInLoacalDB(String title, String priority, String deadlinedate_time, int progressValue, boolean issync, long serverNoteId) {
+    public int addDeadlineNoteInLoacalDB(String title, String priority, String deadlinedate_time, int progressValue, boolean issync, long serverNoteId) {
 
         boolean isDone = false;
         boolean isdeleted = false;
@@ -269,10 +272,14 @@ public class NoteController {
         long id = localDataBase.InsertDeadlineNote(noteEntity);
         if (id == -1) {
             Toast.makeText(MyApplication.getAppContext(), " Error while inserting ", Toast.LENGTH_LONG).show();
-
         } else {
             Toast.makeText(MyApplication.getAppContext(), " Inserted done note id is " + String.valueOf(id), Toast.LENGTH_LONG).show();
         }
+
+        int idInt = ((Long)id).intValue();
+        Log.i("HELLO DeadlineID", String.valueOf(idInt));
+
+        return idInt;
     }
 
     private Timestamp getCurrentDate() {
@@ -496,8 +503,6 @@ public class NoteController {
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         localDataBase.UpdateDeadlineNote(deadlineNoteEntity);
         Toast.makeText(MyApplication.getAppContext(), " Update note done ", Toast.LENGTH_LONG).show();
-
-
     }
 
     public String GetNotSyncNotes() {
@@ -644,7 +649,6 @@ public class NoteController {
     }
 
     private boolean IntToboolean(int x) {
-
         return x != 0;
     }
 
