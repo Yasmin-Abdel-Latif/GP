@@ -54,6 +54,7 @@ public class EditDeadlineProgressActivity extends AppCompatActivity implements S
         btnUpdateDeadlineProgress = (Button) findViewById(R.id.btnUpdateDeadlineProgress);
         seekBarProgress = (SeekBar) findViewById(R.id.seekBarUpdateProgress);
         viewProgress = (TextView) findViewById(R.id.tvNoteProgress);
+        btnDone = (Button) findViewById(R.id.btnDoneDeadlineNote);
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         Cursor res = localDataBase.GetNoteById(deadlineNoteID);

@@ -65,6 +65,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         Log.i("SET ALARM", "SUGGESTED ACTIONS");
         Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 0);
         alarmStartTime.set(Calendar.SECOND, 0);
@@ -78,6 +79,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         Log.i("SET ALARM", "UPDATE PREFERENCES");
         Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 1);
         alarmStartTime.set(Calendar.SECOND, 0);
@@ -91,6 +93,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         Log.i("SET ALARM", "GET OFFERS");
         Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 2);
         alarmStartTime.set(Calendar.SECOND, 0);
@@ -104,6 +107,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         Log.i("SET ALARM", "GET NEAREST STORES");
         Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 3);
         alarmStartTime.set(Calendar.SECOND, 0);

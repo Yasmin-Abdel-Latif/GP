@@ -163,7 +163,6 @@ public class DeadlineActivity extends AppCompatActivity implements View.OnClickL
 
         String[] dateSplit = dateStr.split("-");
         String[] timeSplit = timeStr.split(":");
-        Calendar alarmStartTime = Calendar.getInstance();
         int day = Integer.parseInt(dateSplit[2]);
         int month = Integer.parseInt(dateSplit[1])-1;
         int year = Integer.parseInt(dateSplit[0]);
@@ -173,10 +172,11 @@ public class DeadlineActivity extends AppCompatActivity implements View.OnClickL
 
         Log.i("HELLO SET ALARM", day + "-" + month + "-" + year + " " + hour + ":" + minute + ":" + second);
 
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.DAY_OF_MONTH, day);
         alarmStartTime.set(Calendar.MONTH, month);
         alarmStartTime.set(Calendar.YEAR, year);
-
         alarmStartTime.set(Calendar.HOUR_OF_DAY, hour);
         alarmStartTime.set(Calendar.MINUTE, minute);
         alarmStartTime.set(Calendar.SECOND, second);
