@@ -150,7 +150,7 @@ public class NoteController {
 
     public void Syncroinzation(String NotSyncNotes) {
         try {
-            String res = new CallWebService().execute("http://fci-gp-intelligent-to-do.appspot.com/rest/synchroinzationService",
+            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/synchroinzationService",
                     NotSyncNotes, "synchroinzationService").get();
 
             Log.i("Resssultsynchronize", res);
