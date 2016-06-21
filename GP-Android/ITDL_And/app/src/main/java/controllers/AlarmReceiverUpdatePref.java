@@ -15,7 +15,9 @@ public class AlarmReceiverUpdatePref  extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "l has received alarm intent.");
+        int alarmID = intent.getIntExtra("alarmID",0);
         Intent service1 = new Intent(context, AlarmServiceUpdatePref.class);
+        service1.putExtra("alarmID", alarmID);
         context.startService(service1);
     }
 

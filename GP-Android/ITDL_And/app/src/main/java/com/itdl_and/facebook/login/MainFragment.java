@@ -61,56 +61,66 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void setAlarm() {
         AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
-
-        Log.i("SET ALARM", "SUGGESTED ACTIONS");
+        Log.i("ALARM ACTIONS", "SUGGESTED ACTIONS");
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 0);
         alarmStartTime.set(Calendar.SECOND, 0);
+        int alarmID = alarmStartTime.hashCode();
+        alarmIntent.putExtra("alarmID", alarmID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
+
+        Log.i("ALARM ACTIONS", String.valueOf(alarmID));
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
     public void setAlarmUpdatePref() {
         AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverUpdatePref.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
-
-        Log.i("SET ALARM", "UPDATE PREFERENCES");
+        Log.i("ALARM PREF", "UPDATE PREFERENCES");
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 1);
         alarmStartTime.set(Calendar.SECOND, 0);
+        int alarmID = alarmStartTime.hashCode()+2;
+        alarmIntent.putExtra("alarmID", alarmID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
+        Log.i("ALARM PREF", String.valueOf(alarmID));
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
     public void setAlarmGetOfferBTN() {
         AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverGetOffer.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
-
-        Log.i("SET ALARM", "GET OFFERS");
+        Log.i("ALARM OFFER", "GET OFFERS");
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 2);
         alarmStartTime.set(Calendar.SECOND, 0);
+        int alarmID = alarmStartTime.hashCode()+3;
+        alarmIntent.putExtra("alarmID", alarmID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
+        Log.i("ALARM OFFER", String.valueOf(alarmID));
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 
     public void setAlarmGetNearestStoreBTN() {
         AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverGetNearestStore.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), 0, alarmIntent, 0);
 
-        Log.i("SET ALARM", "GET NEAREST STORES");
+        Log.i("ALARM STORE", "GET NEAREST STORES");
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.setTimeInMillis(System.currentTimeMillis());
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
         alarmStartTime.set(Calendar.MINUTE, 3);
         alarmStartTime.set(Calendar.SECOND, 0);
+        int alarmID = alarmStartTime.hashCode()+4;
+        alarmIntent.putExtra("alarmID", alarmID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
+        Log.i("ALARM STORE", String.valueOf(alarmID));
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
     }
 

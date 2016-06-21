@@ -52,6 +52,8 @@ public class AlarmServiceGetNearestStore extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        int alarmID = intent.getIntExtra("alarmID",0);
         Recomm_Controller callGetNearestStoresABI = new Recomm_Controller();
         LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
@@ -72,7 +74,7 @@ public class AlarmServiceGetNearestStore extends IntentService {
                     Intent mIntent = new Intent(MyApplication.getAppContext(), GetNearestStoresActivity.class);
 
                     mIntent.putExtra("storesOutput", result);
-                    pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    pendingIntent = PendingIntent.getActivity(context, alarmID, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     Resources res = this.getResources();
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -88,10 +90,7 @@ public class AlarmServiceGetNearestStore extends IntentService {
                             .setContentText("You Might Want to See these stores");
 
                     notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                    Timestamp ts = new Timestamp(new Date().getTime());
-                    String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
-                    notificationManager.notify(weekDayToInt(curDay)*2, builder.build());
+                    notificationManager.notify(alarmID, builder.build());
                 }
             }
         } catch (ExecutionException e) {
@@ -101,24 +100,5 @@ public class AlarmServiceGetNearestStore extends IntentService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private int weekDayToInt(String weekDay) {
-        if (weekDay.equals("Saturday")) {
-            return 1;
-        } else if (weekDay.equals("Sunday")) {
-            return 2;
-        } else if (weekDay.equals("Monday")) {
-            return 3;
-        } else if (weekDay.equals("Tuesday")) {
-            return 4;
-        } else if (weekDay.equals("Wednesday")) {
-            return 5;
-        } else if (weekDay.equals("Thursday")) {
-            return 6;
-        } else if (weekDay.equals("Friday")) {
-            return 7;
-        }
-        return 0;
     }
 }

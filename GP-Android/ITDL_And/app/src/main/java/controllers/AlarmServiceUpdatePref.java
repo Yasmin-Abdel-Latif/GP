@@ -50,6 +50,8 @@ public class AlarmServiceUpdatePref extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        int alarmID = intent.getIntExtra("alarmID",0);
         Recomm_Controller callUpdatePref = new Recomm_Controller();
         LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
@@ -73,7 +75,7 @@ public class AlarmServiceUpdatePref extends IntentService {
 
                     mIntent.putExtra("updatePrefOutput", result);
                     mIntent.putExtra("userID",userID);
-                    pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    pendingIntent = PendingIntent.getActivity(context, alarmID, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     Resources res = this.getResources();
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -89,7 +91,7 @@ public class AlarmServiceUpdatePref extends IntentService {
                             .setContentText("Do You Want To Update Preferences?");
 
                     notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    notificationManager.notify(0, builder.build());
+                    notificationManager.notify(alarmID, builder.build());
                 }
             }
         } catch (ExecutionException e) {

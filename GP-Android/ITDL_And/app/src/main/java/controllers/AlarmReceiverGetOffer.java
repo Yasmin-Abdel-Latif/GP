@@ -15,7 +15,9 @@ public class AlarmReceiverGetOffer extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "l has received alarm intent.");
+        int alarmID = intent.getIntExtra("alarmID",0);
         Intent service1 = new Intent(context, AlarmServiceGetOffer.class);
+        service1.putExtra("alarmID", alarmID);
         context.startService(service1);
     }
 
