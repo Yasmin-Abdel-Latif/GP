@@ -72,7 +72,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
 
         Log.i("ALARM ACTIONS", String.valueOf(alarmID));
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     public void setAlarmUpdatePref() {
@@ -88,7 +88,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmIntent.putExtra("alarmID", alarmID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
         Log.i("ALARM PREF", String.valueOf(alarmID));
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalWeek(), pendingIntent);
     }
 
     public void setAlarmGetOfferBTN() {
@@ -104,7 +104,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmIntent.putExtra("alarmID", alarmID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
         Log.i("ALARM OFFER", String.valueOf(alarmID));
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     public void setAlarmGetNearestStoreBTN() {
@@ -121,22 +121,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alarmIntent.putExtra("alarmID", alarmID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
         Log.i("ALARM STORE", String.valueOf(alarmID));
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), getIntervalDay() /* AlarmManager.INTERVAL_HALF_HOUR*/, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     private int getIntervalWeek() {
         int days = 7;
         int hours = 24;
-        int minutes = 60;
-        int seconds = 60;
-        int milliseconds = 1000;
-        int repeatMS = days * hours * minutes * seconds * milliseconds;
-        return repeatMS;
-    }
-
-    private int getIntervalDay() {
-        int days = 1;
-        int hours = 1;
         int minutes = 60;
         int seconds = 60;
         int milliseconds = 1000;
