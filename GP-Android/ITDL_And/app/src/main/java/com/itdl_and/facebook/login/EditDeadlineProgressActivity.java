@@ -1,7 +1,10 @@
 package com.itdl_and.facebook.login;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -23,6 +26,8 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import controllers.AlarmReceiver;
+import controllers.AlarmReceiverDeadlineNote;
 import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
@@ -140,7 +145,31 @@ public class EditDeadlineProgressActivity extends AppCompatActivity implements S
                 }
             }
         }
+
+        else if(view == btnDone)
+        {
+            LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
+            Cursor cur = localDataBase.GetAlarmByNoteId(deadlineNoteID);
+            if (!cur.moveToFirst())
+                return;
+            cur.moveToFirst();
+            do {
+                int alarmID = cur.getInt(cur.getColumnIndex("alarmID"));
+                cancelAlarm(alarmID);
+            } while (cur.moveToNext());
+
+            cur.close();
+            localDataBase.DeleteNoteAlarmPermanentlyByNoteID(deadlineNoteID);
+        }
     }
+
+    private void cancelAlarm(int alarmID){
+        Intent intent = new Intent(MyApplication.getAppContext(), AlarmReceiverDeadlineNote.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
+
     private boolean IntToboolean(int x) {
         return x != 0;
     }

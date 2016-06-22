@@ -366,7 +366,7 @@ public class NoteController {
     }
 
     private void cancelAlarm(int alarmID){
-        Intent intent = new Intent(MyApplication.getAppContext(), AlarmReceiver.class);
+        Intent intent = new Intent(MyApplication.getAppContext(), AlarmReceiverDeadlineNote.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, intent, 0);
         AlarmManager alarmManager = (AlarmManager)MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
