@@ -75,6 +75,7 @@ public class AlarmServiceDeadlineNote extends IntentService {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent mIntent = new Intent(MyApplication.getAppContext(), EditDeadlineProgressActivity.class);
         mIntent.putExtra("noteID", noteID);
+        mIntent.putExtra("alarmID", alarmID);
         pendingIntent = PendingIntent.getActivity(context, alarmID, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources res = this.getResources();

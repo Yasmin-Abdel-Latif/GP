@@ -412,9 +412,16 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
     }
 
-    public void DeleteNoteAlarmPermanently(int noteid) {
+    public void DeleteNoteAlarmPermanently(int alarmid) {
         SQLiteDatabase db = this.getReadableDatabase();
-        db.execSQL("DELETE FROM " + tableName3 + " WHERE " + collocalnoteId + "='" + noteid + "'");
+        db.execSQL("DELETE FROM " + tableName3 + " WHERE " + colalarmID + "='" + alarmid + "'");
+        db.close();
+
+    }
+
+    public void DeleteNoteAlarmPermanentlyByNoteID(int noteID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("DELETE FROM " + tableName3 + " WHERE " + collocalnoteId + "='" + noteID + "'");
         db.close();
 
     }

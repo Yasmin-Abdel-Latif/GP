@@ -40,7 +40,7 @@ public class EditDeadlineProgressActivity extends AppCompatActivity implements S
     TextView viewTitle, viewProgress;
     String olddeadlinetitle, oldDatetime, oldPriority;
     SeekBar seekBarProgress;
-    int progressValue, deadlineNoteID, oldprogress;
+    int progressValue, deadlineNoteID, oldprogress, alarmID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class EditDeadlineProgressActivity extends AppCompatActivity implements S
 
         Intent intent = getIntent();
         deadlineNoteID = intent.getIntExtra("noteID",0);
+        alarmID = intent.getIntExtra("alarmID",0);
 
         viewTitle = (TextView) findViewById(R.id.tvDeadlineProgressTitle);
         btnUpdateDeadlineProgress = (Button) findViewById(R.id.btnUpdateDeadlineProgress);
@@ -90,6 +91,8 @@ public class EditDeadlineProgressActivity extends AppCompatActivity implements S
             oldPriority = note.getNotePriority();
             oldprogress = note.getProgressPercentage();
             oldDatetime = note.getDeadLineDate().toString();
+
+            localDataBase.DeleteNoteAlarmPermanently(alarmID);
 
             viewTitle.setText(olddeadlinetitle);
             viewProgress.setText("progress is " + oldprogress + " % ");

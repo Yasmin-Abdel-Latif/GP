@@ -1,5 +1,8 @@
 package controllers;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
@@ -346,8 +349,27 @@ public class NoteController {
     public void DeleteNoteInLocalDB(int noteid) {
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         localDataBase.DeleteNote(noteid);
+        Cursor cur = localDataBase.GetAlarmByNoteId(noteid);
+        if (!cur.moveToFirst())
+            return;
+        cur.moveToFirst();
+        do {
+            int alarmID = cur.getInt(cur.getColumnIndex("alarmID"));
+            cancelAlarm(alarmID);
+        } while (cur.moveToNext());
+
+        cur.close();
+        localDataBase.DeleteNoteAlarmPermanentlyByNoteID(noteid);
 
         Toast.makeText(MyApplication.getAppContext(), " note Deleted  ", Toast.LENGTH_LONG).show();
+
+    }
+
+    private void cancelAlarm(int alarmID){
+        Intent intent = new Intent(MyApplication.getAppContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
 
     }
 
