@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name="controllers.MyApplication"
         android:allowBackup="true"
@@ -78,19 +85,19 @@
             android:label="@string/title_activity_edit_deadline_progress" />
         <activity
             android:name=".PreferenceActivity"
-            android:label="@string/title_activity_preference"></activity>
+            android:label="@string/title_activity_preference" />
         <activity
             android:name=".HabitActivity"
-            android:label="@string/title_activity_habit_note"></activity>
+            android:label="@string/title_activity_habit_note" />
         <activity
             android:name=".GetNearestStoresActivity"
-            android:label="@string/title_activity_nearest_stores"></activity>
+            android:label="@string/title_activity_nearest_stores" />
         <activity
             android:name=".NewPreferencesActivity"
-            android:label="@string/title_activity_new_preferences"></activity>
+            android:label="@string/title_activity_new_preferences" />
         <activity
             android:name=".GetOffersActivity"
-            android:label="@string/title_activity_get_offers"></activity>
+            android:label="@string/title_activity_get_offers" />
 
         <service android:name="controllers.ApplicationService" />
         <service android:name="controllers.AlarmService" />
@@ -115,6 +122,21 @@
             android:name="controllers.AlarmReceiverGetOffer"
             android:enabled="true" />
 
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

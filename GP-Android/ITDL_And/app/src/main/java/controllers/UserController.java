@@ -470,9 +470,11 @@ public class UserController {
 
             Intent homeIntent = new Intent(MyApplication.getAppContext(),
                     HomeActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             homeIntent.putExtra("status", "Registered successfully");
             homeIntent.putExtra("userId", String.valueOf(currentActiveUserID));
             homeIntent.putExtra("serviceType", "UserPreferenceService");
+            Log.i("HELLO SIGNUP ID", String.valueOf(currentActiveUserID));
             MyApplication.getAppContext().startActivity(homeIntent);
 
         } catch (InterruptedException e) {

@@ -18,7 +18,7 @@ import model.LocalDataBase;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     TextView ShowTextView;
-    Button UpdateProfile, SignOut, addNoteBtn, btnShowNotes;
+    Button UpdateProfile, SignOut, addNoteBtn, btnShowNotes, btnShowCloseOffer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +29,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         noteController.StartService();
 
 
-        Bundle extras = getIntent().getExtras();
+        Intent extras = getIntent();
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
 
-        String status = extras.getString("status");
-        String serviceType = extras.getString("serviceType");
+        String status = extras.getStringExtra("status");
+        String serviceType = extras.getStringExtra("serviceType");
 
         String name = "", welcome = "Hello", text = "";
 
         if (serviceType.equals("LoginService")) {
-            name = extras.getString("name");
+            name = extras.getStringExtra("name");
 
             welcome = "Welcome " + name;
-            String id = extras.getString("userId");
+            String id = extras.getStringExtra("userId");
             text = status + " ... " + welcome + "  , your id is " + id;
             UserController uc = UserController.getInstance();
             String twitterId = uc.getCurrentActiveUser().getUserTwitterAccount();
@@ -57,7 +57,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         } else if (serviceType.equals("UserPreferenceService")) {
-            String id = extras.getString("userId");
+            String id = extras.getStringExtra("userId");
             text = status + " ... " + welcome + "  , your id is " + id;
             UserController uc = UserController.getInstance();
             String twitterId = uc.getCurrentActiveUser().getUserTwitterAccount();
@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (serviceType.equals("UpdateProfileService")) {
             text = status;
         } else if (serviceType.equals("UpdatePrefService")) {
-            String id = extras.getString("userId");
+            String id = extras.getStringExtra("userId");
             text = status + " ... " + welcome + "  , your id is " + id;
         }
 
@@ -84,10 +84,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         SignOut = (Button) findViewById(R.id.SignOut);
         addNoteBtn = (Button) findViewById(R.id.buttonAddNote);
         btnShowNotes = (Button) findViewById(R.id.buttonShowAllNotes);
+        btnShowCloseOffer = (Button) findViewById(R.id.buttonShowCloseOffer);
         UpdateProfile.setOnClickListener(this);
         SignOut.setOnClickListener(this);
         addNoteBtn.setOnClickListener(this);
         btnShowNotes.setOnClickListener(this);
+        btnShowCloseOffer.setOnClickListener(this);
 
 
     }
@@ -105,6 +107,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             usercontrol.GetUserInformation();
         } else if (view == btnShowNotes) {
             Intent intent = new Intent(getApplicationContext(), ShowAllNotesActivity.class);
+            startActivity(intent);
+        } else if (view == btnShowCloseOffer) {
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
             startActivity(intent);
         }
     }

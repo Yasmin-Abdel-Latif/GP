@@ -48,4 +48,5 @@
         <item>Sport</item>
         <item>Fashion </item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>
