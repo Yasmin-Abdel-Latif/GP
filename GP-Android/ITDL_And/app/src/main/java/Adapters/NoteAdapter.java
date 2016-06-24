@@ -1,6 +1,7 @@
 package Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.itdl_and.facebook.login.R;
+import com.itdl_and.facebook.login.ShowNoteDetailsActivity;
 
 import java.util.ArrayList;
 
+import controllers.MyApplication;
 import controllers.NoteController;
 import model.DeadlineNoteEntity;
 import model.MeetingNoteEntity;
@@ -27,11 +30,13 @@ public class NoteAdapter extends BaseAdapter {
     ArrayList<NoteEntity> MYNotes = new ArrayList<NoteEntity>();
     Context context;
     LayoutInflater layoutInflater;
+    String HistoryORCurrent;
 
-    public NoteAdapter(Context context) {
+    public NoteAdapter(Context context,String HistoryORCurrent) {
         NoteController noteController = new NoteController();
-        MYNotes = noteController.ShowAllNotes();
+        MYNotes = noteController.ShowAllNotes(HistoryORCurrent);
         this.context = context;
+        this.HistoryORCurrent = HistoryORCurrent;
         layoutInflater = layoutInflater.from(this.context);
     }
 
@@ -102,7 +107,12 @@ public class NoteAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 NoteController noteController = new NoteController();
-                noteController.GetNoteDetails(id);
+                NoteEntity noteEntity = noteController.GetNoteDetails(id);
+                Intent intent = new Intent(MyApplication.getAppContext(),ShowNoteDetailsActivity.class);
+                intent.putExtra("note", noteEntity);
+                intent.putExtra("fromActivity", HistoryORCurrent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApplication.getAppContext().startActivity(intent);
             }
         });
         return view;

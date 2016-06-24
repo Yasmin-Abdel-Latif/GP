@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="#1A237E">
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -21,7 +22,8 @@
             android:paddingBottom="2dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:paddingTop="2dp"/>
+            android:paddingTop="2dp"
+            android:textColor="#f89939" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,7 +32,8 @@
             android:paddingBottom="2dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:paddingTop="2dp"/>
+            android:paddingTop="2dp"
+            android:textColor="#f89939" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +41,8 @@
             android:paddingBottom="2dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:paddingTop="2dp"/>
+            android:paddingTop="2dp"
+            android:textColor="#f89939" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,12 +50,14 @@
             android:paddingBottom="2dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:paddingTop="2dp"/>
+            android:paddingTop="2dp"
+            android:textColor="#f89939" />
 
     </LinearLayout>
 <Button
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Like Recommendation"
-    android:id="@+id/BTN_like_Offer"/>
+    android:id="@+id/BTN_like_Offer"
+    android:background="#f89939" />
 </LinearLayout>

@@ -24,7 +24,8 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import controllers.AlarmReceiverDeadlineNote;
+import controllers.Alarms;
+import receivers.AlarmReceiverDeadlineNote;
 import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
@@ -118,14 +119,16 @@ public class DeadlineActivity extends AppCompatActivity implements View.OnClickL
                 Log.i("HELLO FirstAlarm", firstAlarm.toString());
                 LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
                 int alarmID = localDataBase.UpdateAlarmCell();
-                setAlarmDeadline(firstAlarm, alarmID, noteID, 1);
+                Alarms alarms = new Alarms();
+                alarms.setAlarmDeadline(firstAlarm, alarmID, noteID, 1);
                 localDataBase.InsertNoteAlarm(noteID, alarmID);
 
                 Timestamp secondAlarm = new Timestamp(Timestamp.valueOf(date + " " + time).getTime() - (1000 * 60 * 60));
                 Log.i("HELLO SecondAlarm", secondAlarm.toString());
                 LocalDataBase localDataBase2 = new LocalDataBase(MyApplication.getAppContext());
                 int alarmID2 = localDataBase2.UpdateAlarmCell();
-                setAlarmDeadline(secondAlarm, alarmID2, noteID, 2);
+                alarms = new Alarms();
+                alarms.setAlarmDeadline(secondAlarm, alarmID2, noteID, 2);
                 localDataBase.InsertNoteAlarm(noteID, alarmID2);
             }
 
@@ -148,41 +151,5 @@ public class DeadlineActivity extends AppCompatActivity implements View.OnClickL
     public void onStopTrackingTouch(SeekBar seekBar) {
         viewProgress.setText("Progress is " + progressValue + "%");
 
-    }
-
-    public void setAlarmDeadline(Timestamp alarmTime, int alarmID, int noteID, int alarmType) {
-        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(MyApplication.getAppContext(), AlarmReceiverDeadlineNote.class);
-        alarmIntent.putExtra("alarmID", alarmID);
-        alarmIntent.putExtra("noteID", noteID);
-        alarmIntent.putExtra("alarmType", alarmType);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, alarmIntent, 0);
-
-        String dateStr = alarmTime.toString().split(" ")[0];
-        String timeStr = alarmTime.toString().split(" ")[1];
-
-        String[] dateSplit = dateStr.split("-");
-        String[] timeSplit = timeStr.split(":");
-        int day = Integer.parseInt(dateSplit[2]);
-        int month = Integer.parseInt(dateSplit[1])-1;
-        int year = Integer.parseInt(dateSplit[0]);
-        int hour = Integer.parseInt(timeSplit[0]);
-        int minute = Integer.parseInt(timeSplit[1]);
-        int second = 0;
-
-        Log.i("HELLO SET ALARM", day + "-" + month + "-" + year + " " + hour + ":" + minute + ":" + second);
-
-        Calendar alarmStartTime = Calendar.getInstance();
-        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
-        alarmStartTime.set(Calendar.DAY_OF_MONTH, day);
-        alarmStartTime.set(Calendar.MONTH, month);
-        alarmStartTime.set(Calendar.YEAR, year);
-        alarmStartTime.set(Calendar.HOUR_OF_DAY, hour);
-        alarmStartTime.set(Calendar.MINUTE, minute);
-        alarmStartTime.set(Calendar.SECOND, second);
-
-        Log.i("HELLO SET ALARM", alarmStartTime.getTime().toString());
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), pendingIntent);
     }
 }

@@ -1,24 +1,18 @@
-package controllers;
-
+package services;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.itdl_and.facebook.login.HabitActivity;
-import com.itdl_and.facebook.login.HomeActivity;
-import com.itdl_and.facebook.login.MainActivity;
-import com.itdl_and.facebook.login.MainFragment;
+import com.itdl_and.facebook.login.GetOffersActivity;
 import com.itdl_and.facebook.login.R;
 
 import org.json.JSONException;
@@ -26,23 +20,25 @@ import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
+import controllers.MyApplication;
+import controllers.Recomm_Controller;
 import model.LocalDataBase;
-import model.NoteEntity;
-import model.OrdinaryNoteEntity;
 
-
-public class AlarmService extends IntentService {
+/**
+ * Created by Yasmin Abdel Latif on 6/18/2016.
+ */
+public class AlarmServiceGetOffer extends IntentService {
     private static final String TAG = "HELLO";
     private NotificationManager notificationManager;
     private PendingIntent pendingIntent;
     Context mContext;
 
-    public AlarmService() {
-        super("AlarmService");
+    public AlarmServiceGetOffer() {
+        super("AlarmServiceGetOffer");
     }
 
     @Override
@@ -52,34 +48,26 @@ public class AlarmService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i(TAG, "Alarm Service has started.");
-
         int alarmID = intent.getIntExtra("alarmID",0);
+        Recomm_Controller callGetOfferABI = new Recomm_Controller();
         LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
             String resultLD = ld.GetUserID();
-            if(resultLD.trim().length() > 0)
-            {
+            if (resultLD.trim().length() > 0) {
                 JSONObject jsonObject = new JSONObject(resultLD);
                 String userID = jsonObject.getString("UserID");
-                String userTwitterAccount = jsonObject.getString("Twitter_Account");
-                Log.i(TAG, userID);
-                Log.i(TAG, userTwitterAccount + " Twitter");
-                ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
-                notes.addAll(UserController.getAllNotes(userID));
-                if(notes.size() > 0)
-                {
+                String result = callGetOfferABI.getOffers(userID);
+
+                JSONObject jsonRootObject = new JSONObject(result);
+                int resultSize = jsonRootObject.getInt("resultSize");
+                Log.i("HELLO GET OFFER", String.valueOf(resultSize));
+                if (resultSize > 0) {
+                    Log.i("Offers Res API : ",result);
                     Context context = MyApplication.getAppContext();
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    Intent mIntent = new Intent(MyApplication.getAppContext(), HabitActivity.class);
-                    String result = "";
-                    for(int i = 0 ; i < notes.size() ; i++)
-                    {
-                        result += ((OrdinaryNoteEntity)notes.get(i)).getNoteContent() + ", ";
-                    }
-                    Bundle bundleObject = new Bundle();
-                    bundleObject.putSerializable("Notes", notes);
-                    mIntent.putExtras(bundleObject);
+                    Intent mIntent = new Intent(MyApplication.getAppContext(), GetOffersActivity.class);
+
+                    mIntent.putExtra("offersOutput", result);
                     pendingIntent = PendingIntent.getActivity(context, alarmID, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     Resources res = this.getResources();
@@ -89,20 +77,20 @@ public class AlarmService extends IntentService {
                     builder.setContentIntent(pendingIntent)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher))
-                            .setTicker("Suggested Actions")
+                            .setTicker("Offers")
                             .setSound(alarmSound)
                             .setAutoCancel(true)
-                            .setContentTitle("These Are Some Notes That Might Interest You")
-                            .setContentText(result);
+                            .setContentTitle("You Might be Interested in these Offers")
+                            .setContentText("You Might be Interested in these Offers");
 
                     notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                    Timestamp ts = new Timestamp(new Date().getTime());
-                    String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
                     notificationManager.notify(alarmID, builder.build());
                 }
             }
-
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }

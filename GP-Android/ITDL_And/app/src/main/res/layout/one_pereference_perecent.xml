@@ -2,13 +2,17 @@
 <LinearLayout   xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#1A237E">
 
     <TextView
         android:layout_width="115dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/textViewcategory" />
+        android:id="@+id/textViewcategory"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <SeekBar
         android:layout_width="178dp"
@@ -22,7 +26,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/textViewpercent"
-        android:layout_toRightOf="@+id/SeekparcategoryPercent" />
+        android:layout_toRightOf="@+id/SeekparcategoryPercent"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
 
 

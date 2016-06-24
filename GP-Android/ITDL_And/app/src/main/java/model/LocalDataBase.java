@@ -20,8 +20,6 @@ public class LocalDataBase extends SQLiteOpenHelper {
     static final String coluniqueid = "Id";
     static final String tableName = "note";
     static final String tableName2 = "UserInfo";
-    static final String tableName3 = "DeadlineNoteAlarms";
-    static final String tableName4 = "PrevAlarmID";
     static final String collocalnoteId = "localnoteId";
     static final String colServernoteId = "ServernoteId";
     static final String colnoteContent = "noteContent";
@@ -45,11 +43,16 @@ public class LocalDataBase extends SQLiteOpenHelper {
     static final String colisDeleted = "isDeleted";
     static final String coltwittername = "twitterUserName";
     static final String coluserid = "userID";
-    static final String colalarmID = "alarmID";
+    static final String colisDoneOnServer = "colisDoneOnServer";
+    static final String tableAlarms = "Alarms";
+    static final String requestcode = "Requestcode";
+    static final String tableOneCellAlarms = "OneCellAlarms";
+    static final String colOneCellAlarms = "OneCell";
 
     static final String queryCreateTableNote = "CREATE TABLE " + tableName + "( " +
             collocalnoteId + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             colServernoteId + " INTEGER ," +
+            coluserid + " INTEGER ," +
             colnoteContent + " TEXT ," +
             colcreationDate + " date NOT NULL," +
             colnoteType + " TEXT NOT NULL ," +
@@ -67,6 +70,7 @@ public class LocalDataBase extends SQLiteOpenHelper {
             colisTextCategorized + " INTEGER," +
             colPriority + " TEXT," +
             colisAdded + " INTEGER," +
+            colisDoneOnServer + " INTEGER," +
             colisUpdated + " INTEGER," +
             colisDeleted + " INTEGER " + " );";
 
@@ -75,14 +79,16 @@ public class LocalDataBase extends SQLiteOpenHelper {
             coluserid + " TEXT NOT NULL," +
             coltwittername + " TEXT" + " );";
 
-    static final String queryCreateTableDeadlineAlarms = "CREATE TABLE " + tableName3 + "( " +
-            coluniqueid + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            collocalnoteId + " INTEGER," +
-            colalarmID + " INTEGER" + " );";
+    static final String queryCreateTableMeetingAlarms =
+            "CREATE TABLE " + tableAlarms + "( " +
+                    coluniqueid + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    collocalnoteId + " INTEGER, " +
+                    requestcode + " INTEGER  );";
 
-    static final String queryCreateTableAlarmPrevID = "CREATE TABLE " + tableName4 + "( " +
-            coluniqueid + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            colalarmID + " INTEGER" + " );";
+
+    static final String queryCreateTableOneCellAlarms =
+            "CREATE TABLE " + tableOneCellAlarms + "( " +
+                    colOneCellAlarms + " INTEGER  );";
 
     public LocalDataBase(Context context) {
         super(context, dataBaseName, null, 1);
@@ -92,16 +98,16 @@ public class LocalDataBase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(queryCreateTableNote);
         sqLiteDatabase.execSQL(queryCreateTableOneUser);
-        sqLiteDatabase.execSQL(queryCreateTableDeadlineAlarms);
-        sqLiteDatabase.execSQL(queryCreateTableAlarmPrevID);
+        sqLiteDatabase.execSQL(queryCreateTableMeetingAlarms);
+        sqLiteDatabase.execSQL(queryCreateTableOneCellAlarms);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + queryCreateTableNote);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + queryCreateTableOneUser);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + queryCreateTableDeadlineAlarms);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + queryCreateTableAlarmPrevID);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + queryCreateTableMeetingAlarms);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + queryCreateTableOneCellAlarms);
         onCreate(sqLiteDatabase);
     }
 
@@ -125,6 +131,8 @@ public class LocalDataBase extends SQLiteOpenHelper {
         values.put(colisAdded, isadded);
         values.put(colisUpdated, isupdated);
         values.put(colServernoteId, note.getServernoteId());
+        values.put(coluserid, note.getUserId());
+        values.put(colisDoneOnServer, 0);
 
         Log.i("ServerNameidinDB=", String.valueOf(note.getServernoteId()));
         long result = db.insert(tableName, null, values);
@@ -151,6 +159,8 @@ public class LocalDataBase extends SQLiteOpenHelper {
         values.put(colisUpdated, isupdated);
         values.put(colisDeleted, isdeleted);
         values.put(colServernoteId, note.getServernoteId());
+        values.put(coluserid, note.getUserId());
+        values.put(colisDoneOnServer, 0);
 
 
         long result = db.insert(tableName, null, values);
@@ -180,6 +190,8 @@ public class LocalDataBase extends SQLiteOpenHelper {
         values.put(colisUpdated, isupdated);
         values.put(colisDeleted, isdeleted);
         values.put(colServernoteId, meetingNoteEntity.getServernoteId());
+        values.put(coluserid, meetingNoteEntity.getUserId());
+        values.put(colisDoneOnServer, 0);
 
         long result = db.insert(tableName, null, values);
         return result;
@@ -206,6 +218,8 @@ public class LocalDataBase extends SQLiteOpenHelper {
         values.put(colisUpdated, isupdated);
         values.put(colisDeleted, isdeleted);
         values.put(colServernoteId, deadlineNoteEntity.getServernoteId());
+        values.put(coluserid, deadlineNoteEntity.getUserId());
+        values.put(colisDoneOnServer, 0);
 
         long result = db.insert(tableName, null, values);
         return result;
@@ -228,18 +242,30 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(collocalnoteId, noteID);
-        values.put(colalarmID, alarmID);
+        values.put(requestcode, alarmID);
 
-        long result = db.insert(tableName3, null, values);
+        long result = db.insert(tableAlarms, null, values);
         return result;
     }
 
-    public Cursor GetNotes() {
+    public Cursor SelectHistoryNotes(long userid) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
-        String qery = "SELECT * FROM " + tableName + " WHERE " + colisDeleted + " = " + 0;
+        String qery = "SELECT * FROM " + tableName + " WHERE " + colisDeleted + " = " + 0 + " and "
+                + coluserid + " = " + userid + " and " + colisDone + " = " + 1;
 
+        c = db.rawQuery(qery, null);
+        return c;
+    }
+
+    //Current Notes
+    public Cursor SelectCurrentNotes(long userid) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+        String qery = "SELECT * FROM " + tableName + " WHERE " + colisDeleted + " = " + 0 + " and "
+                + coluserid + " = " + userid + " and " + colisDone + " = " + 0;
         c = db.rawQuery(qery, null);
         return c;
     }
@@ -255,7 +281,7 @@ public class LocalDataBase extends SQLiteOpenHelper {
     public Cursor GetAlarmByNoteId(int noteId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
-        String qery = "SELECT * FROM " + tableName3 + " WHERE " + collocalnoteId + "=" + noteId;
+        String qery = "SELECT * FROM " + tableAlarms + " WHERE " + collocalnoteId + "=" + noteId;
         c = db.rawQuery(qery, null);
         return c;
     }
@@ -320,18 +346,15 @@ public class LocalDataBase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         int alarmID = 0;
-        if(GetAlarmID().equals(""))
-        {
+        if (GetAlarmID().equals("")) {
             alarmID = 1;
-            values.put(colalarmID, alarmID);
-            db.insert(tableName4, null, values);
-        }
-        else
-        {
+            values.put(colOneCellAlarms, alarmID);
+            db.insert(tableOneCellAlarms, null, values);
+        } else {
             alarmID = Integer.parseInt(GetAlarmID());
             alarmID++;
-            values.put(colalarmID, alarmID);
-            db.update(tableName4, values, coluniqueid + " = 1", null);
+            String query = "UPDATE " + tableOneCellAlarms + " SET " + colOneCellAlarms + " = " + alarmID;
+            db.execSQL(query);
         }
 
         return alarmID;
@@ -339,18 +362,17 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
     public String GetAlarmID() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur = db.rawQuery("SELECT * FROM  " + tableName4 + " where " + coluniqueid + " = 1", null);
+        Cursor cur = db.rawQuery("SELECT * FROM  " + tableOneCellAlarms, null);
         if (!cur.moveToFirst())
             return "";
         cur.moveToFirst();
-        String alarmID = cur.getString(cur.getColumnIndex(colalarmID));
+        String alarmID = cur.getString(cur.getColumnIndex(colOneCellAlarms));
         return alarmID;
     }
 
     public String GetUserID() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery("SELECT * FROM  " + tableName2 + " where " + coluniqueid + " = 1", null);
-        String userID = "";
         if (!cur.moveToFirst())
             return "";
         cur.moveToFirst();
@@ -382,8 +404,8 @@ public class LocalDataBase extends SQLiteOpenHelper {
     public Cursor SelectRecordsWithSyncZero() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
-        String qery = "SELECT * FROM " + tableName + " WHERE " + colisAdded + "= 0 or (" + colisAdded + "= 1 and " + colisDeleted + "= 1)  " +
-                "or( " + colisAdded + "= 1 and " + colisUpdated + "= 1)";
+        String qery = "SELECT * FROM " + tableName + " WHERE " + colisAdded + "= 0 or (" + colisAdded + "= 1 and " + colisDeleted + "= 1 ) " +
+                "or( " + colisAdded + "= 1 and " + colisUpdated + "= 1) or( " + colisAdded + "= 1 and " + colisDone + "= 1 and " + colisDoneOnServer + "= 0 )";
 
         c = db.rawQuery(qery, null);
         return c;
@@ -414,15 +436,28 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
     public void DeleteNoteAlarmPermanently(int alarmid) {
         SQLiteDatabase db = this.getReadableDatabase();
-        db.execSQL("DELETE FROM " + tableName3 + " WHERE " + colalarmID + "='" + alarmid + "'");
+        db.execSQL("DELETE FROM " + tableAlarms + " WHERE " + requestcode + "='" + alarmid + "'");
         db.close();
-
     }
 
     public void DeleteNoteAlarmPermanentlyByNoteID(int noteID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        db.execSQL("DELETE FROM " + tableName3 + " WHERE " + collocalnoteId + "='" + noteID + "'");
+        db.execSQL("DELETE FROM " + tableAlarms + " WHERE " + collocalnoteId + "='" + noteID + "'");
         db.close();
+    }
+
+    public void SycDone(int noteid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(colisDoneOnServer, 1);
+        db.update(tableName, values, collocalnoteId + " = " + noteid, null);
+    }
+
+    public void SetIsDone(int noteid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(colisDone, 1);
+        db.update(tableName, cv, collocalnoteId + " = " + noteid, null);
 
     }
 }

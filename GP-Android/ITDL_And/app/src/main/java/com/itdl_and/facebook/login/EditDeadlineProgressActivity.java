@@ -1,9 +1,7 @@
 package com.itdl_and.facebook.login;
 
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,28 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 
-import controllers.AlarmReceiver;
-import controllers.AlarmReceiverDeadlineNote;
+import receivers.AlarmReceiverDeadlineNote;
 import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
 import model.DeadlineNoteEntity;
 import model.LocalDataBase;
-import model.NoteEntity;
 
 /**
  * Created by Yasmin Abdel Latif on 6/21/2016.

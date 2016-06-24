@@ -26,7 +26,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import controllers.AlarmReceiverDeadlineNote;
+import receivers.AlarmReceiverDeadlineNote;
 import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
@@ -181,14 +181,15 @@ public class EditDeadlineNoteActivity extends AppCompatActivity implements SeekB
                     if (!cur.moveToFirst())
                         return;
                     cur.moveToFirst();
-                    do {
-                        int alarmID = cur.getInt(cur.getColumnIndex("alarmID"));
-                        cancelAlarm(alarmID);
-                    } while (cur.moveToNext());
+                    int alarmID = cur.getInt(cur.getColumnIndex("Requestcode"));
+
+                    cur.moveToNext();
+                    int alarmID2 = cur.getInt(cur.getColumnIndex("Requestcode"));
+
 
                     cur.close();
                     localDataBase.DeleteNoteAlarmPermanentlyByNoteID(deadlineNoteID);
-                    setNewAlarmDeadline(date, time, deadlineNoteID);
+                    setNewAlarmDeadline(date, time, deadlineNoteID, alarmID, alarmID2);
                 }
             }
         }
@@ -201,22 +202,16 @@ public class EditDeadlineNoteActivity extends AppCompatActivity implements SeekB
         alarmManager.cancel(pendingIntent);
     }
 
-    public void setNewAlarmDeadline(String newDate, String newTime, int noteID) {
+    public void setNewAlarmDeadline(String newDate, String newTime, int noteID, int alarmID, int alarmID2) {
         long milliseconds = ((Timestamp.valueOf(newDate + " " + newTime).getTime() - new Date().getTime()) / (2));
         long middle = new Date().getTime() + milliseconds;
         Timestamp firstAlarm = new Timestamp(middle);
         Log.i("HELLO FirstAlarm", firstAlarm.toString());
-        LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
-        int alarmID = localDataBase.UpdateAlarmCell();
         setAlarmDeadline(firstAlarm, alarmID, noteID, 1);
-        localDataBase.InsertNoteAlarm(noteID, alarmID);
 
         Timestamp secondAlarm = new Timestamp(Timestamp.valueOf(newDate + " " + newTime).getTime() - (1000 * 60 * 60));
         Log.i("HELLO SecondAlarm", secondAlarm.toString());
-        LocalDataBase localDataBase2 = new LocalDataBase(MyApplication.getAppContext());
-        int alarmID2 = localDataBase2.UpdateAlarmCell();
         setAlarmDeadline(secondAlarm, alarmID2, noteID, 2);
-        localDataBase.InsertNoteAlarm(noteID, alarmID2);
     }
 
     public void setAlarmDeadline(Timestamp alarmTime, int alarmID, int noteID, int alarmType) {

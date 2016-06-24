@@ -1,8 +1,6 @@
 package com.itdl_and.facebook.login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,7 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import controllers.AlarmService;
 import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
@@ -18,7 +15,7 @@ import model.LocalDataBase;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     TextView ShowTextView;
-    Button UpdateProfile, SignOut, addNoteBtn, btnShowNotes, btnShowCloseOffer;
+    Button UpdateProfile, SignOut, addNoteBtn, btnShowNotes, btnShowCloseOffer, btnHistoryNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +80,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         UpdateProfile = (Button) findViewById(R.id.UpdateProfile);
         SignOut = (Button) findViewById(R.id.SignOut);
         addNoteBtn = (Button) findViewById(R.id.buttonAddNote);
-        btnShowNotes = (Button) findViewById(R.id.buttonShowAllNotes);
-        btnShowCloseOffer = (Button) findViewById(R.id.buttonShowCloseOffer);
+        btnShowNotes = (Button) findViewById(R.id.buttonShowCurrentNotes);
+        btnHistoryNotes = (Button) findViewById(R.id.btnHistory);
+
         UpdateProfile.setOnClickListener(this);
         SignOut.setOnClickListener(this);
         addNoteBtn.setOnClickListener(this);
         btnShowNotes.setOnClickListener(this);
-        btnShowCloseOffer.setOnClickListener(this);
-
-
+        btnHistoryNotes.setOnClickListener(this);
     }
 
     @Override
@@ -105,8 +101,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (view == UpdateProfile) {
             UserController usercontrol = UserController.getInstance();
             usercontrol.GetUserInformation();
-        } else if (view == btnShowNotes) {
+        } else if (view ==btnShowNotes){
             Intent intent = new Intent(getApplicationContext(), ShowAllNotesActivity.class);
+            intent.putExtra("HistoryORCurrent","Current");
+            startActivity(intent);
+        } else if (view ==btnHistoryNotes){
+            Intent intent = new Intent(getApplicationContext(), ShowAllNotesActivity.class);
+            intent.putExtra("HistoryORCurrent","History");
             startActivity(intent);
         } else if (view == btnShowCloseOffer) {
             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);

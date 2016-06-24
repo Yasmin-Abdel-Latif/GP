@@ -99,27 +99,30 @@
             android:name=".GetOffersActivity"
             android:label="@string/title_activity_get_offers" />
 
-        <service android:name="controllers.ApplicationService" />
-        <service android:name="controllers.AlarmService" />
-        <service android:name="controllers.AlarmServiceUpdatePref" />
-        <service android:name="controllers.AlarmServiceGetOffer" />
-        <service android:name="controllers.AlarmServiceGetNearestStore" />
-        <service android:name="controllers.AlarmServiceDeadlineNote" />
+        <service android:name="services.SynchronizationService" />
+        <service android:name="services.AlarmService" />
+        <service android:name="services.AlarmServiceUpdatePref" />
+        <service android:name="services.AlarmServiceGetOffer" />
+        <service android:name="services.AlarmServiceGetNearestStore" />
+        <service android:name="services.AlarmServiceDeadlineNote" />
 
         <receiver
-            android:name="controllers.AlarmReceiver"
+            android:name="receivers.AlarmReceiver"
             android:enabled="true" />
         <receiver
-            android:name="controllers.AlarmReceiverDeadlineNote"
+            android:name="receivers.AlarmReceiverDeadlineNote"
             android:enabled="true" />
         <receiver
-            android:name="controllers.AlarmReceiverUpdatePref"
+            android:name="receivers.AlarmReceiverUpdatePref"
             android:enabled="true" />
         <receiver
-            android:name="controllers.AlarmReceiverGetNearestStore"
+            android:name="receivers.AlarmReceiverGetNearestStore"
             android:enabled="true" />
         <receiver
-            android:name="controllers.AlarmReceiverGetOffer"
+            android:name="receivers.AlarmReceiverGetOffer"
+            android:enabled="true" />
+        <receiver
+            android:name="receivers.AlarmReceiverMeeting"
             android:enabled="true" />
 
         <!--

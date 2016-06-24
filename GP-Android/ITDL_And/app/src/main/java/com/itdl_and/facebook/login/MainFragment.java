@@ -37,10 +37,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import controllers.AlarmReceiver;
-import controllers.AlarmReceiverGetNearestStore;
-import controllers.AlarmReceiverGetOffer;
-import controllers.AlarmReceiverUpdatePref;
+import receivers.AlarmReceiver;
+import receivers.AlarmReceiverGetNearestStore;
+import receivers.AlarmReceiverGetOffer;
+import receivers.AlarmReceiverUpdatePref;
 import controllers.MyApplication;
 import controllers.UserController;
 import model.FacebookPost;

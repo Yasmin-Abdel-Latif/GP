@@ -5,7 +5,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.itdl_and.facebook.login.DeadlineActivity">
+    tools:context="com.itdl_and.facebook.login.DeadlineActivity"
+    android:background="#1A237E">
 
     <EditText
         android:layout_width="match_parent"
@@ -14,7 +15,10 @@
         android:hint="Title"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
 
     <Button
@@ -22,7 +26,10 @@
         android:layout_height="wrap_content"
         android:text="Select Deadline Time"
         android:id="@+id/btnDeadlineTime"
-        android:layout_below="@+id/tvdisplayDeadlineDate" />
+        android:layout_below="@+id/tvdisplayDeadlineDate"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#f89939" />
 
     <Button
         android:layout_width="wrap_content"
@@ -31,7 +38,9 @@
         android:id="@+id/btnDeadlineDate"
         android:layout_below="@+id/etDeadlineTitle"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#f89939" />
 
     <TextView
         android:layout_width="match_parent"
@@ -39,7 +48,9 @@
 
         android:id="@+id/tvdisplayDeadlineDate"
         android:layout_below="@+id/btnDeadlineDate"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#f89939"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -47,7 +58,9 @@
         android:id="@+id/tvdisplayDeadlineTime"
         android:layout_below="@+id/btnDeadlineTime"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#f89939"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -56,17 +69,20 @@
         android:id="@+id/textView9"
         android:layout_below="@+id/tvdisplayDeadlineTime"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/btnaddDeadline"
-        android:layout_marginBottom="73dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/btnDeadlineDate"
-        android:layout_alignEnd="@+id/btnDeadlineDate" />
+        android:layout_below="@+id/radioGroupPriority"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="47dp"
+        android:background="#f89939" />
 
     <TextView
         android:layout_width="match_parent"
@@ -76,7 +92,10 @@
 
         android:id="@+id/textViewPrority"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tvProgress" />
+        android:layout_below="@+id/tvProgress"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/radioGroupPriority"
@@ -91,21 +110,30 @@
             android:layout_width="110dp"
             android:layout_height="59dp"
             android:checked="true"
-            android:text="High" />
+            android:text="High"
+            android:textColor="#f89939"
+            android:textColorHint="#f89939"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButtonMedium"
             android:layout_width="130dp"
             android:layout_height="59dp"
             android:checked="true"
-            android:text="Medium" />
+            android:text="Medium"
+            android:textColor="#f89939"
+            android:textColorHint="#f89939"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButtonLow"
             android:layout_width="120dp"
             android:layout_height="59dp"
             android:checked="true"
-            android:text="Low" />
+            android:text="Low"
+            android:textColor="#f89939"
+            android:textColorHint="#f89939"
+            android:textStyle="bold" />
     </RadioGroup>
 
     <SeekBar
@@ -124,7 +152,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="25dp"
-        />
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

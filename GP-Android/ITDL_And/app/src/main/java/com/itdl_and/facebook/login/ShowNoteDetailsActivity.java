@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import controllers.AlarmController;
 import controllers.NoteController;
 import model.DeadlineNoteEntity;
 import model.MeetingNoteEntity;
@@ -16,7 +17,7 @@ import model.ShoppingNoteEntity;
 
 public class ShowNoteDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tvNoteDetails;
-    Button btnDelete, btnEdit;
+    Button btnDelete, btnEdit, btnDone;
     NoteEntity noteEntity;
 
     @Override
@@ -26,9 +27,16 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
         tvNoteDetails = (TextView) findViewById(R.id.tvNoteDetails);
         btnDelete = (Button) findViewById(R.id.btnNoteDelete);
         btnEdit = (Button) findViewById(R.id.btnNoteEdit);
+        btnDone = (Button) findViewById(R.id.btnDone);
         String note = "";
         Intent intent = getIntent();
+        String from = intent.getStringExtra("fromActivity");
         noteEntity = (NoteEntity) intent.getSerializableExtra("note");
+
+        if (from.equals("History")) {
+            btnDone.setVisibility(View.INVISIBLE);
+            btnEdit.setVisibility(View.INVISIBLE);
+        }
 
         if (noteEntity.getNoteType().equals("Ordinary")) {
             note = "Type : Ordinary \n " +
@@ -69,13 +77,29 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
         tvNoteDetails.setText(note);
         btnEdit.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+        btnDone.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (v == btnDelete) {
-            NoteController noteController = new NoteController();
+            AlarmController alarmController =new AlarmController();
+            NoteController noteController =new NoteController();
             noteController.DeleteNoteInLocalDB(noteEntity.getNoteId());
+            if (noteEntity.getNoteType().equals("Meeting")){
+                alarmController.DeleteAlram(noteEntity.getNoteId());
+            } else if (noteEntity.getNoteType().equals("Deadline")){
+                alarmController.DeleteAlram(noteEntity.getNoteId());
+            }
+        } else  if (v== btnDone){
+            AlarmController alarmController =new AlarmController();
+            NoteController noteController =new NoteController();
+            noteController.DoneNoteInLocalDB(noteEntity.getNoteId());
+            if (noteEntity.getNoteType().equals("Meeting")){
+                alarmController.DeleteAlram(noteEntity.getNoteId());
+            } else if (noteEntity.getNoteType().equals("Deadline")){
+                alarmController.DeleteAlram(noteEntity.getNoteId());
+            }
         } else if (v == btnEdit) {
             Intent intent = null;
             if (noteEntity.getNoteType().equals("Shopping")) {
@@ -91,10 +115,6 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
                 intent = new Intent(getApplicationContext(), EditOrdinaryNoteActivity.class);
                 intent.putExtra("note", (OrdinaryNoteEntity) noteEntity);
             }
-
-           /* intent = new Intent(getApplicationContext(),EditOrdinaryNoteActivity.class);
-            intent.putExtra("note", noteEntity);*/
-            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
     }

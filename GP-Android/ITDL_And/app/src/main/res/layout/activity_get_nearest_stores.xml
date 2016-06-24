@@ -7,13 +7,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android.recommendationpart.GetNearestStoresActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#1A237E">
 
     <TextView
         android:id="@+id/storesOutput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hello world" />
+        android:text="hello world"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/stores_list"

@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.itdl_and.facebook.login.ShowNoteDetailsActivity;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +25,8 @@ import model.MeetingNoteEntity;
 import model.NoteEntity;
 import model.OrdinaryNoteEntity;
 import model.ShoppingNoteEntity;
+import receivers.AlarmReceiverDeadlineNote;
+import services.SynchronizationService;
 
 /**
  * Created by Esraa on 13-Mar-16.
@@ -124,10 +124,11 @@ public class NoteController {
         return id;
     }
 
-    public void addMeetingNote(String title, String place, String agenda, String date, String priority, String time) {
+    public int addMeetingNote(String title, String place, String agenda, String date, String priority, String time) {
         UserController userController = UserController.getInstance();
         String userID = String.valueOf(userController.getCurrentUserID());
 
+        int id = -1;
         try {
             //http://fci-gp-intelligent-to-do.appspot.com/rest/
             String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addMeetingNoteService",
@@ -135,10 +136,9 @@ public class NoteController {
             JSONObject object = new JSONObject(res);
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
                 Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
-                return;
+                return -1;
             } else {
-                addMeetingNoteInLoacalDB(title, place, agenda, date, priority, time, true, Long.valueOf(object.get("noteid").toString()));
-
+                id = addMeetingNoteInLoacalDB(title, place, agenda, date, priority, time, true, Long.valueOf(object.get("noteid").toString()));
                 Toast.makeText(MyApplication.getAppContext(), "Meeting note is added successfully", Toast.LENGTH_LONG).show();
             }
         } catch (InterruptedException e) {
@@ -149,6 +149,7 @@ public class NoteController {
             e.printStackTrace();
         }
 
+        return id;
     }
 
     public void Syncroinzation(String NotSyncNotes) {
@@ -181,6 +182,10 @@ public class NoteController {
                     int id = Integer.parseInt(jsonObject.getString("noteid"));
                     //Delete
                     localDataBase.DeleteNotePermanently(id);
+                } else if (jsonObject.getString("syncType").equals("Done")) {
+                    int id = Integer.parseInt(jsonObject.getString("noteid"));
+                    //Delete
+                    localDataBase.SycDone(id);
                 }
                 //Log.i("Note_status", object.getString("status"));
             }
@@ -207,6 +212,7 @@ public class NoteController {
         OrdinaryNoteEntity noteEntity = new OrdinaryNoteEntity(ordinaryNote, Priority,
                 getCurrentDate(), isDone, isdeleted, isTextCategorized, notecontent, issync);
         noteEntity.setServernoteId(serverNoteId);
+        noteEntity.setUserId(UserController.getCurrentUserID());
         Log.i("Servernoteid=", String.valueOf(serverNoteId));
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertOrdinaryNote(noteEntity);
@@ -227,6 +233,7 @@ public class NoteController {
         ShoppingNoteEntity shoppingNoteEntity = new ShoppingNoteEntity(shoppingNote, priority,
                 getCurrentDate(), isDone, isDeleted, isTextCategorized, isadded, productToBuy, category);
         shoppingNoteEntity.setServernoteId(serverNoteId);
+        shoppingNoteEntity.setUserId(UserController.getCurrentUserID());
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertShoppingNote(shoppingNoteEntity);
@@ -239,8 +246,8 @@ public class NoteController {
         }
     }
 
-    public void addMeetingNoteInLoacalDB(String title, String place, String agenda, String meetingNoteDate,
-                                         String Priority, String estimatedTransportTime, boolean issync, long serverNoteId) {
+    public int addMeetingNoteInLoacalDB(String title, String place, String agenda, String meetingNoteDate,
+                                        String Priority, String estimatedTransportTime, boolean issync, long serverNoteId) {
 
         boolean isDone = false;
         boolean isdeleted = false;
@@ -250,6 +257,7 @@ public class NoteController {
                 getCurrentDate(), isDone, isdeleted, isTextCategorized, issync, title, place, agenda,
                 Timestamp.valueOf(meetingNoteDate), Time.valueOf(estimatedTransportTime));
         noteEntity.setServernoteId(serverNoteId);
+        noteEntity.setUserId(UserController.getCurrentUserID());
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertMeetingNote(noteEntity);
@@ -259,6 +267,11 @@ public class NoteController {
         } else {
             Toast.makeText(MyApplication.getAppContext(), " Inserted done note id is " + String.valueOf(id), Toast.LENGTH_LONG).show();
         }
+
+        int idInt = ((Long) id).intValue();
+        Log.i("HELLO MeetingID", String.valueOf(idInt));
+
+        return idInt;
     }
 
     public int addDeadlineNoteInLoacalDB(String title, String priority, String deadlinedate_time, int progressValue, boolean issync, long serverNoteId) {
@@ -270,6 +283,7 @@ public class NoteController {
         DeadlineNoteEntity noteEntity = new DeadlineNoteEntity(deadlineNote,
                 getCurrentDate(), isDone, isdeleted, isTextCategorized, issync, progressValue, title, Timestamp.valueOf(deadlinedate_time), priority);
         noteEntity.setServernoteId(serverNoteId);
+        noteEntity.setUserId(UserController.getCurrentUserID());
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertDeadlineNote(noteEntity);
@@ -279,7 +293,7 @@ public class NoteController {
             Toast.makeText(MyApplication.getAppContext(), " Inserted done note id is " + String.valueOf(id), Toast.LENGTH_LONG).show();
         }
 
-        int idInt = ((Long)id).intValue();
+        int idInt = ((Long) id).intValue();
         Log.i("HELLO DeadlineID", String.valueOf(idInt));
 
         return idInt;
@@ -291,15 +305,23 @@ public class NoteController {
         return Timestamp.valueOf(currentTimeStamp);
     }
 
-    public ArrayList<NoteEntity> ShowAllNotes() {
+    public ArrayList<NoteEntity> ShowAllNotes(String HistoryORCurrent) {
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
-        Cursor res = localDataBase.GetNotes();
+        Cursor res = null;
+        Log.i("getCurrentUserID()", String.valueOf(UserController.getCurrentUserID()));
+
+        if (HistoryORCurrent.equals("Current")) {
+            res = localDataBase.SelectCurrentNotes(UserController.getCurrentUserID());
+        } else if (HistoryORCurrent.equals("History")) {
+            res = localDataBase.SelectHistoryNotes(UserController.getCurrentUserID());
+        }
+        Log.i("Cursorres", res.toString());
+
         ArrayList<NoteEntity> notes = new ArrayList<NoteEntity>();
         if (!res.moveToFirst()) {
             return notes;
         }
-
         String noteType;
         res.moveToFirst();
         do {
@@ -343,6 +365,7 @@ public class NoteController {
             }
         } while (res.moveToNext());
         res.close();
+        Log.i("Notesssss", notes.toString());
         return notes;
     }
 
@@ -365,10 +388,10 @@ public class NoteController {
 
     }
 
-    private void cancelAlarm(int alarmID){
+    private void cancelAlarm(int alarmID) {
         Intent intent = new Intent(MyApplication.getAppContext(), AlarmReceiverDeadlineNote.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApplication.getAppContext(), alarmID, intent, 0);
-        AlarmManager alarmManager = (AlarmManager)MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
     }
@@ -398,12 +421,12 @@ public class NoteController {
 
     ///////
 
-    public void GetNoteDetails(int noteId) {
+    public NoteEntity GetNoteDetails(int noteId) {
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         Cursor res = localDataBase.GetNoteById(noteId);
         NoteEntity note = null;
         if (res.getCount() == 0)
-            return;
+            return null;
 
         res.moveToFirst();
         String noteType, Priority;
@@ -477,10 +500,13 @@ public class NoteController {
             note.setNoteId(id);
         }
         res.close();
-        Intent intent = new Intent(MyApplication.getAppContext(), ShowNoteDetailsActivity.class);
-        intent.putExtra("note", note);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        MyApplication.getAppContext().startActivity(intent);
+        return note;
+    }
+
+    public void DoneNoteInLocalDB(int noteid){
+        LocalDataBase localDataBase =new LocalDataBase(MyApplication.getAppContext());
+        localDataBase.SetIsDone(noteid);
+        Toast.makeText(MyApplication.getAppContext(), "the  note will be in history ", Toast.LENGTH_LONG).show();
     }
 
 
@@ -676,7 +702,7 @@ public class NoteController {
 
     public void StartService() {
         // Toast.makeText(MyApplication.getAppContext(),"In note Controller ",Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(MyApplication.getAppContext(), ApplicationService.class);
+        Intent intent = new Intent(MyApplication.getAppContext(), SynchronizationService.class);
         intent.putExtra("Interval", 60);
         MyApplication.getAppContext().startService(intent);
     }

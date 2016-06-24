@@ -7,33 +7,49 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.itdl_and.facebook.login.NewPreferencesActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#1A237E">
 
     <TextView
         android:id="@+id/res"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="there are new preferences weights" />
+        android:text="there are new preferences weights"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/newPreferences"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#f89939"
+        android:textColorHint="#f89939"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/BTN_Yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Yes, update my preferences" />
+        android:text="Yes, update my preferences"
+        android:background="#f89939"
+        android:layout_marginBottom="4dp"
+        android:minWidth="250dp" />
 
     <Button
         android:id="@+id/BTN_No"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't update" />
+        android:text="Don't update"
+        android:background="#f89939"
+        android:layout_marginBottom="4dp"
+        android:minWidth="150dp" />
 
 </LinearLayout>

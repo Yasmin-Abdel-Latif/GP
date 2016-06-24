@@ -1,4 +1,4 @@
-package controllers;
+package services;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -14,9 +14,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.itdl_and.facebook.login.GetNearestStoresActivity;
 import com.itdl_and.facebook.login.HabitActivity;
-import com.itdl_and.facebook.login.MainActivity;
+import com.itdl_and.facebook.login.NewPreferencesActivity;
 import com.itdl_and.facebook.login.R;
 
 import org.json.JSONException;
@@ -29,6 +28,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import controllers.MyApplication;
+import controllers.Recomm_Controller;
 import model.LocalDataBase;
 import model.NoteEntity;
 import model.OrdinaryNoteEntity;
@@ -36,13 +37,12 @@ import model.OrdinaryNoteEntity;
 /**
  * Created by Yasmin Abdel Latif on 6/18/2016.
  */
-public class AlarmServiceGetNearestStore extends IntentService {
-    private static final String TAG = "HELLO";
+public class AlarmServiceUpdatePref extends IntentService {
     private NotificationManager notificationManager;
     private PendingIntent pendingIntent;
 
-    public AlarmServiceGetNearestStore() {
-        super("AlarmServiceGetNearestStore");
+    public AlarmServiceUpdatePref() {
+        super("AlarmServiceUpdatePref");
     }
 
     @Override
@@ -54,26 +54,29 @@ public class AlarmServiceGetNearestStore extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         int alarmID = intent.getIntExtra("alarmID",0);
-        Recomm_Controller callGetNearestStoresABI = new Recomm_Controller();
+        Recomm_Controller callUpdatePref = new Recomm_Controller();
         LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
             String resultLD = ld.GetUserID();
-            if (resultLD.trim().length() > 0) {
+            if(resultLD.trim().length() > 0)
+            {
                 JSONObject jsonObject = new JSONObject(resultLD);
                 String userID = jsonObject.getString("UserID");
-                String result = callGetNearestStoresABI.getNearestStores(userID);
-
+                String twitterID = jsonObject.getString("Twitter_Account");
+                String result = callUpdatePref.updateUserPreferencesWeekly(userID, twitterID);
 
                 JSONObject jsonRootObject = new JSONObject(result);
                 int resultSize = jsonRootObject.getInt("resultSize");
-                Log.i("HELLO NEAREST STORE", String.valueOf(resultSize));
-                if (resultSize > 0) {
-                    Log.i("Stores Res API : ", result);
+
+                Log.i("HELLO UPDATE PREF", String.valueOf(resultSize));
+                if(resultSize > 0)
+                {
                     Context context = MyApplication.getAppContext();
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    Intent mIntent = new Intent(MyApplication.getAppContext(), GetNearestStoresActivity.class);
+                    Intent mIntent = new Intent(MyApplication.getAppContext(), NewPreferencesActivity.class);
 
-                    mIntent.putExtra("storesOutput", result);
+                    mIntent.putExtra("updatePrefOutput", result);
+                    mIntent.putExtra("userID",userID);
                     pendingIntent = PendingIntent.getActivity(context, alarmID, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     Resources res = this.getResources();
@@ -83,11 +86,11 @@ public class AlarmServiceGetNearestStore extends IntentService {
                     builder.setContentIntent(pendingIntent)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher))
-                            .setTicker("Nearest Stores")
+                            .setTicker("Update Preferences")
                             .setSound(alarmSound)
                             .setAutoCancel(true)
-                            .setContentTitle("You Might Want to See these stores")
-                            .setContentText("You Might Want to See these stores");
+                            .setContentTitle("Do You Want To Update Preferences?")
+                            .setContentText("Do You Want To Update Preferences?");
 
                     notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     notificationManager.notify(alarmID, builder.build());

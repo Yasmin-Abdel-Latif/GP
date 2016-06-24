@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -14,26 +13,29 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import controllers.AlarmController;
 import controllers.NoteController;
 import controllers.UserController;
 
 public class MeetingNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Calendar calendar = Calendar.getInstance();
-    Button btnDate, btnEstimatedTime, btnAddNote, btnMeetingTime;
-    EditText Title, Agenda, meeingPlace;
-    TextView displayDate, DisplayTime, DisplayTimeEstimation;
-    String date, time, estimatedTime, temp;
+
+    Calendar calendar =Calendar.getInstance();
+    Button btnDate,btnEstimatedTime,btnAddNote,btnMeetingTime;
+    EditText Title,Agenda,meeingPlace;
+    TextView displayDate,DisplayTime,DisplayTimeEstimation;
+    String date,time,estimatedTime,temp;
+    String date1,time1,estimatedTime1,temp1;
+
     RadioGroup priorityRadioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meeting_not);
+        setContentView(R.layout.activity_meeting_note);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radioGroupPriority);
 
         Title = (EditText) findViewById(R.id.etMeetingTitle);
@@ -46,6 +48,7 @@ public class MeetingNoteActivity extends AppCompatActivity implements View.OnCli
         DisplayTimeEstimation = (TextView) findViewById(R.id.tvDisplayEstimatedTime);
         btnEstimatedTime = (Button) findViewById(R.id.btnEstimatedTime);
         btnAddNote = (Button) findViewById(R.id.btnAddMeetingNote);
+
         btnAddNote.setOnClickListener(this);
         btnDate.setOnClickListener(this);
         btnMeetingTime.setOnClickListener(this);
@@ -60,20 +63,22 @@ public class MeetingNoteActivity extends AppCompatActivity implements View.OnCli
             DecimalFormat formatter = new DecimalFormat("00");
             String hoursFormatted = formatter.format(hours);
             String minuteFormatted = formatter.format(minute);
-            DisplayTime.setText("Time :" + hoursFormatted + ":" + minuteFormatted);
-            time = hoursFormatted + ":" + minuteFormatted + ":00";
+            DisplayTime.setText("Time :"+hoursFormatted + ":" + minuteFormatted);
+            time=hoursFormatted+":"+minuteFormatted+":00";
+            time1=hours+":"+minute+":00";
         }
     };
 
     DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayofmonth) {
-            month = month + 1;
+            int tempp=month+1;
             DecimalFormat formatter = new DecimalFormat("00");
-            String monthFormatted = formatter.format(month);
+            String monthFormatted = formatter.format(tempp);
             String dayofmonthFormatted = formatter.format(dayofmonth);
-            displayDate.setText("selected Date is " + year + "-" + monthFormatted + "-" + dayofmonthFormatted);
-            date = year + "-" + monthFormatted + "-" + dayofmonthFormatted;
+            displayDate.setText("selected Date is "+year+"-"+tempp+"-"+dayofmonthFormatted);
+            date =year+"-"+monthFormatted+"-"+dayofmonthFormatted;
+            date1 =year+"-"+tempp+"-"+dayofmonth;
         }
     };
 
@@ -84,8 +89,9 @@ public class MeetingNoteActivity extends AppCompatActivity implements View.OnCli
             DecimalFormat formatter = new DecimalFormat("00");
             String hoursFormatted = formatter.format(hours);
             String minuteFormatted = formatter.format(minute);
-            DisplayTimeEstimation.setText("Estimated Time :" + hoursFormatted + "hours and " + minuteFormatted + "minute");
-            estimatedTime = hoursFormatted + ":" + minuteFormatted + ":00";
+            DisplayTimeEstimation.setText("Estimated Time :"+hoursFormatted + "hours and " + minuteFormatted+"minute");
+            estimatedTime=hoursFormatted+":"+minuteFormatted+":00";
+            estimatedTime1=hours+":"+minute+":00";
         }
     };
 
@@ -100,24 +106,29 @@ public class MeetingNoteActivity extends AppCompatActivity implements View.OnCli
         } else if (view == btnEstimatedTime) {
             new TimePickerDialog(MeetingNoteActivity.this, ontimelistener3,
                     0, 0, true).show();
-        } else if (view == btnAddNote) {
-            String title = Title.getText().toString();
-            String place = meeingPlace.getText().toString();
-            String agenda = Agenda.getText().toString();
+        }  else if (view  == btnAddNote){
+            String title=Title.getText().toString();
+            String place=meeingPlace.getText().toString();
+            String agenda =Agenda.getText().toString();
             int selectedId = priorityRadioGroup.getCheckedRadioButtonId();
             RadioButton btnpriority = (RadioButton) findViewById(selectedId);
             String priority = btnpriority.getText().toString();
             UserController userController = UserController.getInstance();
-            boolean isConnected = userController.isNetworkConnected(getApplicationContext());
+            boolean isConnected=userController.isNetworkConnected(getApplicationContext());
             NoteController noteController = new NoteController();
-            temp = date + " " + time;
+            temp = date+" "+time;
+            temp1 = date1+" "+time1;
 
+            int id;
             if (!isConnected) {
-                noteController.addMeetingNoteInLoacalDB(title, place, agenda, temp, priority, estimatedTime, false, 0);
-            } else {
-                noteController.addMeetingNote(title, place, agenda, temp, priority, estimatedTime);
+                id= noteController.addMeetingNoteInLoacalDB(title,place,agenda,temp,priority,estimatedTime,false,0);
+
             }
+            else{
+                id=noteController.addMeetingNote(title, place, agenda, temp, priority, estimatedTime);
+            }
+            AlarmController alarmController =new AlarmController();
+            alarmController.SetMeetingAlarm(temp1,estimatedTime1,id);
         }
     }
 }
-

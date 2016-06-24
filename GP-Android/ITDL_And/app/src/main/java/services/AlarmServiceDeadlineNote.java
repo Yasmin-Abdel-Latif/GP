@@ -1,4 +1,4 @@
-package controllers;
+package services;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import controllers.MyApplication;
 import model.LocalDataBase;
 import model.NoteEntity;
 import model.OrdinaryNoteEntity;
