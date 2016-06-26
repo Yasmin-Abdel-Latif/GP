@@ -6,16 +6,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.android.recommendationpart.GetOffersActivity"
+    tools:context="com.itdl_and.facebook.login.GetOffersActivity"
     android:orientation="vertical"
-    android:background="#1A237E">
+    android:background="@color/primary_color">
 
     <TextView
         android:id="@+id/offersOutput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="hello world"
-        android:textColor="#f89939"
+        android:textColor="@color/secondary_color"
         android:textStyle="bold" />
 
 

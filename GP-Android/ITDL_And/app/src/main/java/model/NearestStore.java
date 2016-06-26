@@ -6,6 +6,16 @@ public class NearestStore {
 
 
     private String storeAddress;
+    private double distanceCal;
+
+    public double getDistanceCal() {
+        return distanceCal;
+    }
+
+    public void setDistanceCal(double distanceCal) {
+        this.distanceCal = distanceCal;
+    }
+
 
     public String getStoreAddress() {
         return storeAddress;

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="#1A237E">
+    android:background="@color/primary_color">
     <ImageView
 
         android:id="@+id/imgStore"
@@ -19,6 +19,6 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:paddingTop="2dp"
-        android:textColor="#f89939"/>
+        android:textColor="@color/secondary_color"/>
 
 </LinearLayout>

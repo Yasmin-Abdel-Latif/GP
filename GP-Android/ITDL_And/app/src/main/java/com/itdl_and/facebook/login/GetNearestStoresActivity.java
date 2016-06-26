@@ -1,5 +1,9 @@
 package com.itdl_and.facebook.login;
 
+import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,11 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Vector;
 
 import model.NearestStore;
@@ -37,7 +43,37 @@ public class GetNearestStoresActivity extends AppCompatActivity {
         String storesOutput = getIntent().getStringExtra("storesOutput");
         Recomm_Parser recomm_parser = new Recomm_Parser();
         try {
-            storesVec = recomm_parser.getParsesNearestStores(storesOutput);
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            List<String> providers = lm.getProviders(true);
+            Location l = null;
+            double myLat = 0.0;
+            double myLng = 0.0;
+
+            for (int i = 0; i < providers.size(); i++) {
+                l = lm.getLastKnownLocation(providers.get(i));
+                if (l != null) {
+                    myLat = l.getLatitude();
+                    myLng = l.getLongitude();
+                    break;
+                }
+            }
+            storesVec = recomm_parser.getParsesNearestStores(storesOutput, myLat, myLng);
+
+            ListView list = (ListView) findViewById(R.id.stores_list);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent,
+                                        View view, int position, long id) {
+                    NearestStore n = storesVec.get(position);
+                    if (n != null) {
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        intent.putExtra("Lat", n.getLat());
+                        intent.putExtra("Lng", n.getLongt());
+                        intent.putExtra("Address", n.getStoreAddress());
+                        startActivity(intent);
+                    }
+                }
+            });
             populateListView();
 
 
@@ -109,20 +145,5 @@ public class GetNearestStoresActivity extends AppCompatActivity {
 
 
         }
-
-        private void registerClickCallback() {
-            ListView list = (ListView) findViewById(R.id.stores_list);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent,
-                                        View view, int position, long id) {
-                    NearestStore n = storesVec.get(position);
-
-
-                }
-            });
-        }
-
-
     }
 }

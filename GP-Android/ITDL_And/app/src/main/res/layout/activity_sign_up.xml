@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SignUp"
-    android:background="#1A237E">
+    android:background="@color/primary_color">
 
     <TextView
         android:id="@+id/textView2"
@@ -17,8 +17,8 @@
         android:layout_alignParentStart="true"
         android:text="@string/UserName"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <EditText
@@ -29,8 +29,8 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:layout_alignStart="@+id/buttonRegister"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold">
 
         <requestFocus />
@@ -45,8 +45,8 @@
         android:layout_alignParentStart="true"
         android:text="@string/Email"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <EditText
@@ -58,8 +58,8 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         android:minWidth="150dp"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
 
@@ -71,8 +71,8 @@
         android:layout_alignParentStart="true"
         android:text="@string/UserPassword"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <EditText
@@ -84,8 +84,8 @@
         android:ems="10"
         android:inputType="textPassword"
         android:minWidth="150dp"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
@@ -96,8 +96,8 @@
         android:layout_alignParentStart="true"
         android:text="@string/TwitterAccount"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <EditText
@@ -109,8 +109,8 @@
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:minWidth="150dp"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
 
@@ -123,8 +123,8 @@
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:minWidth="150dp"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
@@ -134,7 +134,8 @@
         android:layout_below="@+id/textView7"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:ems="10" />
+        android:ems="10"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/btnBirthDate"
@@ -144,7 +145,7 @@
         android:layout_below="@+id/editTextCity"
         android:text="Set Birth Date"
         android:layout_alignStart="@+id/editTextCity"
-        android:background="#f89939" />
+        android:background="@color/secondary_color" />
 
     <Button
         android:id="@+id/buttonRegister"
@@ -153,7 +154,7 @@
         android:text="@string/SignUp"
         android:layout_below="@+id/radioGroupGender"
         android:layout_centerHorizontal="true"
-        android:background="#f89939" />
+        android:background="@color/secondary_color" />
 
     <TextView
         android:id="@+id/textView6"
@@ -163,8 +164,8 @@
         android:layout_alignParentStart="true"
         android:text="@string/City"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
@@ -175,8 +176,8 @@
         android:layout_alignParentStart="true"
         android:text="@string/BirthDate"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <RadioGroup
@@ -193,8 +194,8 @@
             android:layout_height="59dp"
             android:checked="true"
             android:text="@string/male"
-            android:textColor="#f89939"
-            android:textColorHint="#f89939"
+            android:textColor="@color/secondary_color"
+            android:textColorHint="@color/secondary_color"
             android:textStyle="bold" />
 
         <RadioButton
@@ -203,8 +204,8 @@
             android:layout_height="59dp"
             android:checked="true"
             android:text="@string/female"
-            android:textColor="#f89939"
-            android:textColorHint="#f89939"
+            android:textColor="@color/secondary_color"
+            android:textColorHint="@color/secondary_color"
             android:textStyle="bold" />
 
     </RadioGroup>
@@ -217,8 +218,8 @@
         android:layout_below="@+id/textViewBirthDate"
         android:text="@string/gender"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
 </RelativeLayout>

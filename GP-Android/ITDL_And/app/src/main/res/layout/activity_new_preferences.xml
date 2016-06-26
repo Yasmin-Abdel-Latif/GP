@@ -8,30 +8,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.itdl_and.facebook.login.NewPreferencesActivity"
     android:orientation="vertical"
-    android:background="#1A237E">
+    android:background="@color/primary_color">
 
     <TextView
         android:id="@+id/res"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="there are new preferences weights"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/newPreferences"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <Button
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Yes, update my preferences"
-        android:background="#f89939"
+        android:background="@color/secondary_color"
         android:layout_marginBottom="4dp"
         android:minWidth="250dp" />
 
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don't update"
-        android:background="#f89939"
+        android:background="@color/secondary_color"
         android:layout_marginBottom="4dp"
         android:minWidth="150dp" />
 

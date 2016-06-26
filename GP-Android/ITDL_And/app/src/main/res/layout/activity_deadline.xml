@@ -6,7 +6,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.itdl_and.facebook.login.DeadlineActivity"
-    android:background="#1A237E">
+    android:background="@color/primary_color">
 
     <EditText
         android:layout_width="match_parent"
@@ -16,8 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
 
@@ -29,7 +29,7 @@
         android:layout_below="@+id/tvdisplayDeadlineDate"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:background="#f89939" />
+        android:background="@color/secondary_color" />
 
     <Button
         android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:background="#f89939" />
+        android:background="@color/secondary_color" />
 
     <TextView
         android:layout_width="match_parent"
@@ -49,7 +49,7 @@
         android:id="@+id/tvdisplayDeadlineDate"
         android:layout_below="@+id/btnDeadlineDate"
         android:layout_centerHorizontal="true"
-        android:textColor="#f89939"
+        android:textColor="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
@@ -59,7 +59,7 @@
         android:layout_below="@+id/btnDeadlineTime"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#f89939"
+        android:textColor="@color/secondary_color"
         android:textStyle="bold" />
 
     <TextView
@@ -70,8 +70,8 @@
         android:layout_below="@+id/tvdisplayDeadlineTime"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <Button
@@ -82,7 +82,7 @@
         android:layout_below="@+id/radioGroupPriority"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="47dp"
-        android:background="#f89939" />
+        android:background="@color/secondary_color" />
 
     <TextView
         android:layout_width="match_parent"
@@ -93,8 +93,8 @@
         android:id="@+id/textViewPrority"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/tvProgress"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
     <RadioGroup
@@ -111,8 +111,8 @@
             android:layout_height="59dp"
             android:checked="true"
             android:text="High"
-            android:textColor="#f89939"
-            android:textColorHint="#f89939"
+            android:textColor="@color/secondary_color"
+            android:textColorHint="@color/secondary_color"
             android:textStyle="bold" />
 
         <RadioButton
@@ -121,8 +121,8 @@
             android:layout_height="59dp"
             android:checked="true"
             android:text="Medium"
-            android:textColor="#f89939"
-            android:textColorHint="#f89939"
+            android:textColor="@color/secondary_color"
+            android:textColorHint="@color/secondary_color"
             android:textStyle="bold" />
 
         <RadioButton
@@ -131,8 +131,8 @@
             android:layout_height="59dp"
             android:checked="true"
             android:text="Low"
-            android:textColor="#f89939"
-            android:textColorHint="#f89939"
+            android:textColor="@color/secondary_color"
+            android:textColorHint="@color/secondary_color"
             android:textStyle="bold" />
     </RadioGroup>
 
@@ -152,8 +152,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="25dp"
-        android:textColor="#f89939"
-        android:textColorHint="#f89939"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
 
 

@@ -14,6 +14,16 @@ public class Offer {
     private String storeName;
     private String storeAddress;
 
+    private double distanceCal;
+
+    public double getDistanceCal() {
+        return distanceCal;
+    }
+
+    public void setDistanceCal(double distanceCal) {
+        this.distanceCal = distanceCal;
+    }
+
     public String getStoreName() {
         return storeName;
     }

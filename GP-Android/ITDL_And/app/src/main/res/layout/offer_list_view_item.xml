@@ -2,62 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary_color"
     android:orientation="horizontal"
-    android:background="#1A237E">
+    android:weightSum="1">
+
     <ImageView
+        android:id="@+id/imgOffer"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/imgOffer"
 
-     />
-    <LinearLayout
+        android:layout_marginTop="7dp" />
+
+    <TextView
+        android:id="@+id/offerContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/offerInfo"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/offerContent"
-            android:paddingBottom="2dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingTop="2dp"
-            android:textColor="#f89939" />
+        android:paddingBottom="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/secondary_color"
+        android:layout_marginTop="7dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/offerCategory"
-            android:paddingBottom="2dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingTop="2dp"
-            android:textColor="#f89939" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/storeName"
-            android:paddingBottom="2dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingTop="2dp"
-            android:textColor="#f89939" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/storeAddress"
-            android:paddingBottom="2dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingTop="2dp"
-            android:textColor="#f89939" />
-
-    </LinearLayout>
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Like Recommendation"
-    android:id="@+id/BTN_like_Offer"
-    android:background="#f89939" />
 </LinearLayout>
