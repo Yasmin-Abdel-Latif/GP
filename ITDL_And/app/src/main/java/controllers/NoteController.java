@@ -46,7 +46,7 @@ public class NoteController {
         String userID = String.valueOf(userController.getCurrentUserID());
 
         try {
-            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addOrdinaryNoteService",
+            String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/addOrdinaryNoteService",
                     noteContent, userID, "addOrdinaryNoteService").get();
 
             JSONObject object = new JSONObject(res);
@@ -74,7 +74,7 @@ public class NoteController {
         String userID = String.valueOf(userController.getCurrentUserID());
 
         try {
-            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addShoppingNoteService",
+            String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/addShoppingNoteService",
                     productToBuy, category, userID, "addShoppingNoteService").get();
             JSONObject object = new JSONObject(res);
 
@@ -103,7 +103,7 @@ public class NoteController {
         int id = -1;
 
         try {
-            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addDeadLineNoteService",
+            String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/addDeadLineNoteService",
                     title, deadlinedate_time, String.valueOf(progressValue), userID, "addDeadLineNoteService").get();
             JSONObject object = new JSONObject(res);
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
@@ -131,7 +131,7 @@ public class NoteController {
         int id = -1;
         try {
             //http://fci-gp-intelligent-to-do.appspot.com/rest/
-            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/addMeetingNoteService",
+            String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/addMeetingNoteService",
                     title, place, agenda, date, time, userID, priority, "addMeetingNoteService").get();
             JSONObject object = new JSONObject(res);
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
@@ -154,7 +154,7 @@ public class NoteController {
 
     public void Syncroinzation(String NotSyncNotes) {
         try {
-            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/synchroinzationService",
+            String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/synchroinzationService",
                     NotSyncNotes, "synchroinzationService").get();
 
             Log.i("Resssultsynchronize", res);
@@ -398,7 +398,7 @@ public class NoteController {
 
     public String UpdateCreationDateAndIsDone(long noteid) {
         try {
-            String res = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/updateCreationDateAndIsDoneService",
+            String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/updateCreationDateAndIsDoneService",
                     String.valueOf(noteid), "updateCreationDateAndIsDoneService").get();
             JSONObject object = new JSONObject(res);
 

@@ -69,7 +69,7 @@ public class UserController {
     public void signUp(String userName, String email, String password, String gender,
                        String city, String birth_date, String twitterAccount) {
         try {
-            String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/RegestrationService", userName,
+            String result = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/RegestrationService", userName,
                     email, password, gender, city, birth_date, twitterAccount, "RegistrationService").get();
 
             Log.i("Cursor", "Signup");
@@ -105,7 +105,7 @@ public class UserController {
     public void fbSignUp(String userName, String email, String password, String gender,
                          String city, String birth_date, String twitterAccount, ArrayList<FacebookPost> fbPosts) {
         try {
-            String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/RegestrationService", userName,
+            String result = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/RegestrationService", userName,
                     email, password, gender, city, birth_date, twitterAccount, "RegistrationService").get();
 
             Log.i("Cursor", result);
@@ -151,7 +151,7 @@ public class UserController {
 
         try {
             String result = new CallWebService().execute(
-                    "http://5-dot-secondhelloworld-1221.appspot.com/restNotes/LoginService",
+                    MyApplication.getServiceLink() + "restNotes/LoginService",
                     email, password, "LoginService").get();
 
             Log.i("Cursor", "Login");
@@ -204,7 +204,7 @@ public class UserController {
 
         try {
             String result = new CallWebService().execute(
-                    "http://5-dot-secondhelloworld-1221.appspot.com/restNotes/LoginService",
+                    MyApplication.getServiceLink() + "restNotes/LoginService",
                     email, password, "LoginService").get();
 
             Log.i("Cursor", "FBLogin");
@@ -259,7 +259,7 @@ public class UserController {
 
     public void addFBUserPost(FacebookPost fbPost) {
         try {
-            String result = new CallWebService().execute("http://8-dot-itdloffers.appspot.com/rest/AddUserPostService", fbPost.getUserID(),
+            String result = new CallWebService().execute(MyApplication.getServiceLink2() + "rest/AddUserPostService", fbPost.getUserID(),
                     fbPost.getPostID(), fbPost.getPostContent(), fbPost.getCreationDate(), "AddUserPostService").get();
             JSONObject object = new JSONObject(result);
 
@@ -280,7 +280,7 @@ public class UserController {
 
     public void getFBUserPosts(String userID) throws ParseException{
         try {
-            String result = new CallWebService().execute("http://8-dot-itdloffers.appspot.com/rest/GetPostsService", userID, "GetPostsService").get();
+            String result = new CallWebService().execute(MyApplication.getServiceLink2() + "rest/GetPostsService", userID, "GetPostsService").get();
             JSONObject object = new JSONObject(result);
 
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
@@ -315,7 +315,7 @@ public class UserController {
         try {
             Log.i("HELLO HI", userID);
             userID = userID.trim();
-            String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/getAllNotesService", userID, "getAllNotesService").get();
+            String result = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/getAllNotesService", userID, "getAllNotesService").get();
 
             Log.i("HELLO", result);
             JSONObject object = new JSONObject(result);
@@ -361,7 +361,7 @@ public class UserController {
         Log.i("UserID" , String.valueOf(currentActiveUser.getUserId()));
         try {
             String result = new CallWebService().execute(
-                    "http://5-dot-secondhelloworld-1221.appspot.com/restNotes/GetUserInfoService",
+                    MyApplication.getServiceLink() + "restNotes/GetUserInfoService",
                     String.valueOf(currentActiveUser.getUserId()), "GetUserInfoService").get();
             Log.i("HELLO" , result);
             JSONObject object = new JSONObject(result);
@@ -400,7 +400,7 @@ public class UserController {
         String userId = String.valueOf(currentActiveUser.getUserId());
         try {
             String result = new CallWebService().execute(
-                    "http://5-dot-secondhelloworld-1221.appspot.com/restNotes/UpdateProfileService", userId, userName,
+                    MyApplication.getServiceLink() + "restNotes/UpdateProfileService", userId, userName,
                     email, password, gender, city, birth_date, twitterAccount, "UpdateProfileService").get();
             JSONObject object = new JSONObject(result);
 
@@ -466,7 +466,7 @@ public class UserController {
 
         try {
 
-            String result = new CallWebService().execute("http://5-dot-secondhelloworld-1221.appspot.com/restNotes/enterInitialWeightsForOneUserService",
+            String result = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/enterInitialWeightsForOneUserService",
                     String.valueOf(UserController.getCurrentUserID()), jsonArrayPrfrnce.toString(), "enterInitialWeightsForOneUserService").get();
 
             Log.i("HELLO PRFRNC", result);
