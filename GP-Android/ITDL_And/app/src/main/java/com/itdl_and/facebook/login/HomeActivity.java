@@ -88,6 +88,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (serviceType.equals("UpdatePrefService")) {
             String id = extras.getStringExtra("userId");
             text = status + " ... " + welcome + "  , your id is " + id;
+        } else if (serviceType.equals("Suggested")) {
+            String id = extras.getStringExtra("userId");
+            text = status + " ... " + id;
         }
 
         ShowTextView = (TextView) findViewById(R.id.ShowText);

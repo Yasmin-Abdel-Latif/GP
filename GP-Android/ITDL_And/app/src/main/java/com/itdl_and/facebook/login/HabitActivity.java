@@ -43,13 +43,18 @@ public class HabitActivity extends AppCompatActivity {
                                          public void onClick(View v) {
                                              result = "Selected Notes are :";
                                              ArrayList<NoteEntity> chosenNotes = note_adapter.getCheckedNotes();
+                                             long userID = 0;
                                              for (NoteEntity c : chosenNotes) {
                                                  result += c.getNoteType() + " " + c.getServernoteId() + " " + c.getUserId();
+                                                 userID = c.getUserId();
                                                  NoteController nc = new NoteController();
                                                  nc.UpdateCreationDateAndIsDone(c.getServernoteId());
                                              }
                                              Intent homeIntent = new Intent(MyApplication.getAppContext(),
                                                      HomeActivity.class);
+                                             homeIntent.putExtra("status", "Notes Added");
+                                             homeIntent.putExtra("userId", String.valueOf(userID));
+                                             homeIntent.putExtra("serviceType", "Suggested");
                                              homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                              MyApplication.getAppContext().startActivity(homeIntent);
                                              Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
