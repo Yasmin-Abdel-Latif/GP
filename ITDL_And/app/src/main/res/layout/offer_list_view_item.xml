@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_color"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/imgOffer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="7dp" />
+
+    <TextView
+        android:id="@+id/offerContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/secondary_color"
+        android:layout_marginTop="7dp" />
+
+</LinearLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.itdl_and.facebook.login">
+
+    <permission
+        android:name="com.itdl_and.facebook.login.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.itdl_and.facebook.login.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:name="controllers.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".LoadingActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/title_activity_sign_up" />
+        <activity
+            android:name=".ViewUserInfoActivity"
+            android:label="@string/title_activity_view_user_info" />
+        <activity
+            android:name=".AddNoteActivity"
+            android:label="@string/title_activity_add_note" />
+        <activity
+            android:name=".OrdinaryNoteActivity"
+            android:label="@string/title_activity_ordinary_note" />
+        <activity
+            android:name=".ShoppingNoteActivity"
+            android:label="@string/title_activity_shopping_note" />
+        <activity
+            android:name=".MeetingNoteActivity"
+            android:label="@string/title_activity_meeting_note" />
+        <activity
+            android:name=".DeadlineActivity"
+            android:label="@string/title_activity_deadline" />
+        <activity
+            android:name=".ShowAllNotesActivity"
+            android:label="@string/title_activity_show_all_notes" />
+        <activity
+            android:name=".ShowNoteDetailsActivity"
+            android:label="@string/title_activity_show_note_details" />
+        <activity
+            android:name=".EditOrdinaryNoteActivity"
+            android:label="@string/title_activity_edit_ordinary_note" />
+        <activity
+            android:name=".EditShoppingNoteActivity"
+            android:label="@string/title_activity_edit_shopping_note" />
+        <activity
+            android:name=".EditMeetingNoteActivity"
+            android:label="@string/title_activity_edit_meeting_note" />
+        <activity
+            android:name=".EditDeadlineNoteActivity"
+            android:label="@string/title_activity_edit_deadline_note" />
+        <activity
+            android:name=".EditDeadlineProgressActivity"
+            android:label="@string/title_activity_edit_deadline_progress" />
+        <activity
+            android:name=".PreferenceActivity"
+            android:label="@string/title_activity_preference" />
+        <activity
+            android:name=".HabitActivity"
+            android:label="@string/title_activity_habit_note" />
+        <activity
+            android:name=".GetNearestStoresActivity"
+            android:label="@string/title_activity_nearest_stores" />
+        <activity
+            android:name=".NewPreferencesActivity"
+            android:label="@string/title_activity_new_preferences" />
+        <activity
+            android:name=".GetOffersActivity"
+            android:label="@string/title_activity_get_offers" />
+
+        <service android:name="services.SynchronizationService" />
+        <service android:name="services.AlarmService" />
+        <service android:name="services.AlarmServiceUpdatePref" />
+        <service android:name="services.AlarmServiceGetOffer" />
+        <service android:name="services.AlarmServiceGetNearestStore" />
+        <service android:name="services.AlarmServiceDeadlineNote" />
+
+        <receiver
+            android:name="receivers.AlarmReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name="receivers.AlarmReceiverDeadlineNote"
+            android:enabled="true" />
+        <receiver
+            android:name="receivers.AlarmReceiverUpdatePref"
+            android:enabled="true" />
+        <receiver
+            android:name="receivers.AlarmReceiverGetNearestStore"
+            android:enabled="true" />
+        <receiver
+            android:name="receivers.AlarmReceiverGetOffer"
+            android:enabled="true" />
+        <receiver
+            android:name="receivers.AlarmReceiverMeeting"
+            android:enabled="true" />
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+    </application>
+
+</manifest>
