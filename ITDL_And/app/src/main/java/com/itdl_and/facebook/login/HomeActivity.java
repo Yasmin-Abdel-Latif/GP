@@ -27,6 +27,7 @@ import controllers.NoteController;
 import controllers.Recomm_Controller;
 import controllers.UserController;
 import model.LocalDataBase;
+import model.UserEntity;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     TextView ShowTextView;
@@ -58,7 +59,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             String password = extras.getStringExtra("userPassword");
             text = status + " ... " + welcome + "  , your id is " + id;
             UserController uc = UserController.getInstance();
-            String twitterId = uc.getCurrentActiveUser().getUserTwitterAccount();
+            UserEntity ue = uc.GetUserInformation(id);
+            String twitterId = ue.getUserTwitterAccount();
             if(localDataBase.GetUserID().length() > 0)
             {
                 localDataBase.UpdateUserInfo(id, twitterId, email, password);
@@ -72,21 +74,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         } else if (serviceType.equals("UserPreferenceService")) {
             String id = extras.getStringExtra("userId");
-            String email = extras.getStringExtra("userEmail");
-            String password = extras.getStringExtra("userPassword");
             text = status + " ... " + welcome + "  , your id is " + id;
-            UserController uc = UserController.getInstance();
-            String twitterId = uc.getCurrentActiveUser().getUserTwitterAccount();
-            if(localDataBase.GetUserID().length() > 0)
-            {
-                localDataBase.UpdateUserInfo(id, twitterId, email, password);
-                Toast.makeText(MyApplication.getAppContext(), " ID Updated 1", Toast.LENGTH_LONG).show();
-            }
-            else
-            {
-                long localId = localDataBase.InsertUserInfo(id, twitterId, email, password);
-                Toast.makeText(MyApplication.getAppContext(), " ID Inserted " + localId, Toast.LENGTH_LONG).show();
-            }
         } else if (serviceType.equals("UpdateProfileService")) {
             text = status;
         } else if (serviceType.equals("UpdatePrefService")) {
@@ -95,6 +83,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (serviceType.equals("Suggested")) {
             String id = extras.getStringExtra("userId");
             text = status + " ... " + id;
+        } else if (serviceType.equals("NoteDetails")) {
+            text = status;
+        } else if (serviceType.equals("NoteDone")) {
+            text = status;
+        } else if (serviceType.equals("Back")) {
+            text = status;
         }
 
         ShowTextView = (TextView) findViewById(R.id.ShowText);
@@ -126,7 +120,33 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             usercontrol.SignOut();
         } else if (view == UpdateProfile) {
             UserController usercontrol = UserController.getInstance();
-            usercontrol.GetUserInformation();
+            LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+            String userID = "";
+            try {
+                String resultLD = ld.GetUserID();
+                if (resultLD.trim().length() > 0) {
+                    JSONObject jsonObject = new JSONObject(resultLD);
+                    userID = jsonObject.getString("UserID");
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            UserEntity ue = usercontrol.GetUserInformation(userID);
+            Intent viewIntent = new Intent(MyApplication.getAppContext(),
+                    ViewUserInfoActivity.class);
+
+            viewIntent.putExtra("username", ue.getUserName());
+            viewIntent.putExtra("useremail", ue.getUserEmail());
+            viewIntent.putExtra("userpassword", ue.getUserPassword());
+            viewIntent.putExtra("usergender", ue.getGender());
+            viewIntent.putExtra("usercity", ue.getCity());
+            viewIntent.putExtra("usertwiterAcc", ue.getUserTwitterAccount());
+            viewIntent.putExtra("userbirthdate", ue.getDateOfBirth());
+
+            viewIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            MyApplication.getAppContext().startActivity(viewIntent);
         } else if (view ==btnShowNotes){
             Intent intent = new Intent(getApplicationContext(), ShowAllNotesActivity.class);
             intent.putExtra("HistoryORCurrent","Current");

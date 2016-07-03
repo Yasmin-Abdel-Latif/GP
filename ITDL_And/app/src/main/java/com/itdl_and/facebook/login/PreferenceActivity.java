@@ -1,5 +1,6 @@
 package com.itdl_and.facebook.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,6 +26,10 @@ public class PreferenceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preference);
         listViewCategories = (ListView) findViewById(R.id.listViewCategories);
         Submit = (Button) findViewById(R.id.btnSubmit);
+        Intent intent = getIntent();
+        final String id = intent.getStringExtra("userId");
+        final String email = intent.getStringExtra("userEmail");
+        final String pass = intent.getStringExtra("userPass");
 
         PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getApplicationContext());
         listViewCategories.setAdapter(preferenceAdapter);
@@ -36,7 +41,7 @@ public class PreferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                userController.UserPreferences(pereferences);
+                userController.UserPreferences(pereferences, email, pass, id);
 
             }
         });

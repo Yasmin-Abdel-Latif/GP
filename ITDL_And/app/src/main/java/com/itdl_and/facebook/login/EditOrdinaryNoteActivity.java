@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
 import model.OrdinaryNoteEntity;
@@ -78,7 +79,11 @@ UpdateNote.setOnClickListener(this);
                 //noteController.AddShoppingNoteInLocalDB(productname, priority,category, true);
             }
         }
-
-
+        Intent homeIntent = new Intent(MyApplication.getAppContext(),
+                HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        homeIntent.putExtra("status", "Welcome Back");
+        homeIntent.putExtra("serviceType", "Back");
+        startActivity(homeIntent);
     }
 }

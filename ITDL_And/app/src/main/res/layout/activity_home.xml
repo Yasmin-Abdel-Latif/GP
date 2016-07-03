@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:text="@string/updateProfile"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:id="@+id/SignOut"
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="@string/SignOut"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp" />
 
     <Button
         android:layout_width="356dp"
@@ -41,7 +42,7 @@
         android:text="History"
         android:id="@+id/btnHistory"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp" />
 
 
 
@@ -51,7 +52,7 @@
         android:text="Show Current notes"
         android:id="@+id/buttonShowCurrentNotes"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -59,16 +60,7 @@
         android:text="show offer recomendation"
         android:id="@+id/buttonShowOfferRecomendation"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="show notifications"
-        android:id="@+id/buttonShowNotifications"
-        android:layout_below="@+id/buttonShowOfferRecomendation"
-        android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -76,7 +68,7 @@
         android:text="Add Note"
         android:id="@+id/buttonAddNote"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -84,5 +76,5 @@
         android:text="Show Close Store"
         android:id="@+id/buttonShowCloseOffer"
         android:background="@color/secondary_color"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="13dp" />
 </LinearLayout>

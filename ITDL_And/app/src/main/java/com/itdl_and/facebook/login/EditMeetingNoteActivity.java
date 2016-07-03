@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import controllers.AlarmController;
+import controllers.MyApplication;
 import controllers.NoteController;
 import controllers.UserController;
 import model.MeetingNoteEntity;
@@ -184,6 +185,13 @@ public class EditMeetingNoteActivity extends ActionBarActivity implements View.O
                 }
 
             }
+
+            Intent homeIntent = new Intent(MyApplication.getAppContext(),
+                    HomeActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            homeIntent.putExtra("status", "Welcome Back");
+            homeIntent.putExtra("serviceType", "Back");
+            startActivity(homeIntent);
         }
 
     }

@@ -42,8 +42,18 @@ public class NoteController {
     }
 
     public void addOrdinaryNote(String noteContent, String priority) {
-        UserController userController = UserController.getInstance();
-        String userID = String.valueOf(userController.getCurrentUserID());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/addOrdinaryNoteService",
@@ -69,9 +79,18 @@ public class NoteController {
     }
 
     public void addShoppingNote(String productToBuy, String priority, String category) {
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
 
-        UserController userController = UserController.getInstance();
-        String userID = String.valueOf(userController.getCurrentUserID());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         try {
             String res = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/addShoppingNoteService",
@@ -97,8 +116,18 @@ public class NoteController {
     }
 
     public int addDeadlineNote(String title, String priority, String deadlinedate_time, int progressValue) {
-        UserController userController = UserController.getInstance();
-        String userID = String.valueOf(userController.getCurrentUserID());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         int id = -1;
 
@@ -125,8 +154,18 @@ public class NoteController {
     }
 
     public int addMeetingNote(String title, String place, String agenda, String date, String priority, String time) {
-        UserController userController = UserController.getInstance();
-        String userID = String.valueOf(userController.getCurrentUserID());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         int id = -1;
         try {
@@ -212,7 +251,21 @@ public class NoteController {
         OrdinaryNoteEntity noteEntity = new OrdinaryNoteEntity(ordinaryNote, Priority,
                 getCurrentDate(), isDone, isdeleted, isTextCategorized, notecontent, issync);
         noteEntity.setServernoteId(serverNoteId);
-        noteEntity.setUserId(UserController.getCurrentUserID());
+        UserController uc = UserController.getInstance();
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = Long.parseLong(userID);
+        noteEntity.setUserId(userId);
         Log.i("Servernoteid=", String.valueOf(serverNoteId));
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertOrdinaryNote(noteEntity);
@@ -233,7 +286,20 @@ public class NoteController {
         ShoppingNoteEntity shoppingNoteEntity = new ShoppingNoteEntity(shoppingNote, priority,
                 getCurrentDate(), isDone, isDeleted, isTextCategorized, isadded, productToBuy, category);
         shoppingNoteEntity.setServernoteId(serverNoteId);
-        shoppingNoteEntity.setUserId(UserController.getCurrentUserID());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = Long.parseLong(userID);
+        shoppingNoteEntity.setUserId(userId);
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertShoppingNote(shoppingNoteEntity);
@@ -257,7 +323,20 @@ public class NoteController {
                 getCurrentDate(), isDone, isdeleted, isTextCategorized, issync, title, place, agenda,
                 Timestamp.valueOf(meetingNoteDate), Time.valueOf(estimatedTransportTime));
         noteEntity.setServernoteId(serverNoteId);
-        noteEntity.setUserId(UserController.getCurrentUserID());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = Long.parseLong(userID);
+        noteEntity.setUserId(userId);
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertMeetingNote(noteEntity);
@@ -283,7 +362,20 @@ public class NoteController {
         DeadlineNoteEntity noteEntity = new DeadlineNoteEntity(deadlineNote,
                 getCurrentDate(), isDone, isdeleted, isTextCategorized, issync, progressValue, title, Timestamp.valueOf(deadlinedate_time), priority);
         noteEntity.setServernoteId(serverNoteId);
-        noteEntity.setUserId(UserController.getCurrentUserID());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = Long.parseLong(userID);
+        noteEntity.setUserId(userId);
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         long id = localDataBase.InsertDeadlineNote(noteEntity);
@@ -309,12 +401,26 @@ public class NoteController {
 
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         Cursor res = null;
-        Log.i("getCurrentUserID()", String.valueOf(UserController.getCurrentUserID()));
+        UserController uc = UserController.getInstance();
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = Long.parseLong(userID);
+        Log.i("getCurrentUserID()", String.valueOf(userId));
 
         if (HistoryORCurrent.equals("Current")) {
-            res = localDataBase.SelectCurrentNotes(UserController.getCurrentUserID());
+            res = localDataBase.SelectCurrentNotes(userId);
         } else if (HistoryORCurrent.equals("History")) {
-            res = localDataBase.SelectHistoryNotes(UserController.getCurrentUserID());
+            res = localDataBase.SelectHistoryNotes(userId);
         }
         Log.i("Cursorres", res.toString());
 
@@ -371,7 +477,6 @@ public class NoteController {
 
     public void DeleteNoteInLocalDB(int noteid) {
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
-        localDataBase.DeleteNote(noteid);
         Cursor cur = localDataBase.GetAlarmByNoteId(noteid);
         if (!cur.moveToFirst())
             return;
@@ -383,6 +488,9 @@ public class NoteController {
 
         cur.close();
         localDataBase.DeleteNoteAlarmPermanentlyByNoteID(noteid);
+
+        localDataBase.DeleteNote(noteid);
+
 
         Toast.makeText(MyApplication.getAppContext(), " note Deleted  ", Toast.LENGTH_LONG).show();
 
@@ -505,6 +613,17 @@ public class NoteController {
 
     public void DoneNoteInLocalDB(int noteid){
         LocalDataBase localDataBase =new LocalDataBase(MyApplication.getAppContext());
+        Cursor cur = localDataBase.GetAlarmByNoteId(noteid);
+        if (!cur.moveToFirst())
+            return;
+        cur.moveToFirst();
+        do {
+            int alarmID = cur.getInt(cur.getColumnIndex("alarmID"));
+            cancelAlarm(alarmID);
+        } while (cur.moveToNext());
+
+        cur.close();
+        localDataBase.DeleteNoteAlarmPermanentlyByNoteID(noteid);
         localDataBase.SetIsDone(noteid);
         Toast.makeText(MyApplication.getAppContext(), "the  note will be in history ", Toast.LENGTH_LONG).show();
     }
@@ -555,7 +674,19 @@ public class NoteController {
 
     public String GetNotSyncNotes() {
 
-        long usetId = UserController.getCurrentUserID();
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
+        String userID = "";
+        try {
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userID = jsonObject.getString("UserID");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long userId = Long.parseLong(userID);
         LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
         JSONArray jsonArray = new JSONArray();
         NoteEntity note;
@@ -592,7 +723,7 @@ public class NoteController {
                 note = new MeetingNoteEntity(meetingNote, Priority, creationDate, isDone, isDeleted, isTextcat, isAdded
                         , meetingTitle, place, agenda, MeetingDate, EstimatedTime);
                 note.setNoteId(localid);
-                note.setUserId(usetId);
+                note.setUserId(userId);
                 note.setIsUpdated(isUpdated);
                 note.setServernoteId(serverNoteId);
 
@@ -625,7 +756,7 @@ public class NoteController {
                 note = new DeadlineNoteEntity(deadlineNote, creationDate, isDone, isDeleted, isTextcat, isAdded, progressprecentage,
                         deadLineTitle, deadlineDate, Priority);
                 note.setNoteId(localid);
-                note.setUserId(usetId);
+                note.setUserId(userId);
                 note.setIsUpdated(isUpdated);
                 note.setServernoteId(serverNoteId);
 
@@ -653,7 +784,7 @@ public class NoteController {
 
                 note = new ShoppingNoteEntity(shoppingNote, Priority, creationDate, isDone, isDeleted, isTextcat, isAdded, productToBuy, Category);
                 note.setNoteId(localid);
-                note.setUserId(usetId);
+                note.setUserId(userId);
                 note.setIsUpdated(isUpdated);
                 note.setServernoteId(serverNoteId);
 
@@ -679,7 +810,7 @@ public class NoteController {
 
                 note = new OrdinaryNoteEntity(ordinaryNote, Priority, creationDate, isDone, isDeleted, isTextcat, noteContent, isAdded);
                 note.setNoteId(localid);
-                note.setUserId(usetId);
+                note.setUserId(userId);
                 note.setIsUpdated(isUpdated);
                 note.setServernoteId(serverNoteId);
                 JSONObject temp = new JSONObject();

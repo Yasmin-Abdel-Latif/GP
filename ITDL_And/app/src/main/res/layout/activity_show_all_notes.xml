@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/LvShowNotes"
-        android:layout_below="@+id/tvNoNotes"
+        android:layout_below="@+id/btnBack"
         android:layout_marginTop="4dp" />
 
     <TextView
@@ -30,8 +30,16 @@
         android:textColor="@color/secondary_color"
         android:textColorHint="@color/secondary_color"
         android:textStyle="bold" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNoNotes"
+        android:background="@color/secondary_color"
+        android:id="@+id/btnBack"
+        android:text="Go Home"/>
 
 
 </RelativeLayout>
+
 
 </LinearLayout>

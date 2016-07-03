@@ -44,9 +44,18 @@
     <string name="title_activity_edit_deadline_progress">EditDeadlineProgressActivity</string>
 
     <string-array name="Categories">
-        <item>Food</item>
-        <item>Sport</item>
-        <item>Fashion </item>
+        <item>Art and Entertainment</item>
+        <item>Movies</item>
+        <item>Music</item>
+        <item>Food and Drink</item>
+        <item>Technology and Computing</item>
+        <item>Sports</item>
+        <item>Health and Fitness</item>
+        <item>Religion and Spirituality</item>
+        <item>Education</item>
+        <item>Pets</item>
+        <item>Style and Fashion</item>
+        <item>Reading</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
 </resources>

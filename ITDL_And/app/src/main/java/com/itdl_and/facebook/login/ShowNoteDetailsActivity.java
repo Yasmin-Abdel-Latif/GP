@@ -3,12 +3,15 @@ package com.itdl_and.facebook.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import controllers.AlarmController;
+import controllers.MyApplication;
 import controllers.NoteController;
+import controllers.UserController;
 import model.DeadlineNoteEntity;
 import model.MeetingNoteEntity;
 import model.NoteEntity;
@@ -19,6 +22,7 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
     TextView tvNoteDetails;
     Button btnDelete, btnEdit, btnDone;
     NoteEntity noteEntity;
+    String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
         btnDone = (Button) findViewById(R.id.btnDone);
         String note = "";
         Intent intent = getIntent();
-        String from = intent.getStringExtra("fromActivity");
+        from = intent.getStringExtra("fromActivity");
         noteEntity = (NoteEntity) intent.getSerializableExtra("note");
 
         if (from.equals("History")) {
@@ -91,6 +95,13 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
             } else if (noteEntity.getNoteType().equals("Deadline")){
                 alarmController.DeleteAlram(noteEntity.getNoteId());
             }
+            Intent homeIntent = new Intent(MyApplication.getAppContext(),
+                    HomeActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            homeIntent.putExtra("status", "Notes Updated");
+            homeIntent.putExtra("serviceType", "NoteDetails");
+            startActivity(homeIntent);
+
         } else  if (v== btnDone){
             AlarmController alarmController =new AlarmController();
             NoteController noteController =new NoteController();
@@ -100,6 +111,13 @@ public class ShowNoteDetailsActivity extends AppCompatActivity implements View.O
             } else if (noteEntity.getNoteType().equals("Deadline")){
                 alarmController.DeleteAlram(noteEntity.getNoteId());
             }
+
+            Intent homeIntent = new Intent(MyApplication.getAppContext(),
+                    HomeActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            homeIntent.putExtra("status", "Notes Updated");
+            homeIntent.putExtra("serviceType", "NoteDone");
+            startActivity(homeIntent);
         } else if (v == btnEdit) {
             Intent intent = null;
             if (noteEntity.getNoteType().equals("Shopping")) {

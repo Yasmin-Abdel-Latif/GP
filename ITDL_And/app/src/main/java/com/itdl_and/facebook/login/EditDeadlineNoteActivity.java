@@ -191,7 +191,14 @@ public class EditDeadlineNoteActivity extends AppCompatActivity implements SeekB
                     localDataBase.DeleteNoteAlarmPermanentlyByNoteID(deadlineNoteID);
                     setNewAlarmDeadline(date, time, deadlineNoteID, alarmID, alarmID2);
                 }
+
             }
+            Intent homeIntent = new Intent(MyApplication.getAppContext(),
+                    HomeActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            homeIntent.putExtra("status", "Welcome Back");
+            homeIntent.putExtra("serviceType", "Back");
+            startActivity(homeIntent);
         }
     }
 

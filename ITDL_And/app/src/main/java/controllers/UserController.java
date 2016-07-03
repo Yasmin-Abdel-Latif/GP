@@ -1,18 +1,28 @@
 package controllers;
 
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.itdl_and.facebook.login.HabitActivity;
 import com.itdl_and.facebook.login.HomeActivity;
 import com.itdl_and.facebook.login.MainActivity;
 import com.itdl_and.facebook.login.PreferenceActivity;
+import com.itdl_and.facebook.login.R;
 import com.itdl_and.facebook.login.ViewUserInfoActivity;
 
 import org.json.JSONArray;
@@ -34,23 +44,13 @@ import model.FacebookPost;
 import model.LocalDataBase;
 import model.NoteEntity;
 import model.NoteParser;
+import model.OrdinaryNoteEntity;
 import model.UserEntity;
 
 public class UserController {
 
-    private static UserEntity currentActiveUser;
     private static UserController userController;
-    private static long currentActiveUserID;
-
-    public static long getCurrentUserID() {
-
-        return currentActiveUserID;
-    }
-
-    public UserEntity getCurrentActiveUser() {
-
-        return currentActiveUser;
-    }
+    private static String twitterAccountActive;
 
     public static UserController getInstance() {
 
@@ -60,10 +60,6 @@ public class UserController {
         }
 
         return userController;
-    }
-
-    public void setCurrentActiveUser(UserEntity currentActiveUserSet) {
-        currentActiveUser = currentActiveUserSet;
     }
 
     public void signUp(String userName, String email, String password, String gender,
@@ -79,15 +75,24 @@ public class UserController {
                 Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
                 return;
             }
-            currentActiveUser = UserEntity.createLoginUser(result);
-            currentActiveUserID = currentActiveUser.getUserId();
+
+            String id = object.get("userId").toString();
 
             Intent perefernce = new Intent(MyApplication.getAppContext(),
                     PreferenceActivity.class);
             perefernce.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             perefernce.putExtra("status", "Registered successfully");
-            perefernce.putExtra("userId", object.get("userId").toString());
+            perefernce.putExtra("userId", id);
             perefernce.putExtra("serviceType", "RegistrationService");
+            LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
+            String twitterId = twitterAccount;
+            if (localDataBase.GetUserID().length() > 0) {
+                localDataBase.UpdateUserInfo(id, twitterId, email, password);
+                Toast.makeText(MyApplication.getAppContext(), " ID Updated 1", Toast.LENGTH_LONG).show();
+            } else {
+                long localId = localDataBase.InsertUserInfo(id, twitterId, email, password);
+                Toast.makeText(MyApplication.getAppContext(), " ID Inserted " + localId, Toast.LENGTH_LONG).show();
+            }
 
             Log.d("user_id ", object.get("userId").toString());
             MyApplication.getAppContext().startActivity(perefernce);
@@ -116,8 +121,6 @@ public class UserController {
                 Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
                 return;
             }
-            currentActiveUser = UserEntity.createLoginUser(result);
-            currentActiveUserID = currentActiveUser.getUserId();
             Log.i("Cursor", result);
 
             for (int i = 0; i < fbPosts.size(); i++) {
@@ -125,14 +128,25 @@ public class UserController {
                 addFBUserPost(fbPosts.get(i));
             }
 
+            String id = object.get("userId").toString();
+
             Intent perefernce = new Intent(MyApplication.getAppContext(),
                     PreferenceActivity.class);
             perefernce.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             perefernce.putExtra("status", "Registered successfully");
-            perefernce.putExtra("userId", object.getLong("userId"));
+            perefernce.putExtra("userId", id);
             perefernce.putExtra("serviceType", "RegistrationService");
+            LocalDataBase localDataBase = new LocalDataBase(MyApplication.getAppContext());
+            String twitterId = twitterAccount;
+            if (localDataBase.GetUserID().length() > 0) {
+                localDataBase.UpdateUserInfo(id, twitterId, email, password);
+                Toast.makeText(MyApplication.getAppContext(), " ID Updated 1", Toast.LENGTH_LONG).show();
+            } else {
+                long localId = localDataBase.InsertUserInfo(id, twitterId, email, password);
+                Toast.makeText(MyApplication.getAppContext(), " ID Inserted " + localId, Toast.LENGTH_LONG).show();
+            }
 
-            Log.i("user_id ", String.valueOf(object.getLong("userId")));
+            Log.d("user_id ", object.get("userId").toString());
             MyApplication.getAppContext().startActivity(perefernce);
 
         } catch (InterruptedException e) {
@@ -168,8 +182,6 @@ public class UserController {
                 MyApplication.getAppContext().startActivity(homeIntent);
                 //return;
             } else {
-                currentActiveUser = UserEntity.createLoginUser(result);
-                currentActiveUserID = getCurrentActiveUser().getUserId();
                 Intent homeIntent = new Intent(MyApplication.getAppContext(),
                         HomeActivity.class);
                 //System.out.println("--- " + serviceType + "IN LOGIN " + object.getString("Status"));
@@ -221,9 +233,6 @@ public class UserController {
                 MyApplication.getAppContext().startActivity(homeIntent);
                 return 0;
             } else {
-                currentActiveUser = UserEntity.createLoginUser(result);
-                currentActiveUserID = getCurrentActiveUser().getUserId();
-
                 for (int i = 0; i < fbPosts.size(); i++) {
                     fbPosts.get(i).setUserID(String.valueOf(object.getLong("userId")));
                     addFBUserPost(fbPosts.get(i));
@@ -278,7 +287,7 @@ public class UserController {
 
     }
 
-    public void getFBUserPosts(String userID) throws ParseException{
+    public void getFBUserPosts(String userID) throws ParseException {
         try {
             String result = new CallWebService().execute(MyApplication.getServiceLink2() + "rest/GetPostsService", userID, "GetPostsService").get();
             JSONObject object = new JSONObject(result);
@@ -328,7 +337,7 @@ public class UserController {
             NoteParser noteParser = new NoteParser();
             if (object.get("Status").equals("OK")) {
                 JSONArray jnotes = object.getJSONArray("AllUserNotes");
-                Log.i("HELLO",String.valueOf(jnotes.length()));
+                Log.i("HELLO", String.valueOf(jnotes.length()));
                 Timestamp ts = new Timestamp(new Date().getTime());
                 String curDay = (new SimpleDateFormat("EEEE", Locale.getDefault())).format(ts.getTime());
                 for (int i = 0; i < jnotes.length(); i++) {
@@ -357,33 +366,23 @@ public class UserController {
         return notes;
     }
 
-    public void GetUserInformation() {
-        Log.i("UserID" , String.valueOf(currentActiveUser.getUserId()));
+    public UserEntity GetUserInformation(String userID) {
         try {
             String result = new CallWebService().execute(
                     MyApplication.getServiceLink() + "restNotes/GetUserInfoService",
-                    String.valueOf(currentActiveUser.getUserId()), "GetUserInfoService").get();
-            Log.i("HELLO" , result);
+                    userID, "GetUserInfoService").get();
+            Log.i("HELLO", result);
             JSONObject object = new JSONObject(result);
 
             if (!object.has("Status") || object.getString("Status").equals("Failed")) {
                 Toast.makeText(MyApplication.getAppContext(), "Error occured", Toast.LENGTH_LONG).show();
-                return;
+                return null;
             }
-            Intent viewIntent = new Intent(MyApplication.getAppContext(),
-                    ViewUserInfoActivity.class);
-
-            viewIntent.putExtra("username", object.get("username").toString());
-            viewIntent.putExtra("useremail", object.get("useremail").toString());
-            viewIntent.putExtra("userpassword", object.get("userpassword").toString());
-            viewIntent.putExtra("usergender", object.get("usergender").toString());
-            viewIntent.putExtra("usercity", object.get("usercity").toString());
-            viewIntent.putExtra("usertwiterAcc", object.get("usertwiterAcc").toString());
-            viewIntent.putExtra("userbirthdate", object.get("userbirthdate").toString());
-
-            viewIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            MyApplication.getAppContext().startActivity(viewIntent);
+            UserEntity ue = new UserEntity(object.get("username").toString(),
+                    object.get("useremail").toString(), object.get("usertwiterAcc").toString(),
+                    object.get("usergender").toString(), object.get("userpassword").toString(),
+                    object.get("usercity").toString(), object.get("userbirthdate").toString());
+            return ue;
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -392,13 +391,22 @@ public class UserController {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
 
     public void UpdateProfile(String userName, String email, String password, String gender,
                               String city, String birth_date, String twitterAccount) {
-        String userId = String.valueOf(currentActiveUser.getUserId());
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
+            String userId = "";
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userId = jsonObject.getString("UserID");
+
+            }
             String result = new CallWebService().execute(
                     MyApplication.getServiceLink() + "restNotes/UpdateProfileService", userId, userName,
                     email, password, gender, city, birth_date, twitterAccount, "UpdateProfileService").get();
@@ -426,9 +434,8 @@ public class UserController {
     }
 
     public void SignOut() {
-        currentActiveUser = null;
         userController = null;
-        if(LoginManager.getInstance() != null)
+        if (LoginManager.getInstance() != null)
             LoginManager.getInstance().logOut();
         LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         ld.LogoutUserID();
@@ -448,7 +455,7 @@ public class UserController {
         }
     }
 
-    public void UserPreferences(ArrayList<Category> Preferences) {
+    public void UserPreferences(ArrayList<Category> Preferences, String email, String password, String id) {
         JSONArray jsonArrayPrfrnce = new JSONArray();
         for (int i = 0; i < Preferences.size(); i++) {
             JSONObject object = new JSONObject();
@@ -464,10 +471,18 @@ public class UserController {
 
         Log.i("category_Chosenn", String.valueOf(jsonArrayPrfrnce));
 
+        LocalDataBase ld = new LocalDataBase(MyApplication.getAppContext());
         try {
+            String userId = "";
+            String resultLD = ld.GetUserID();
+            if (resultLD.trim().length() > 0) {
+                JSONObject jsonObject = new JSONObject(resultLD);
+                userId = jsonObject.getString("UserID");
+
+            }
 
             String result = new CallWebService().execute(MyApplication.getServiceLink() + "restNotes/enterInitialWeightsForOneUserService",
-                    String.valueOf(UserController.getCurrentUserID()), jsonArrayPrfrnce.toString(), "enterInitialWeightsForOneUserService").get();
+                    userId, jsonArrayPrfrnce.toString(), "enterInitialWeightsForOneUserService").get();
 
             Log.i("HELLO PRFRNC", result);
 
@@ -480,16 +495,18 @@ public class UserController {
                     HomeActivity.class);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             homeIntent.putExtra("status", "Registered successfully");
-            homeIntent.putExtra("userId", String.valueOf(currentActiveUserID));
-            homeIntent.putExtra("userEmail", currentActiveUser.getUserEmail());
-            homeIntent.putExtra("userPassword", currentActiveUser.getUserPassword());
+            homeIntent.putExtra("userId", id);
+            homeIntent.putExtra("userEmail", email);
+            homeIntent.putExtra("userPassword", password);
             homeIntent.putExtra("serviceType", "UserPreferenceService");
-            Log.i("HELLO SIGNUP ID", String.valueOf(currentActiveUserID));
+            Log.i("HELLO SIGNUP ID", id);
             MyApplication.getAppContext().startActivity(homeIntent);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
